@@ -185,8 +185,7 @@ module.exports = function(grunt) {
 		devserver : {
 			server: {},
 			options : {
-				port: PORT,
-				base: '../'
+				port: PORT
 			}
 		},
 
@@ -212,6 +211,14 @@ module.exports = function(grunt) {
 				tasks: ['edbml:outline', 'concat', 'uglify'],
 				files: [ 
 					'src/edbml/outline/*.edbml'
+				]
+			},
+			edbml_inline: {
+				options: { interval: 5000 },
+				tasks: ['edbml:inline'],
+				files: [ 
+					'src/edbml/inline/**/*.edbml',
+					'Gruntfile.js'
 				]
 			},
 			js : {

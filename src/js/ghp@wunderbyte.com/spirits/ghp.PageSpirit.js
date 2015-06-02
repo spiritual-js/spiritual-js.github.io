@@ -86,9 +86,9 @@ ghp.PageSpirit = gui.Spirit.extend({
 	 * Update menu selection.
 	 */
 	_menu: function() {
-		var page = location.pathname.split('/').slice(-1)[0];
-		page = page.contains('.html') ? page : 'index.html';
-		gui.get('#nav').select(page);
+		var page = location.pathname; // .split('/').slice(-1)[0];
+		page = page.contains('.html') ? page : page + 'index.html';
+		gui.get('#nav').select(page); 
 	},
 
 	/**
@@ -102,6 +102,7 @@ ghp.PageSpirit = gui.Spirit.extend({
 	/**
 	 * Jump to anchor. We do this on a regular basis now 
 	 * that Prism might have messed with scroll position.
+	 * TODO: Prism is now serverside, this still needed?
 	 */
 	_jump: function() {
 		var elm, hash = location.hash;
