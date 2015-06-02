@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Output</title>
+		<script>
+				var Person = edb.Object.extend({
+					firstname: '',
+					lastname: '',
+					fullname: function() {
+						return [this.firstname, this.lastname].join(' ');
+					}
+				});
+			</script>
+			<script>
+				new Person({
+					firstname: 'John',
+					lastname: 'Johnson'
+				}).output();
+				
+				setTimeout(function() {
+					Person.output.revoke();	
+				}, 2000);
+			</script>
+			<script>
+				Person.output.add({
+					oninput: function(input) {
+						console.log(input.data);
+					}
+				});
+			</script>
+	</head>
+	<body>
+		<main>
+			<h1>Output</h1>
+			<p>You can <em>output</em> a Type instance on the page.</p>
+			<script class="language-javascript" type="text/plain">
+				var person = new Person({
+					firstname: 'John',
+					lastname: 'Johnson'
+				});
+				person.output();
+			</script>
+			<p>That's all there is to it. You can now get a hold of the 
+				<code>person</code> from anywhere on the page.</p>
+			<script class="language-javascript" type="text/plain">
+				var person = Person.output.get();
+				console.log(person.fullname()); // John Johnson
+			</script>
+			<p>That is nice, but not always practical if you don't know when the person is outputted. To cover this, you can connect an <em>output listener</em>. But before we can get to that, please observe the following conventions.</p>
+
+			<h2>Output conventions</h2>
+			<ol>
+				<li>When a new instance is outputted, the new output replaces the old output. There can only be one instance of our <code>Person</code> on the page.</li>
+				<li>When a <em>subclass</em> of <code>Person</code> is outputted, it also replaces the output of type <code>Person</code> or any other subclass. There can really only be one.</li>
+			</ol>
+			<p>According to conventions, any output listener connected to <code>Person</code> would also be hooked up to output of type <code>GoodPerson</code> or <code>BadPerson</code>, so let's create and output one of those.</p>
+			<script class="language-javascript" type="text/plain">
+				var GoodPerson = Person.extend();
+				var goodperson = new GoodPerson();
+				goodperson.output(); // replaces the Person output
+			</script>
+
+			<h2>Connect a listener</h2>
+			<p>The output listener must have a special method <code>oninput</code> to be called whenever a new <code>Person</code> is outputted. It listens for <em>all kinds</em> of <code>Person</code>.</p>
+			<script class="language-javascript" type="text/plain">
+				Person.output.connect ({
+					oninput: function(input) {
+						console.log(input.data);
+					}
+				});
+			</script>
+			<p>Because an instance of <code>GoodPerson</code> is already out, the method will be called immediately. In the code above, the <code>input</code> parameter is not the <code>goodperson</code> instance, but an <code>edb.Input</code> object with three properties.</p>
+			<ul>
+				<li><code>data</code> refers to the outputted instance (<code>goodperson</code>)</li>
+				<li><code>type</code> refers to the instance constructor (<code>GoodPerson</code>)</li>
+				<li><code>connection</code> refers to Type we are connected to (Person)</li>
+			</ul>
+			<p>This elaborate setup will come in handy when we attempt to handle multiple types of output with a single method (like we do in <a href="plugins.html">plugins</a>).</p>
+
+			<h2>Disconnect a listener</h2>
+			<p>If you keep a reference to listener, you can of course disconnect it.</p>
+			<script class="language-javascript" type="text/plain">
+				Person.output.disconnect(listener);
+			</script>
+
+			<h2>Revoke the output</h2>
+			<p>If you decide that a Type should no longer be output on the page, you can <em>revoke</em> it. There's two ways to go about this.</p>
+			<script class="language-javascript" type="text/plain">
+				person.revoke(); // via the instance
+				Person.output.revoke(); // via the constructor
+			</script>
+			<p>This will cause all output observers to be called with an <code>edb.Input</code> object whose <code>data</code> property is <code>null</code>.</p>
+
+			<h2>Working with output</h2>
+			<p>Say we're working on a list-detail view. It's fine that there is only ever one <code>Person</code> to deal with in the details, but what if there's more than one <code>Person</code> in the list? To cover this, we'll need to output a second Type on the page and this time it's an <code>edb.Array</code>. Note that we'll not worry about rendering techniques here, we'll save that topic for <a href="javascript:alert('TODO: Spiritual EDBML')">later</a>.</p>
+
+			<script class="language-javascript" type="text/plain">
+				var PersonList = edb.Array.extend(
+					$of: Person
+				);
+				var json_array = $.getJSON('personas.json');
+				ver personlist = new PersonList(json_array);
+				personlist.output();
+			</script>
+			<p>When a person is selected in the list, we can update the details view.</p>
+			<script class="language-javascript" type="text/plain">
+				personlist[23].output();
+			</script>
+			<p>You can render a lot of UI by outputting Objects and Arrays like this.</p>
+
+			<h2>Observing Types</h2>
+			<p>If we're coding a chat room, our rendering might also need to know:</p>
+
+			<ul>
+				<li>When a new <code>Person</code> goes online (and should be added to the list)</li>
+				<li>When a <code>Person</code> changes status (and the details should be updated)</li>
+			</ul>
+
+			<p>Instead of rendering the whole UI whenever something like this happes, we can apply incremental updates to our rendering by <em>observing the output</em> for microscopic changes. <a href="observers.html">Let's see how.</a></p>
+
+
+
+
+
+			
+
+
+
+
+
+
+
+			<!--
+			<h2>Conventions</h2>
+			<p>Input and output follows a set of important <em>conventions</em>.</p>
+			<ul>
+				<li>
+					Whenever a new <code>person</code> is output on the page, the 
+					listeners <code>oninput</code> method will be called again. After a 
+					few milliseconds, it's not safe to use the old <code>person</code>.
+				</li>
+				<li>
+					Whenever a <code>subclass</code> of <code>Person</code> is output on the page, 
+					the same applies. The input listener handles <em>all kinds of Persons</em>. 
+					You can of course register your listener for a specific subclass, 
+					such as <code>GoodPerson</code> or <code>BadPerson</code>, to avoid this.
+				</li>
+			</ul>
+			-->
+
+		</main>
+	</body>
+</html>

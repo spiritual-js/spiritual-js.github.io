@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Observers</title>
+	</head>
+	<body>
+		<main>
+			<h1>Observers</h1>
+			<p>When we observe a Type instance, the observer must implement a method <code>onchange</code> to deal with the changes.</p>
+			<script class="language-javascript" type="text/plain">
+				var person = new Person({
+					firstname: 'John',
+					lastname: 'Johnson'
+				});
+				person.addObserver({
+					onchange: function(changes) {
+						// handle changes
+					}
+				})
+			</script>
+			<p class="todo">Work in progress.</p>
+		</main>
+	</body>
+</html>

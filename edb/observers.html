@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html id="spiritual-edb">
+	<head>
+		<title>Observers &#x2013; Spiritual EDB</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/gui/res/css/styles.min.css">
+		<script src="/gui/res/js/scripts.min.js"></script>
+	</head>
+	<body>
+		<main>
+			<h1>Observers</h1>
+			<p>When we observe a Type instance, the observer must implement a method <code>onchange</code> to deal with the changes.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">var</span> person <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+	firstname<span class="token punctuation">:</span> <span class="token string">&apos;John&apos;</span><span class="token punctuation">,</span>
+	lastname<span class="token punctuation">:</span> <span class="token string">&apos;Johnson&apos;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+person<span class="token punctuation">.</span><span class="token function">addObserver<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onchange<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>changes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token comment" spellcheck="true">// handle changes
+</span>	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span></code>
+</pre>
+			<p class="todo">Work in progress.</p>
+		</main>
+		<aside>
+			<nav id="nav">
+				<li><a href="index.html">Types</a><nav>
+					<li><a href="objects.html">Objects</a></li>
+					<li><a href="arrays.html">Arrays</a></li></nav></li>
+				<li><a href="output.html">Output</a></li>
+				<li><a href="observers.html">Observers</a></li>
+				<li><a href="plugins.html">Plugins</a></li>
+			</nav>
+		</aside>
+	</body>
+</html>

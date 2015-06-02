@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html id="spiritual-edb">
+	<head>
+		<title>Arrays &#x2013; Spiritual EDB</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/gui/res/css/styles.min.css">
+		<script src="/gui/res/js/scripts.min.js"></script>
+	</head>
+	<body>
+		<main>
+			<h1>Arrays</h1>
+			<p>To create an <code>edb.Array</code> constructor, simply <code>extend</code> from <code>edb.Array</code>.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">var</span> Persons <span class="token operator">=</span> edb<span class="token punctuation">.</span>Array<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	$of<span class="token punctuation">:</span> Person
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>The magic property <code>$of</code> instructs the edb.Array to instantiate a <code>Person</code> for every JSON object is added, so let&apos;s try that out.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">var</span> persons <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Persons</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+	firstname<span class="token punctuation">:</span> <span class="token string">&apos;Bob&apos;</span><span class="token punctuation">,</span>
+	lastname<span class="token punctuation">:</span> <span class="token string">&apos;Schmidt&apos;</span> 
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>persons<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">fullname<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Bob Schmidt
+</span>persons<span class="token punctuation">.</span><span class="token function">push<span class="token punctuation">(</span></span><span class="token punctuation">{</span> firstname<span class="token punctuation">:</span> <span class="token string">&apos;Jim&apos;</span><span class="token punctuation">,</span> lastname<span class="token punctuation">:</span> <span class="token string">&apos;Nielsen&apos;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>persons<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">fullname<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Jim Nielsen
+</span>persons<span class="token punctuation">.</span><span class="token function">unshift<span class="token punctuation">(</span></span><span class="token punctuation">{</span> firstname<span class="token punctuation">:</span> <span class="token string">&apos;Ole&apos;</span><span class="token punctuation">,</span> lastname<span class="token punctuation">:</span> <span class="token string">&apos;Jensen&apos;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>persons<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">fullname<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Ole Jensen</span></code>
+</pre>
+			<p>If an already instantiated object other than a <code>Person</code> is added, the Array will throw an error. Let&apos;s also try that out.</p>
+			<pre class="language-javascript">
+<code>persons<span class="token punctuation">.</span><span class="token function">push<span class="token punctuation">(</span></span><span class="token keyword">new</span> <span class="token class-name">Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// TypeError</span></code>
+</pre>
+			
+			<h2>Dynamic <code>$of</code></h2>
+			<p>Hej hej.</p>
+
+			<h2>Arrays versus Objects</h2>
+			<p>You can add methods to the Array, much like an <code>edb.Object</code>.</p>
+			<pre class="language-javascript">
+<code>Persons <span class="token operator">=</span> edb<span class="token punctuation">.</span>Array<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	$of<span class="token punctuation">:</span> Person<span class="token punctuation">,</span>
+	lookup<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">filter<span class="token punctuation">(</span></span><span class="token keyword">function</span><span class="token punctuation">(</span>person<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token keyword">return</span> person<span class="token punctuation">.</span><span class="token function">fullname<span class="token punctuation">(</span></span><span class="token punctuation">)</span> <span class="token operator">===</span> name<span class="token punctuation">;</span>
+		<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>You can also add properties.</p>
+			<pre class="language-javascript">
+<code>Persons <span class="token operator">=</span> edb<span class="token punctuation">.</span>Array<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	$of<span class="token punctuation">:</span> Person<span class="token punctuation">,</span>
+	lucky_number<span class="token punctuation">:</span> <span class="token number">23</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>Unline an <code>edb.Object</code>, the properties of an Array cannot be set via constructor arguments. You&apos;ll need to set them afterwards, like this.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">var</span> persons <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Persons</span><span class="token punctuation">(</span>json1<span class="token punctuation">,</span> json2<span class="token punctuation">,</span> json3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+persons<span class="token punctuation">.</span>lucky_number <span class="token operator">=</span> <span class="token number">42</span><span class="token punctuation">;</span></code>
+</pre>
+			
+			
+
+			<h2>Populating Arrays</h2>
+			<p>When you populate a <code>edb.Array</code>, you can do so with an array argument if that is more convenient. For real data, it usually is.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">var</span> persons <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Persons</span><span class="token punctuation">(</span><span class="token punctuation">[</span> <span class="token comment" spellcheck="true">// notice square brackets
+</span>	<span class="token punctuation">{</span> firstname<span class="token punctuation">:</span> <span class="token string">&apos;Bob&apos;</span><span class="token punctuation">,</span> lastname<span class="token punctuation">:</span> <span class="token string">&apos;Schmidt&apos;</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+	<span class="token punctuation">{</span> firstname<span class="token punctuation">:</span> <span class="token string">&apos;Ole&apos;</span><span class="token punctuation">,</span> lastname<span class="token punctuation">:</span> <span class="token string">&apos;Honnor&#xE9;&apos;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>When you do this, remember that the Array must be declared <code>$of</code> a type <code>edb.Object</code>, because the example code will otherwise push a (nested) <code>edb.Array</code> into the list.</p>
+
+			<h2>Anonymous Arrays</h2>
+			<p></p>
+			
+		</main>
+		<aside>
+			<nav id="nav">
+				<li><a href="index.html">Types</a><nav>
+					<li><a href="objects.html">Objects</a></li>
+					<li><a href="arrays.html">Arrays</a></li></nav></li>
+				<li><a href="output.html">Output</a></li>
+				<li><a href="observers.html">Observers</a></li>
+				<li><a href="plugins.html">Plugins</a></li>
+			</nav>
+		</aside>
+	</body>
+</html>

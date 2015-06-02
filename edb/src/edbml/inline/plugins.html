@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Plugins</title>
+	</head>
+	<body>
+		<main>
+			<h1>Plugins</h1>
+			<p>If spirits.</p>
+			<script class="language-javascript" type="text/plain">
+			var MySpirit = gui.Spirit.extend({
+				onready: function() {
+					this.super.onready();
+					this.input.connect(Person);
+				}
+			})
+			</script>
+			<p>Equivalent.</p>
+			<script class="language-javascript" type="text/plain">
+				Person.output.connect(this);
+			</script>
+			<p>Destruction.</p>
+			<script class="language-javascript" type="text/plain">
+				oninput: function(input) {
+					this.super.oninput(input);
+					switch(input.type) {
+						case GoodPerson:
+							var goodperson = input.data;
+							console.log(goodperson.fullname());
+							break;
+						case BadPerson:
+							var badperson = input.data;
+							console.log(badperson.fullname());
+							break;
+					}
+				}
+			</script>
+		</main>
+	</body>
+</html>

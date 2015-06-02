@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Objects</title>
+	</head>
+	<body>
+		<main>
+			<h1>Objects</h1>
+			<p>To create an <code>edb.Object</code> constructor, simply <code>extend</code> from <code>edb.Object</code>.</p>
+			<script class="language-javascript" type="text/plain">
+				var Person = edb.Object.extend({
+					firstname: '',
+					lastname: '',
+					fullname: function() {
+						return [this.firstname, this.lastname].join(' ');
+					}
+				});
+			</script>
+			<p>An instance of <code>Person</code> can now be created with a JSON argument.</p>
+			<script class="language-javascript" type="text/plain">
+				var person = new Person({
+					firstname: 'John',
+					lastname: 'Johnson'
+				});
+				console.log(person.fullname()); // John Johnson
+			</script>
+
+			<h2>Typed properties</h2>
+			<p>We can also declare <em>typed properties</em>. Typically like this:</p>
+			<script class="language-javascript" type="text/plain">
+				var Person = edb.Object.extend({
+					friend: Person
+					// (firstname, lastname, fullname etc.)
+				});
+			</script>
+			<p>This example will however not really work. That's because the <code>Person</code> constructor doesn't exist before it has been declared, but we can work around this by writing directly to the <code>prototype</code>.</p>
+			<script class="language-javascript" type="text/plain">
+				var Person = edb.Object.extend(/* extensions */);
+				Person.prototype.friend = Person;
+			</script>
+			<p>Two <code>Person</code> instances can now be created with a single argument.</p>
+			<script class="language-javascript" type="text/plain">
+				var person = new Person({
+					firstname: 'John',
+					lastname: 'Johnson',
+					friend: {
+						firstname: 'Bob',
+						lastname: 'Schmidt'
+					}
+				});
+				console.log(person.fullname()); // John Johnson
+				console.log(person.friend.fullname()); // Bob Schmidt
+			</script>
+			<p>The typed properties can also be an <code>edb.Array</code>. We haven't prepared such a constructor, but we can declare one <em>anonymously</em>.</p>
+			<script class="language-javascript" type="text/plain">
+				var Person = edb.Object.extend({
+					friends: edb.Array.extend({
+						$of: Person
+					});
+				});
+			</script>
+			<p>We can now create as many <code>Person</code> instances as we like with a single JSON argument. Note that the value of <code>friends</code> must now be an array.</p>
+			<script class="language-javascript" type="text/plain">
+				var person = new Person({
+					firstname: 'John',
+					lastname: 'Johnson',
+					friends: [
+						{ firstname: 'Bob', lastname: 'Schmidt' },
+						{ firstname: 'Ole', lastname: 'Honnoré' },
+						{ firstname: 'Jim', lastname: 'Nielsen' },
+					]
+				});
+				console.log(person.friends[2].fullname()); // Jim Nielsen
+			</script>
+
+			<h2>Untyped properties</h2>
+			<p>If no Types are a assigned to the properties, objects and arrays found in JSON will be newed up as either an <code>edb.Object</code> or an <code>edb.Array</code>. If you don't want this, you must declare them as simple objects/arrays.</p>
+			<script class="language-javascript" type="text/plain">
+				var Person = edb.Object.extend({
+					friend: Object,
+					friends: Array
+				});
+			</script>
+			<p>If you're not planning to <a href="observers.html">observe</a> these properties, and if they contain a lot of data, it's generally adviced to declare them as simple properties.</p>
+
+			<h2>Anonymous Objects</h2>
+			<p>As we have seen, Type subclasses can be create <em>anonymously</em>.</p>
+			<script class="language-javascript" type="text/plain">
+			Person.prototype.friend = Person.extend({
+				fullname: function() {
+					return 'Friendly ' + this.super.fullname();
+				}
+			});
+			var person = new Person({
+				friend: {
+					firstname: 'Bob',
+					lastname: 'Schmidt',
+				}
+			})
+			console.log(person.friend.fullname()); // Friendly Bob Schmidt
+			</script>
+		</main>
+	</body>
+</html>
