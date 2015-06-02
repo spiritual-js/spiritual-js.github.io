@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>box</title>
+	</head>
+	<body>
+		<main>
+			<h1>box</h1>
+			<p>The <code>box</code> plugin will the measure position and dimension of a spirit.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Spirit.extend({
+					onready: function() {
+						this.super.onready();
+						console.log(this.box.localX + this.box.height);
+					}
+				});
+			</script>
+			<p>These properties are <em>readonly</em>. If you are looking to change position and dimension, please refer to the <a href="plugin-css.html"><code>css</code></a> plugin. Also note that these things are implemented as properties, not methods, using <em>getters</em>.</p>
+			<dl class="inline">
+				<dt><code>width</code></dt>
+				<dd>Width of the spirit element</dd>
+				<dt><code>height</code></dt>
+				<dd>Height of the spirit element</dd>
+				<dt><code>localX</code></dt>
+				<dd>Horizontal position relative to positioned ancestor</dd>
+				<dt><code>localY</code></dt>
+				<dd>Vertical position relative to positioned ancestor</dd>
+				<dt><code>pageX</code></dt>
+				<dd>Horizontal position relative to the full page (includes scrolling)</dd>
+				<dt><code>pageY</code></dt>
+				<dd>Vertical position relative to the full page (includes scrolling)</dd>
+				<dt><code>clientX</code></dt>
+				<dd>Horizontal position relative to the viewport (ex scrolling)</dd>
+				<dt><code>clientY</code></dt>
+				<dd>Vertical position relative to the viewport (ex scrolling)</dd>
+			</dl>
+			<p class="todo">Note on layout trashing</p>
+		</main>
+	</body>
+</html>

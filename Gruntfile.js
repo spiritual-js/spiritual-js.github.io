@@ -14,6 +14,28 @@ module.exports = function(grunt) {
 
 	grunt.initConfig ({
 
+		sitemap_gui: [
+			['Spirits', '/gui/index.html'],
+			['Lifecycle', '/gui/lifecycle.html'],
+			['Callbacks', '/gui/callbacks.html'],
+			['Plugins', '/gui/plugins.html', [
+				['action', '/gui/plugin-action.html'],
+				['att', '/gui/plugin-att.html'],
+				['box', '/gui/plugin-box.html'],
+				['broadcast', '/gui/plugin-broadcast.html'],
+				['config', '/gui/plugin-config.html'],
+				['css', '/gui/plugin-css.html'],
+				['dom', '/gui/plugin-dom.html'],
+				['event', '/gui/plugin-event.html'],
+				['life', '/gui/plugin-life.html'],
+				['tick', '/gui/plugin-tick.html']
+			]],
+			['Classes', '/gui/classes.html'],
+			['Projects', '/gui/projects.html'],
+			['Caveats', '/gui/caveats.html'],
+			['Contribute', '/gui/contribute.html']
+		],
+
 		sitemap_edb: [
 			['Types', '/edb/index.html', [
 				['Objects', '/edb/objects.html'],

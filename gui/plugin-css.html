@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html id="spiritual-gui">
+	<head>
+		<title>css &#x2013; Spiritual GUI</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/css/styles.min.css">
+		<script src="/js/scripts.min.js"></script>
+	</head>
+	<body>
+		<main id="page-css">
+			<h1>css</h1>
+			<p>The <code>css</code> plugins deal with the <code>className</code> and <code>style</code> properties. Here&apos;s an overview of the methods.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;myclass&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// add classname(s)
+</span><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">remove<span class="token punctuation">(</span></span><span class="token string">&apos;myclass&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// remove classname(s)
+</span><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">toggle<span class="token punctuation">(</span></span><span class="token string">&apos;myclass&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// toggle classname(s)
+</span><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">shift<span class="token punctuation">(</span></span><span class="token keyword">true</span><span class="token punctuation">,</span> <span class="token string">&apos;myclass&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// conditional class
+</span><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">contains<span class="token punctuation">(</span></span><span class="token string">&apos;myclass&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// has classname?
+</span><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span><span class="token string">&apos;color&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;red&apos;</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// set single style
+</span><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">&apos;color&apos;</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// get single style
+</span><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">style<span class="token punctuation">(</span></span><span class="token punctuation">{</span>color<span class="token punctuation">:</span> <span class="token string">&apos;red&apos;</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// set multiple styles
+</span><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">compute<span class="token punctuation">(</span></span><span class="token string">&apos;color&apos;</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// get computed style
+</span><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">name<span class="token punctuation">(</span></span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// get or set the classname
+</span><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">matches<span class="token punctuation">(</span></span><span class="token string">&apos;[color]&apos;</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// matches selector?</span></code>
+</pre>
+
+			<h2 id="classes">Class names</h2>
+			<p>We can add a classname to the spirit.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onenter<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onenter<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;myclass&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>We can also remove it again.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">remove<span class="token punctuation">(</span></span><span class="token string">&apos;myclass&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>We can add or remove multiple class names with an array or space-separated string.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token punctuation">[</span>CLASS1<span class="token punctuation">,</span> CLASS2<span class="token punctuation">,</span> CLASS3<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">remove<span class="token punctuation">(</span></span><span class="token string">&apos;class1 class2 class3&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>We can toggle the class name on and off, depending on whether or not it&apos;s there already.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">toggle<span class="token punctuation">(</span></span><span class="token string">&apos;myclass&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>The class can also be setup to depend on a <code>boolean</code>.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">shift<span class="token punctuation">(</span></span>window <span class="token operator">===</span> top<span class="token punctuation">,</span> <span class="token string">&apos;myclass&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>Finally, we can test if the class name is present.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">contains<span class="token punctuation">(</span></span><span class="token string">&apos;myclass&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// true</span></code>
+</pre>
+
+
+			<h2 id="styles">Style properties</h2>
+			<p>We can set a single <code>style</code> property on the spirit element.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span><span class="token string">&apos;white-space&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;nowrap&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>We can set multiple style properties with a <code>map</code>. Note that this uses a different method call.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">style<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	<span class="token string">&apos;white-space&apos;</span><span class="token punctuation">:</span> <span class="token string">&apos;nowrap&apos;</span><span class="token punctuation">,</span>
+	<span class="token string">&apos;text-align&apos;</span><span class="token punctuation">:</span> <span class="token string">&apos;left&apos;</span><span class="token punctuation">,</span>
+	<span class="token string">&apos;-beta-hyphens&apos;</span><span class="token punctuation">:</span> <span class="token string">&apos;auto&apos;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>The <code>-beta</code> syntax is short for a vendor prefix. It resolves to <code>-webkit</code>, <code>-moz</code>, <code>-ms</code> or maybe an empty string depending on the browser that runs the code. You can also use an alternative syntax, but note that the <code>-beta</code> syntax is not yet supported here.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">style<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	whiteSpace<span class="token punctuation">:</span> <span class="token string">&apos;nowrap&apos;</span><span class="token punctuation">,</span>
+	textAlign<span class="token punctuation">:</span> <span class="token string">&apos;left&apos;</span><span class="token punctuation">,</span>
+	<span class="token string">&apos;-beta-hyphens&apos;</span><span class="token punctuation">:</span> <span class="token string">&apos;auto&apos;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>You can get a style property <em>provided</em> that you set it first.</p>
+			<pre class="language-javascript">
+<code>console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">&apos;white-space&apos;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//&apos;nowrap&apos;</span></code>
+</pre>
+			<p>If you didn&apos;t explicitely <code>set</code> the property, but instead keep it defined in a stylesheet, you can still get the <em>computed</em> property.</p>
+			<pre class="language-javascript">
+<code>console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span><span class="token function">compute<span class="token punctuation">(</span></span><span class="token string">&apos;white-space&apos;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//&apos;nowrap&apos;</span></code>
+</pre>
+			<p>Note that this may lead to unexpected results of the element is <code>display:none</code> or not positioned in the document.</p>
+
+
+			<h2 id="shorthands">Shorthands</h2>
+			<p>The <code>css</code> plugin comes with a set of shorthands for common <code>style</code> properties. For properties that require a unit, <code>px</code> is automatically assumed. </p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span>display <span class="token operator">=</span> <span class="token string">&quot;block&quot;</span><span class="token punctuation">;</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span>width <span class="token operator">=</span> <span class="token string">&quot;50%&quot;</span><span class="token punctuation">;</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span>paddingTop <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span>opacity <span class="token operator">=</span> <span class="token number">0.5</span><span class="token punctuation">;</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span>left <span class="token operator">=</span> <span class="token number">250</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>CSS shorthands must be wrapped in a string. For now, all units must be also included. In other words, they don&apos;t really have a shorthand.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span>margin <span class="token operator">=</span> <span class="token string">&quot;10px 20px&quot;</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>Here&apos;s the list of properties we have covered with shorthands so far.</p>
+			<section class="shorthands">
+				<ul>
+					<li><code>zIndex</code></li>
+					<li><code>position</code></li>
+					<li><code>display</code></li>
+					<li><code>visibility</code>
+					</li><li><code>fontWeight</code></li>
+					<li><code>top</code></li>
+					<li><code>right</code></li>
+					<li><code>bottom</code></li>
+					<li><code>left</code></li>
+				</ul>
+				<ul>
+					<li><code>width</code></li>
+					<li><code>height</code></li>
+					<li><code>maxWidth</code></li>
+					<li><code>maxHeight</code></li>
+					<li><code>minWidth</code></li>
+					<li><code>minHeight</code></li>
+					<li><code>textIndent</code></li>
+					<li><code>margin</code></li>
+					<li><code>padding</code></li>
+				</ul>
+				<ul>
+					<li><code>marginTop</code></li>
+					<li><code>marginRight</code></li>
+					<li><code>marginBottom</code></li>
+					<li><code>marginLeft</code></li>
+					<li><code>paddingTop</code></li>
+					<li><code>paddingRight</code></li>
+					<li><code>paddingBottom</code></li>
+					<li><code>paddingLeft</code></li>
+					<li><code>opacity</code></li>
+				</ul>
+			</section>
+			<p class="todo">Support shorthand <em>getters</em>.</p>
+		</main>
+		<aside>
+			<nav id="nav">
+				<li><a href="/gui/index.html">Spirits</a></li>
+				<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
+				<li><a href="/gui/callbacks.html">Callbacks</a></li>
+				<li><a href="/gui/plugins.html">Plugins</a><nav>
+					<li><a href="/gui/plugin-action.html">action</a></li>
+					<li><a href="/gui/plugin-att.html">att</a></li>
+					<li><a href="/gui/plugin-box.html">box</a></li>
+					<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
+					<li><a href="/gui/plugin-config.html">config</a></li>
+					<li><a href="/gui/plugin-css.html">css</a></li>
+					<li><a href="/gui/plugin-dom.html">dom</a></li>
+					<li><a href="/gui/plugin-event.html">event</a></li>
+					<li><a href="/gui/plugin-life.html">life</a></li>
+					<li><a href="/gui/plugin-tick.html">tick</a></li></nav></li>
+				<li><a href="/gui/classes.html">Classes</a></li>
+				<li><a href="/gui/projects.html">Projects</a></li>
+				<li><a href="/gui/caveats.html">Caveats</a></li>
+				<li><a href="/gui/contribute.html">Contribute</a></li>
+			</nav>
+		</aside>
+	</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html id="spiritual-gui">
+	<head>
+		<title>box &#x2013; Spiritual GUI</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/css/styles.min.css">
+		<script src="/js/scripts.min.js"></script>
+	</head>
+	<body>
+		<main>
+			<h1>box</h1>
+			<p>The <code>box</code> plugin will the measure position and dimension of a spirit.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onready<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onready<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token keyword">this</span><span class="token punctuation">.</span>box<span class="token punctuation">.</span>localX <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>box<span class="token punctuation">.</span>height<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>These properties are <em>readonly</em>. If you are looking to change position and dimension, please refer to the <a href="plugin-css.html"><code>css</code></a> plugin. Also note that these things are implemented as properties, not methods, using <em>getters</em>.</p>
+			<dl class="inline">
+				<dt><code>width</code></dt>
+				<dd>Width of the spirit element</dd>
+				<dt><code>height</code></dt>
+				<dd>Height of the spirit element</dd>
+				<dt><code>localX</code></dt>
+				<dd>Horizontal position relative to positioned ancestor</dd>
+				<dt><code>localY</code></dt>
+				<dd>Vertical position relative to positioned ancestor</dd>
+				<dt><code>pageX</code></dt>
+				<dd>Horizontal position relative to the full page (includes scrolling)</dd>
+				<dt><code>pageY</code></dt>
+				<dd>Vertical position relative to the full page (includes scrolling)</dd>
+				<dt><code>clientX</code></dt>
+				<dd>Horizontal position relative to the viewport (ex scrolling)</dd>
+				<dt><code>clientY</code></dt>
+				<dd>Vertical position relative to the viewport (ex scrolling)</dd>
+			</dl>
+			<p class="todo">Note on layout trashing</p>
+		</main>
+		<aside>
+			<nav id="nav">
+				<li><a href="/gui/index.html">Spirits</a></li>
+				<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
+				<li><a href="/gui/callbacks.html">Callbacks</a></li>
+				<li><a href="/gui/plugins.html">Plugins</a><nav>
+					<li><a href="/gui/plugin-action.html">action</a></li>
+					<li><a href="/gui/plugin-att.html">att</a></li>
+					<li><a href="/gui/plugin-box.html">box</a></li>
+					<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
+					<li><a href="/gui/plugin-config.html">config</a></li>
+					<li><a href="/gui/plugin-css.html">css</a></li>
+					<li><a href="/gui/plugin-dom.html">dom</a></li>
+					<li><a href="/gui/plugin-event.html">event</a></li>
+					<li><a href="/gui/plugin-life.html">life</a></li>
+					<li><a href="/gui/plugin-tick.html">tick</a></li></nav></li>
+				<li><a href="/gui/classes.html">Classes</a></li>
+				<li><a href="/gui/projects.html">Projects</a></li>
+				<li><a href="/gui/caveats.html">Caveats</a></li>
+				<li><a href="/gui/contribute.html">Contribute</a></li>
+			</nav>
+		</aside>
+	</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Spiritual GUI</title>
+	</head>
+	<body>
+		<main>
+			<h1>Spiritual GUI</h1>
+			<p class="note">Don't panic just yet. Documentation is in progress.<br/>We'll just pretend to have a general introduction here.</p>
+			<p>Spiritual can be configured to run in two modes, <code>human</code> and <code>robot</code>.</p>
+			<p>In <code>human</code> mode, it becomes the responsibility of you, the developer, to initialize UI components and potentially destroy them again whenever the page gets updated. If you know exactly when and how this happens, you can skip directly to the detailed <a href="javascript:alert('TODO: what shall this lead to?')">instructions for human mode</a>.</p>
+			<p>In <code>robot</code> mode, Spiritual takes the approach of overriding native DOM methods to accomplish "magic" initialization of beha&shy;vior. When an operation causes a link to render, a spirit will appear to open external links in a new window. There are <a href="caveats.html">current limitations</a> to this strategy, but you can get far without running into them.</p>
+			<p>Spiritual GUI is:</p>
+			<ul>
+				<li>Not something that works in Node.js. You need a browser.</li>
+				<li>Not a JavaScript MVC framework, although a sister project <a href="http://wunderbyte.github.io/spiritual-edb/">Spiritual EDB</a> provides features to that effect.</li>
+				<li>More of a framework than a library.</li>
+			</ul>
+			<p class="todo">Here would follow a general reflection upon the difference between libraries, frameworks and platforms</p>
+			<p>Spiritual works off the principle "Don't call us, we'll call you", also known as the <a href="http://en.wikipedia.org/wiki/Hollywood_principle">Hollywood principle</a>. According to <a href="http://martinfowler.com/bliki/InversionOfControl.html">Fowler</a>, this makes it into a framework.</p>
+			<blockquote cite="http://martinfowler.com/bliki/InversionOfControl.html">
+		    <p>A <strong>library</strong> is essentially a set of functions that you can call, these days usually organized into classes. Each call does some work and returns control to the client.</p>
+		    <p>A <strong>framework</strong> embodies some abstract design, with more behavior built in. In order to use it you need to insert your behavior into various places in the framework either by subclassing or by plugging in your own classes. The framework's code then calls your code at these points.</p>
+	    </blockquote>
+	    <p>That's exactly how it works. In Spiritual in general and in <code>robot</code> mode in particular. At this point, we should write something about being opinionated and so on and so forth.</p>
+	    <!--
+	    <h2>It's a library</h2>
+	    <p>You can make another distinction between library and framework to classify Spiritual as more of a library. According to <a href="http://stackoverflow.com/questions/148747/what-is-the-difference-between-a-framework-and-a-library#148781">Curran</a>:</p>
+	    <blockquote cite="http://stackoverflow.com/questions/148747/what-is-the-difference-between-a-framework-and-a-library#148781">
+	    <p>A <strong>library</strong> is a tool. A <strong>framework</strong> is a way of life. A library you can use whatever tiny part helps you. A Framework you must commit your entire project to.</p>
+	    </blockquote>
+	    <p>Spiritual GUI doesn't deal with routing, caching, deployment, testing, security or database access, mapping and configuration.</p>
+	    -->
+		</main>
+	</body>
+</html>

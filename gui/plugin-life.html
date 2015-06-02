@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html id="spiritual-gui">
+	<head>
+		<title>life &#x2013; Spiritual GUI</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/css/styles.min.css">
+		<script src="/js/scripts.min.js"></script>
+	</head>
+	<body>
+		<main id="page-life">
+			<h1>life</h1>
+			<p>The <code>life</code> plugin tracks a spirits <a href="lifecycle.html">lifecycle</a>. Oftentimes a spirit would use it to retrieve the lifecycle status of another spirit.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">var</span> otherspirit <span class="token operator">=</span> gui<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">&apos;#thatspirit&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>otherspirit<span class="token punctuation">.</span>life<span class="token punctuation">.</span>attached<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// true</span></code>
+</pre>
+
+			<h2 id="flags">Lifecycle flags</h2>
+			<p>The lifecycle status of a spirit is reflected in a set of <code>boolean</code> properties. These are all readonly, or at least they should be.</p>
+			<dl>
+				<dt><code>constructed</code></dt>
+				<dd>Spirit is constructed? This is almost certainly true by the time you address the spirit.</dd>
+				<dt><code>configured</code></dt>
+				<dd>Spirit is configured? If true, the spirits (other) plugins are ready to be used.</dd>
+				<dt><code>entered</code></dt>
+				<dd>The spirit is now or has ever been positioned in the DOM?</dd>
+				<dt><code>attached</code></dt>
+				<dd>The spirit is currently positioned in the DOM? Note that this is initially <code>false</code> until the spirit has been discovered by the framework. It is also <code>false</code> whenever <code>detached</code> is <code>true</code>.</dd>
+				<dt><code>detached</code></dt>
+				<dd>The spirit is currently <em>not</em> positioned in the DOM? Note that this is initially <code>true</code> until the spirit has been discovered by the framework. It is also <code>true</code> whenever <code>attached</code> is false.</dd>
+				<dt><code>ready</code></dt>
+				<dd>The method <code>onready</code> has been called on the spirit? If <code>true</code>, this implies that all descendant spirits are also <code>ready</code>.</dd>
+				<dt><code>async</code></dt>
+				<dd>The spirit has entered the phase of it&apos;s life that happens roughly 4 milliseconds after <code>ready</code>?</dd>
+				<dt><code>destructed</code></dt>
+				<dd>The spirit is destructed? If true, don&apos;t try anything funny. The spirits properties and (other) plugins may not even exist.</dd>
+			</dl>
+
+			<p class="todo">Perhaps refactor something to allow <code>undefined</code> as a third state for these booleans?</p>
+
+			<h2 id="events">Lifecycle listeners</h2>
+			<p>You can add like an event listener to get notified whenever a spirit transitions into a new lifecycle phase. This is particularly useful for plugins, as they would otherwise need to rewrite the spirits methods.</p>
+			<pre class="language-javascript">
+<code>onconstruct<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onconstruct<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">this</span><span class="token punctuation">.</span>spirit<span class="token punctuation">.</span>life<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span>gui<span class="token punctuation">.</span>LIFE_ATTACH<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+onlife<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>l<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">if</span><span class="token punctuation">(</span>l<span class="token punctuation">.</span>type <span class="token operator">===</span> gui<span class="token punctuation">.</span>LIFE_ATTACH<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>spirit<span class="token punctuation">.</span>dom<span class="token punctuation">.</span><span class="token function">parent<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span>className <span class="token operator">=</span> <span class="token string">&quot;container&quot;</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code>
+</pre>
+			<p>The callback method recieves a <code>gui.Life</code> object with two properties <code>type</code> and <code>target</code> where the <code>target</code> is always a spirit. Note that this is a &quot;non-bubbling&quot; type of event, so you need to get a hold of the spirit in order to listen for it. We recomment you add listeners using this list of constants.</p>
+			<section>
+				<ul>
+					<li><code>gui.LIFE_CONSTRUCT</code></li>
+					<li><code>gui.LIFE_CONFIGURE</code></li>
+					<li><code>gui.LIFE_ENTER</code></li>
+					<li><code>gui.LIFE_ATTACH</code></li>
+				</ul>
+				<ul>
+					<li><code>gui.LIFE_READY</code></li>
+					<li><code>gui.LIFE_DETACH </code></li>
+					<li><code>gui.LIFE_ASYNC</code></li>
+					<li><code>gui.LIFE_DESTRUCT</code></li>
+				</ul>
+			</section>
+			<p>The constants map down to strings, but we can reduce the risk of typos by using the constants instead of the strings. That&apos;s because the plugin has been rigged to explode on <code>undefined</code>.</p>
+
+			<h2>Custom events</h2>
+			<p>You can make up new lifecycle events as you go along.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>life<span class="token punctuation">.</span>copypasted <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">;</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>life<span class="token punctuation">.</span><span class="token function">dispatch<span class="token punctuation">(</span></span><span class="token string">&apos;copypasted&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+		</main>
+		<aside>
+			<nav id="nav">
+				<li><a href="/gui/index.html">Spirits</a></li>
+				<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
+				<li><a href="/gui/callbacks.html">Callbacks</a></li>
+				<li><a href="/gui/plugins.html">Plugins</a><nav>
+					<li><a href="/gui/plugin-action.html">action</a></li>
+					<li><a href="/gui/plugin-att.html">att</a></li>
+					<li><a href="/gui/plugin-box.html">box</a></li>
+					<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
+					<li><a href="/gui/plugin-config.html">config</a></li>
+					<li><a href="/gui/plugin-css.html">css</a></li>
+					<li><a href="/gui/plugin-dom.html">dom</a></li>
+					<li><a href="/gui/plugin-event.html">event</a></li>
+					<li><a href="/gui/plugin-life.html">life</a></li>
+					<li><a href="/gui/plugin-tick.html">tick</a></li></nav></li>
+				<li><a href="/gui/classes.html">Classes</a></li>
+				<li><a href="/gui/projects.html">Projects</a></li>
+				<li><a href="/gui/caveats.html">Caveats</a></li>
+				<li><a href="/gui/contribute.html">Contribute</a></li>
+			</nav>
+		</aside>
+	</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>tick</title>
+	</head>
+	<body>
+		<main>
+			<h1>tick</h1>
+			<p>The <code>tick</code> plugin deals with the timing of things. This plugin is in a sorry state, so let's just give a quick overview of some API calls that are not likely to change.</p>
+
+			<h2>Ticks</h2>
+			<script class="language-javascript" type="text/plain">
+				this.tick.next(function() {
+					this.dom.hide();
+				});
+			</script>
+
+			<h2>Timeouts</h2>
+			<script class="language-javascript" type="text/plain">
+				this.tick.time(function() {
+					this.dom.hide();
+				}, 23);
+			</script>
+
+			<h2>Animations</h2>
+			<script class="language-javascript" type="text/plain">
+				this.tick.nextFrame(function() {
+					this.css.left += 5;
+				});
+			</script>
+		</main>
+	</body>
+</html>

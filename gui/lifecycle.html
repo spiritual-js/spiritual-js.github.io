@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html id="spiritual-gui">
+	<head>
+		<title>Lifecycle &#x2013; Spiritual GUI</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/css/styles.min.css">
+		<script src="/js/scripts.min.js"></script>
+	</head>
+	<body>
+		<main id="page-lifecycle">
+			<h1>Lifecycle</h1>
+			<p>These methods get called upon the spirit by the framework. You should not call them yourself.</p>
+			<dl>
+				<dt><code>onconstruct</code></dt>
+				<dd>This is called when the spirits gets newed up. The spirit is in a primitive state at this point, so you would probably catch a later event. Note also that the spirit may not exist in the page DOM at this point.</dd>
+				<dt><code>onconfigure</code></dt>
+				<dd>This gets called immediately after <code>onconstruct</code>. The spirit will initialize plugins and parse special <a href="plugin-config.html">config</a> attributes on it&apos;s DOM element.</dd>
+				<dt><code>onenter</code></dt>
+				<dd>This gets called when the spirit element is first encounted in the page DOM. Either it was there when the page loaded or somebody put it there.</dd>
+				<dt><code>onattach</code></dt>
+				<dd>This gets called when the spirit is encountered in the DOM. But unlike <code>onenter</code>, it also gets called whenever the spirit is moved to a new position in the DOM.</dd>
+				<dt><code>onready</code></dt>
+				<dd>This is the final event during the standard initialization of a spirit. It&apos;s a good time for the spirit to start acting out on the page, because at this point we know that all descendant spirits are also ready (see the <a href="#sequence">lifecycle sequence</a>).</dd>
+				<dt><code>onasync</code></dt>
+				<dd>This get&apos;s called some milliseconds after the <code>onready</code> event. If the spirit needs to perform processor intensive stuff that would delay percieved load time, like simulating a supernova explosion before it can be shown to the user, this might be a good time time.</dd>
+				<dt><code>oninit</code></dt>
+				<dd>TODO: This event is not supported at all. But it&apos;s supposed to be an event that occurs after <code>onready</code> unless something (perhaps the spirit itself) has blocked it. Something can unblock it at a later point; and the event will occur as soon as nothing is left to block.</dd>
+				<dt><code>ondetach</code></dt>
+				<dd>This gets called whenever the spirit is removed from it&apos;s position in the DOM. Note that unless the spirit is attached somewhere more or less immediately, the spirit will be nuked by a machine that <code>nulls</code> all it&apos;s properties, see <code>ondestruct</code>.</dd>
+				<dt><code>ondestruct</code></dt>
+				<dd>The spirit becomes scheduled for destruction. This could be a consequence of a DOM update that removes the spirit element from the document. After a short pause, all properties will be deleted to assist the garbage collector. To forcibly trigger this process, you can call the spirits <code>dispose()</code> method.</dd>
+			</dl>
+
+
+			<h2 id="sequence">The sequence of life</h2>
+			<p>It&apos;s really more of a sequence than a cycle. When the page loads, a machine will crawl the document from top to bottom looking for elements that match a spirit. A new spirit is created when:</p>
+			<ol>
+				<li>The <code>gui</code> attribute is <a href="index.html#inlining">specified</a> on the element</li>
+				<li>The element matches a <a href="index.html#channeling">channeled</a> CSS selector</li>
+			</ol>
+			<p>The <code>onconstruct</code> method gets called before the machine continues. When there are no more elements to crawl, the machine will call <code>onconfigure</code>, <code>onenter</code> and <code>onattach</code> in that order. Finally it will call <code>onready</code> and <code>oninit</code> in reverse order, first created spirits last. It looks something like this.</p>
+			<figure>
+				<ul>
+					<li>1. <code>onconstruct</code></li>
+					<li>1. <code>onconfigure</code></li>
+					<li>2. <code>onenter</code></li>
+					<li>3. <code>onattach</code></li>
+				</ul>
+				<ul>
+					<li>5. <code>oninit</code></li>
+					<li>4. <code>onready</code></li>
+				</ul>
+			</figure>
+			<p>The procedure is repeated whenever elements gets added to the document. A separate procedure runs whenever something is removed from the document.</p>
+			<p class="todo">Summarize separate procedure</p>
+			<p>This turn of events implies that when <code>onenter</code> is called on a spirit, we can safely assume that <code>oneneter</code> has already been called on all ancestor spirits. Whenever <code>onready</code> is called on a spirit, we can assume that <code>onready</code> has already been called on all descendant spirits. This will come in handy when we setup spirits that interact with each other, because we don&apos;t have to send and receive special events to control the timing of things.</p>
+
+			<h2 id="handling-own">Handling own life</h2>
+			<p>For a spirits to handle it&apos;s own lifecycle, simply override the associated method.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onready<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onready<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token string">&apos;Ready&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>Unless you really mean it, always call <code>this.super.onready()</code> when you override eg. the <code>onready</code> event. Spirits will not do anything with these methods by default, so nothing terrible is bound to happen if you forget about it. But since you never know when something interesting may be added to the super method, it&apos;s a good idea to onsider this a boilerplate formula.</p>
+			<p>The <code>life</code> plugin exposes a set of boolean flags that reflect the lifecycle status of the spirit. See a complete <a href="plugin-life.html#flags">list of flags</a>.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onenter<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onenter<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token keyword">this</span><span class="token punctuation">.</span>life<span class="token punctuation">.</span>entered<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// true
+</span>		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token keyword">this</span><span class="token punctuation">.</span>life<span class="token punctuation">.</span>ready<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// false
+</span>	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>			
+
+			<h2 id="handling-others">The life of others</h2>
+			<p>To handle lifecycle events of other spirits, or to intercept a spirits lifecycle from within a plugin, there&apos;s a special type of event you can listen for using the <code>life</code> plugin. To add a lifecycle listener to a spirit from anywhere on the page:</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">var</span> spirit <span class="token operator">=</span> gui<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">&apos;#otherspirit&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>spirit<span class="token punctuation">.</span>life<span class="token punctuation">.</span>ready<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// true
+</span>spirit<span class="token punctuation">.</span>life<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;destruct&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+	onlife<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>life<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>life<span class="token punctuation">.</span>target<span class="token punctuation">,</span> life<span class="token punctuation">.</span>type<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>The spirit can of course also add listeners for it&apos;s own lifecycle events as an alternative to method overriding. See a complete <a href="plugin-life.html#events">list of events</a>.</p>
+		</main>
+		<aside>
+			<nav id="nav">
+				<li><a href="/gui/index.html">Spirits</a></li>
+				<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
+				<li><a href="/gui/callbacks.html">Callbacks</a></li>
+				<li><a href="/gui/plugins.html">Plugins</a><nav>
+					<li><a href="/gui/plugin-action.html">action</a></li>
+					<li><a href="/gui/plugin-att.html">att</a></li>
+					<li><a href="/gui/plugin-box.html">box</a></li>
+					<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
+					<li><a href="/gui/plugin-config.html">config</a></li>
+					<li><a href="/gui/plugin-css.html">css</a></li>
+					<li><a href="/gui/plugin-dom.html">dom</a></li>
+					<li><a href="/gui/plugin-event.html">event</a></li>
+					<li><a href="/gui/plugin-life.html">life</a></li>
+					<li><a href="/gui/plugin-tick.html">tick</a></li></nav></li>
+				<li><a href="/gui/classes.html">Classes</a></li>
+				<li><a href="/gui/projects.html">Projects</a></li>
+				<li><a href="/gui/caveats.html">Caveats</a></li>
+				<li><a href="/gui/contribute.html">Contribute</a></li>
+			</nav>
+		</aside>
+	</body>
+</html>

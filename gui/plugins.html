@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html id="spiritual-gui">
+	<head>
+		<title>Plugins &#x2013; Spiritual GUI</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/css/styles.min.css">
+		<script src="/js/scripts.min.js"></script>
+	</head>
+	<body>
+		<main>
+			<h1>Plugins</h1>
+			<p>Spirits come with a set of <em>plugins</em> out of the box and there&apos;s a whole subsection of this site dedicated to the study of default plugins.</p>
+			<dl class="inline">
+				<a href="plugin-action.html">
+					<dt><code>action</code></dt>
+					<dd>Actions work much like jQuery triggers.</dd>
+				</a>
+				<a href="plugin-att.html">
+					<dt><code>att</code></dt>
+					<dd>Update attributes and observe attribute updates.</dd>
+				</a>
+				<a href="plugin-box.html">
+					<dt><code>box</code></dt>
+					<dd>Compute the position and dimension of a spirit.</dd>
+				</a>
+				<a href="plugin-broadcast.html">
+					<dt><code>broadcast</code></dt>
+					<dd>Broadcast messages pub-sub style.</dd>
+				</a>
+				<a href="plugin-config.html">
+					<dt><code>config</code></dt>
+					<dd>Parsing special configuration attributes.</dd>
+				</a>
+				<a href="plugin-css.html">
+					<dt><code>css</code></dt>
+					<dd>maintain classnames and <code>style</code> properties.</dd>
+				</a>
+				<a href="plugin-dom.html">
+					<dt><code>dom</code></dt>
+					<dd>Find and manipulate elements.</dd>
+				</a>
+				<a href="plugin-event.html">
+					<dt><code>event</code></dt>
+					<dd>Add and remove event listeners.</dd>
+				</a>
+				<a href="plugin-life.html">
+					<dt><code>life</code></dt>
+					<dd>Tracking the lifecycle of a spirit.</dd>
+				</a>
+				<a href="plugin-tick.html">
+					<dt><code>tick</code></dt>
+					<dd>Deal with scheduling and timing.</dd>
+				</a>
+			</dl>
+
+			<p>In Spiritual, a plugin is simply a group of related functionality that has been encapsulated under a single property name. Plugins offload complexity from the spirit and reduce the likelihood of naming collisions.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	example<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>event<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;click&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>action<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;pick&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>broadcast<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;done&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>Because a spirits methods are only available to the spirit and its sub&#xAD;classes, plugins are also useful for sharing functionality between spirits that would otherwise become stuck in class hierarchies.</p>
+			
+			<h2 id="creating">Creating plugins</h2>
+			<p>To create a plugin, you start by extending another plugin. The base plugin is <code>gui.Plugin</code>.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">var</span> NumberPlugin <span class="token operator">=</span> gui<span class="token punctuation">.</span>Plugin<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	getRandom<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>max<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token function">round<span class="token punctuation">(</span></span>Math<span class="token punctuation">.</span><span class="token function">random<span class="token punctuation">(</span></span><span class="token punctuation">)</span> <span class="token operator">*</span> max<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>Then you just need to plug it into a spirit. The base spirit is <code>gui.Spirit</code>.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">plugin<span class="token punctuation">(</span></span><span class="token string">&quot;number&quot;</span><span class="token punctuation">,</span> NumberPlugin<span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>The plugin becomes available to <code>gui.Spirit</code> and all spirits that inherit from it (in this case, all spirits). When the <code>number</code> property is accessed, the plugin will be newed up.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">var</span> MySpirit <span class="token operator">=</span> gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onconstruct<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onconstruct<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token keyword">this</span><span class="token punctuation">.</span>number<span class="token punctuation">.</span><span class="token function">getRandom<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+
+
+			<h2 id="laziness">Laziness</h2>
+			<p>Plugins are instantiated lazily. If you want the plugin to do something without being accessed first, you can set the <code>lazy</code> property to <code>false</code>. This is a property on the plugin <code>constructor</code>, so it&apos;s a static property. There&apos;s a shorthand for declaring this. Read <a href="classes.html">more about classes</a>.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Plugin<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onconstruct<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onconstruct<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getRandom<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	getRandom<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token function">random<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+	lazy<span class="token punctuation">:</span> <span class="token keyword">false</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>A non-lazy plugin like this instantiates when the <code>onconfigure</code> method is called on the spirit. That&apos;s pretty much straight away. If the plugin needs to deal with the spirit (or any other plugin), it can access the spirit using <code>this.spirit</code>.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Plugin<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onconstruct<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onconstruct<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token keyword">this</span><span class="token punctuation">.</span>spirit<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// [object gui.Spririt]
+</span>	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+
+			<h2 id="lifecycle">Lifecycle</h2>
+			<p>The lifecycle of a plugin is bound the spirit. A lazy plugin will be newed up when the spirit starts using. A non-lazy plugin will be created when <code>onconfigure</code> is called on the spirit. In both cases, the plugin will be destroyed when the spirit is destroyed. You can hook into these things.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Plugin<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onconstruct<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onconstruct<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token string">&apos;Constructed.&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	ondestruct<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">ondestruct<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token string">&apos;Destructed.&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>Once constructed, the plugin can also hook into the spirits lifecycle. The plugin might for example need to know when <code>onenter</code> is called. We&apos;ll do this using the <code>life</code> plugin. You can get a hold on the <code>life</code> plugin through the spirit.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Plugin<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onconstruct<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onconstruct<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>spirit<span class="token punctuation">.</span>life<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;enter&apos;</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	onlife<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>l<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>l<span class="token punctuation">.</span>type<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// &apos;enter&apos;
+</span>	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+	lazy<span class="token punctuation">:</span> <span class="token keyword">false</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>For a full list of events, refer to the <a href="plugin-life.html"><code>life</code></a> plugin. Note that unlike with spirits, you should rarely add <code>this.super.onlife</code> in the callback method, since few plugins have this method predefined.</p>
+
+
+			<h2 id="chaining">Method chaining</h2>
+			<p>Plugins keep a tradition of method chaining as seen in jQuery. Unless a method returns something special, consider having it return <code>this</code> to cut down on keystrokes.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	example<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>action<span class="token punctuation">.</span>
+			<span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;one&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>
+			<span class="token function">remove<span class="token punctuation">(</span></span><span class="token string">&apos;two&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>
+			<span class="token function">dispatch<span class="token punctuation">(</span></span><span class="token string">&apos;three&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>There&apos;s an assistant function <code>gui.Combo.chained</code> that makes a method return <code>this</code> when it would otherwise return <code>undefined</code>. It makes for a nice declarative syntax.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">var</span> MySpirit <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token function">using<span class="token punctuation">(</span></span>chained<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">return</span> gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+		dothis<span class="token punctuation">:</span> <span class="token function">chained<span class="token punctuation">(</span></span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+		dothat<span class="token punctuation">:</span> <span class="token function">chained<span class="token punctuation">(</span></span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">(</span>gui<span class="token punctuation">.</span>Combo<span class="token punctuation">.</span>chained<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+		</main>
+		<aside>
+			<nav id="nav">
+				<li><a href="/gui/index.html">Spirits</a></li>
+				<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
+				<li><a href="/gui/callbacks.html">Callbacks</a></li>
+				<li><a href="/gui/plugins.html">Plugins</a><nav>
+					<li><a href="/gui/plugin-action.html">action</a></li>
+					<li><a href="/gui/plugin-att.html">att</a></li>
+					<li><a href="/gui/plugin-box.html">box</a></li>
+					<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
+					<li><a href="/gui/plugin-config.html">config</a></li>
+					<li><a href="/gui/plugin-css.html">css</a></li>
+					<li><a href="/gui/plugin-dom.html">dom</a></li>
+					<li><a href="/gui/plugin-event.html">event</a></li>
+					<li><a href="/gui/plugin-life.html">life</a></li>
+					<li><a href="/gui/plugin-tick.html">tick</a></li></nav></li>
+				<li><a href="/gui/classes.html">Classes</a></li>
+				<li><a href="/gui/projects.html">Projects</a></li>
+				<li><a href="/gui/caveats.html">Caveats</a></li>
+				<li><a href="/gui/contribute.html">Contribute</a></li>
+			</nav>
+		</aside>
+	</body>
+</html>

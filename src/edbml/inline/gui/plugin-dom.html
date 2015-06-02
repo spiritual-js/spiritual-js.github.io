@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>dom</title>
+	</head>
+	<body>
+		<main>
+			<h1>dom</h1>
+			<p>The <code>dom</code> plugin handles DOM navigation and manipulation with a focus on navigating and manipulating the <em>spirits</em> associated to DOM elements. It is less suited for general DOM navigation, so you might want to compliment Spiritual GUI with some like jQuery for that.</p>
+
+
+			<h2 id="queries">Queries</h2>
+			<p>The spirit can lookup elements and other spirits using CSS selectors. The <code>selector</code> is required, the <code>type</code>, is optional.</p>
+			<script class="language-javascript" type="text/plain">
+				this.dom.q(selector, type); // first descendant
+				this.dom.qall(selector, type); // all descendants
+				this.dom.qdoc(selector, type); // first in document
+				this.dom.qdocall(selector, type); // all in document
+			</script>
+			<p>Given a single argument, the CSS selector, the methods return either a DOM element or an array of elements.<p>
+			<script class="language-javascript" type="text/plain">
+				this.dom.q('a'); // [object HTMLAnchorElement]
+				this.dom.qall('a').length; // 23
+			</script>
+			<p>The second argument <code>type</code> is a spirit constructor. When specified, the methods return either a spirit or an array of spirits. You can use <code>gui.Spirit</code> to find any kind of spirit.</p>
+			<script class="language-javascript" type="text/plain">
+				this.dom.q('a', gui.Spirit); // [object MyLinkSpirit]
+				this.dom.qall('a', MyLinkSpirit).length; // 23
+			</script>
+			<p>The two methods <code>qdoc</code> and <code>qdocall</code> work the same way, except they search from the document node instead of the spririts DOM subtree.</p>
+
+
+			<h2 id="navigation">Navigation</h2>
+			<p>The <code>dom</code> plugin also features more traditional methods for navigating back and forth in the DOM structure. The <code>type</code> argument is optional.</p>
+			<script class="language-javascript" type="text/plain">
+				this.dom.parent(type); // parent element or spirit of type
+				this.dom.child(type); // first child element (or spirit)
+				this.dom.children(type); // all children
+				this.dom.ancestor(type); // first ancestor
+				this.dom.ancestors(type); // all ancestors
+				this.dom.descendant(type); // first descendant
+				this.dom.descendants(type); // all descendants
+				this.dom.next(type); // next sibiling (of type)
+				this.dom.previous(type); // previous sibling
+				this.dom.following(type); // all following siblings
+				this.dom.preceding(type); // all preceding siblings
+				this.dom.first(type); // first child (or spirit of type)
+				this.dom.last(type); // last child (or spirit of type)
+			</script>
+			<p>If you omit the <code>type</code> argument, these methods will return either a DOM element or an array of elements. In this case, some methods become redundant. For example, <code>parent()</code> and <code>ancestor()</code> always return the same element.</p>
+			<p>If you add a second argument in the form of a spirit constructor, the methods can be used to lookup spirits. Use <code>gui.Spirit</code> to lookup all kinds of spirits.</p>
+			<script class="language-javascript" type="text/plain">
+				this.dom.descendants(gui.Spirit).length; // 23
+				this.dom.ancestor(TopMenuSpirit); // [object TopMenuSpirit]
+				this.dom.last(ButtonSpirit); // [object ButtonSpirit]
+			</script>
+			<p>We'll save the detailed walkthrough of these methods for a more convenient time. Let's talk about DOM manipulation.</p>
+
+			<h2 id="manipulation">Manipulation</h2>
+			<p>The following methods can be used to insert things inside-of, instead-of or next-to the spirit. They share the same signature.</p>
+			<script class="language-javascript" type="text/plain">
+				this.dom.append(things); // append element(s) or spirit(s)
+				this.dom.prepend(things); // prepend thing(s)
+				this.dom.before(things); // insert thing(s) before
+				this.dom.after(things); // insert things(s) after
+				this.dom.replace(things); // replace with thing(s)
+			</script>
+			<p>The <code>things</code> argument is complicated. It can be either:</p>
+			<ul>
+				<li>A node</li>
+				<li>An array of nodes</li>
+				<li>A NodeList</li>
+				<li>A spirit</li>
+				<li>An array of spirits</li>
+				<li>An array of nodes and spirits</li>
+			</ul>
+			<p>There's also this method.</p>
+			<script class="language-javascript" type="text/plain">
+				this.dom.appendTo(thing); // append to element or spirit
+			</script>
+			<p>It goes along with some methods that are still under development.</p>
+			<p class="todo">Add methods <code>insertBefore</code> and so on + add a note on second-step navigation (stuff only works in spirits).</p>
+			<p>
+		</main>
+	</body>
+</html>

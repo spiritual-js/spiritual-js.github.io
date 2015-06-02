@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>att</title>
+	</head>
+	<body>
+		<main>
+			<h1>att</h1>
+			<p>The <code>att</code> plugin is used to update DOM attributes on the spirits element and/or listening for DOM attributes being updated.</p>
+
+			<h2 id="updates">Attribute updates</h2>
+			<script class="language-javascript" type="text/plain">
+				this.att.set('name','value'); // set attribute
+				this.att.del('name'); // delete attribute
+				this.att.get('name'); // get attribute
+				this.att.getmap(); // get atributes as map
+				this.att.setmap(obj); // set attributes with map
+				this.att.all(); // get DOM attributes as array
+			</script>
+			<p>You can set an attribute like this:</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Spirit.extend({
+					onenter: function() {
+						this.super.onenter();
+						this.att.set('title','Return');
+					}
+				});
+			</script>
+			<p>If you set it to <code>null</code>, the attribute will be removed. Or you can do this:</p>
+			<script class="language-javascript" type="text/plain">
+				this.att.del('title');
+			</script>
+			<p>You can check if the attribute is specified.</p>
+			<script class="language-javascript" type="text/plain">
+				console.log(this.att.has('title')); // true
+			</script>
+			<p>You can of course also get the attribute value.</p>
+			<script class="language-javascript" type="text/plain">
+				console.log(this.att.get('title')); // 'Return'
+			</script>
+			<p>Or you can get all the attributes in the form of an <code>object</code>.</p>
+			<script class="language-javascript" type="text/plain">
+				var atts = this.att.getmap();
+				console.log(atts.title); // 'Return'
+			</script>
+			<p>You can also set the attributes with an <code>object</code>.</p>
+			<script class="language-javascript" type="text/plain">
+				this.att.setmap({
+					title: 'Return',
+					href: '/index.html'
+				});
+			</script>
+			<p>You can even get the attributes as an array (of DOM attributes).</p>
+			<script class="language-javascript" type="text/plain">
+				var atts = this.att.all(), att = atts[0];
+				console.log(att.name, att.value); // 'title', 'Return'
+			</script>
+
+			
+			<h2 id="listeners">Attribute listeners</h2>
+			<p>You can setup to get a callback whenever an attribute is updated. You'll recieve a simple object with the properties <code>name</code> and <code>value</code>.<p>
+			<script class="language-javascript" type="text/plain">
+				gui.Spirit.extend({
+					onconfigure: function() {
+						this.super.onconfigure();
+						this.att.add('title');
+					},
+					onatt: function(a) {
+						this.super.onatt(a);
+						if(a.name === 'title') {
+							console.log(a.value); // 'Return'
+						}
+					}
+				});
+			</script>
+			<p>When you are done with an attribute, you can remove the listener.</p>
+			<script class="language-javascript" type="text/plain">
+			this.att.remove('title');
+			</script>
+			<p>When you add or remove attribute listeners, you can use an array or space-separated string to add or remove more than one.</p>
+			<script class="language-javascript" type="text/plain">
+			this.att.add('title href').remove(['rel', 'rev']);
+			</script>
+		</main>
+	</body>
+</html>

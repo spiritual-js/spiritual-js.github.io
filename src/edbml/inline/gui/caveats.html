@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Caveats</title>
+	</head>
+	<body>
+		<main>
+			<h1>Caveats</h1>
+			<p>We are waiting on a fix for <a href="https://code.google.com/p/chromium/issues/detail?id=43394">issue&#160;43394</a>, "DOM attributes should be moved to prototype chains and should expose JavaScript getters and setters". Until it fixes, spirits will attach <em>async</em> in Chrome and Safari whenever one of these is involved:</p>
+			<ul>
+				<li><code>innerHTML</code></li>
+				<li><code>outerHTML</code></li>
+				<li><code>textContent</code></li>
+			</ul>
+			<p>The bug relates to these things being implemented as property setters instead of method calls. Observe the difference:</p>
+			<script class="language-javascript" type="text/plain">
+			document.body.textContent = 'hello'; // property setter
+			document.body.appendChild(textnode); // method call
+			</script>
+			<p>We can work around this with a <code>MutationObserver</code>. When the DOM changes, the observer will trigger a spiritualization of newly created elements.</p>
+			<ul>
+				<li>Spirits will constructed as expected, it just takes a few milliseconds before it happens. Until the bug is fixed, please be aware of this potential delay while coding your spirits.</li>
+				<li>Spirits may however not be destructed properly when their element is removed from the DOM, so they may still be subscribed to events and broadcasts going on. If this causes problems, you&apos;ll need extra code to work around it.</li>
+			</ul>
+			<p>The issue is making good progress in Chrome but the status in Safari is unknown, as always.</p>
+
+			<!--
+			<p>DOM setters are not overridable in Chrome and there is no per&shy;formant workaround. We've disabled overriding of DOM setters in all browsers, just so there's no surprises when switching back and forth between them. For now, you'll have to bear in mind that when a document update didn't initialize the spirits as expected, it probably boils down to this bug.</p>
+
+			<h2>Workarounds</h2>
+			<p>Workaround nuber one is to run Spiritual in <code>human</code> mode and assume full responsibility for initialization and destruction of spirits. You can read more about <a href="javascript:alert('TODO: What will this lead to?')">developing in human mode</a>.
+
+			<p>This will introduce a possibility for forgetting about the spirits when you update the page. Depending on the number of different ways you do this, and the number of people doing it, it may lead to worse statistics.</p>
+
+			<p>Workaround number two is to not use any of these setters. Use methods where possible or use the following, Spiritual-aware equivalents to <code>innerHTML</code>, <code>outerHTML</code> and <code>textContent</code>:</p>
+			<script class="language-javascript" type="text/plain">
+				this.dom.html('<h1>html</h1>');
+				this.dom.outerHtml('<h2>html</h2>');
+				this.dom.text('text');
+			</script>
+			<p>This works for spirits with the <a href="plugin-dom.html">dom plugin</a>, but you can run via the same methods from anywhere in your code.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.DOMPlugin.html(element, '<h1>html</h1>');
+				gui.DOMPlugin.outerHtml(element, '<h2>html</h2>');
+				gui.DOMPlugin.text(element, 'text');
+			</script>
+
+			<p>This will of course introduce the possibility for spirits not initializing because you forget to use the methods.</p>
+			<p>None of these workarounds are really helpful if the document is getting updated by a mechanism that is not under immediate control, as i happens with many high-level MVC frameworks. Unless you like to modify the source code for these frameworks, the ultimate workaround is to simply initialize spirits the <code>human</code> way whenever they don't seem to do so themselves.</p>
+			<script class="language-javascript" type="text/plain">
+				menumodel.addItem('Frontpage', 'index.html');
+				setTimeout(function() { // sometimes needed :/
+					gui.spiritualize(document.querySelector('#menu'));
+				});
+			</script>
+			<p>If the issue should get fixed at some point, there's no harm done with leaving this code around, but it would of course make sense to remove it.</p>
+			<h2>Observing mutations</h2>
+			<p>As long as the bug lingers, Spiritual will ship with a mechanism for observing and reporting changes to the document that are not intercepted by the framework.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.debugmutations = true;
+			</script>
+			<p>This will trigger a console message whenever something was updated with <code>innerHTML</code> or any other unsupported interface. You can track down the source of the update and instruct the <code>gui.Observer</code> to ignore mutations while you:</li>
+			<ol>
+				<li>Remove old spirits manually.</li>
+				<li>Perform the update</li>
+				<li>Resolve new spirits manually.</li>
+			</ol>
+			<script class="language-javascript" type="text/plain">
+				gui.Observer.suspend(function() {
+					gui.materialize(document.body);
+					document.body.innerHTML = '<h1>Updated</h1>';
+					gui.spiritualize(document.body);
+				});
+			</script>
+			<p></p>
+			<p>You are probably wondering why we don't just use the observer mechanism to initialize the spirits. We know that there's two reasons for this.</p>
+			<ol>
+				<li>It uses <a href="mdn.io/mutationobserver">Mutation Observers</a> and these things don't work in IE9-10.</li>
+				<li>Mutation Observers are asynchronous and Spiritual attempts to always run in a synchronous mode (in sync with the DOM, that is).</li>
+			</ol>
+			-->
+
+
+		</main>
+	</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html id="spiritual-gui">
+	<head>
+		<title>Projects &#x2013; Spiritual GUI</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/css/styles.min.css">
+		<script src="/js/scripts.min.js"></script>
+	</head>
+	<body>
+		<main>
+			<h1>Projects</h1>
+			<p>Introduction goes here.</p>
+
+			<h2 id="namespaces">Namespaces</h2>
+			<p>Although we haven&apos;t used them so far, namespace objects are recommended to avoid collissions in the global namespace, an invisible namespace that exists all around us.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">var</span> myns <span class="token operator">=</span> window<span class="token punctuation">.</span>myns <span class="token operator">||</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+myns<span class="token punctuation">.</span>MySpirit <span class="token operator">=</span> gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>Spiritual comes with a formalized API for declaring namespace objects. You would usually do this in one of the <em>first</em> files so that the namespace is ready to be used.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span><span class="token function">namespace<span class="token punctuation">(</span></span><span class="token string">&apos;myns&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// create window.myns (if needed)</span></code>
+</pre>
+			<p>This declares the namespace as a property of <code>window</code>. It also returns the namespace object, so you can write it like this if your editor complaints that <code>myns</code> is not defined.</p>
+			<pre class="language-javascript">
+<code>myns <span class="token operator">=</span> gui<span class="token punctuation">.</span><span class="token function">namespace<span class="token punctuation">(</span></span><span class="token string">&apos;myns&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>Some people like to declare constants and simple properties as part of the namespace declaration. I certainly do, since it&apos;s loaded first.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span><span class="token function">namespace<span class="token punctuation">(</span></span><span class="token string">&apos;myns&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+	LOCALHOST<span class="token punctuation">:</span> <span class="token string">&apos;127.0.0.1&apos;</span><span class="token punctuation">,</span>
+	PUBLICHOST<span class="token punctuation">:</span> <span class="token string">&apos;77.66.50.50&apos;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>When you are done adding members like spirits and plugins to the namespace object, there&apos;s a method you can call to <em>name</em> the members. We are not sure if this is supposed to be a manual step, but that&apos;s what it is for now.</p>
+			<pre class="language-javascript">
+<code>myns<span class="token punctuation">.</span><span class="token function">spacename<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>This runs through the namespace members and updates the <code>toString</code> method. It also changes how things get logged in the console and displayed in the profiler. This might not quite work at the moment, but that&apos;s the idea.</p>
+			<pre class="language-javascript">
+<code><span class="token function">alert<span class="token punctuation">(</span></span>myspirit<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// [object Anonymous]
+</span>myns<span class="token punctuation">.</span><span class="token function">spacename<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">alert<span class="token punctuation">(</span></span>myspirit<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// [object myns.MySpirit]</span></code>
+</pre>
+			<p class="todo">See what&apos;s up with <a href="https://code.google.com/p/chromium/issues/detail?id=17356">issue 17356</a> nowadays.</p>
+			<p class="todo">Note on namespaces versus config-metatags.</p>
+
+
+			<h2 id="modules">Modules</h2>
+			<p>Spiritual comes with an informal <em>module</em> concept. A module doesn&apos;t <code>export</code> methods in the sense of a conventional module, it&apos;s more of a convenient place to:</p>
+			<ul>
+				<li>Channel spirits to CSS selectors</li>
+				<li>Assign plugins to all spirits</li>
+				<li>Declare mixins for all spirits</li>
+			</ul>
+			<p>You would usually load the module as the <em>last</em> file, having declared all the spirits and plugins that goes into it. Notice the identity token.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span><span class="token function">module<span class="token punctuation">(</span></span><span class="token string">&apos;mymodule@mycompany.com&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+	channels<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token comment" spellcheck="true">// spirits for selectors
+</span>		<span class="token punctuation">[</span><span class="token string">&quot;a, button&quot;</span><span class="token punctuation">,</span> myns<span class="token punctuation">.</span>ButtonSpirit<span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token string">&quot;#menubar&quot;</span><span class="token punctuation">,</span> myns<span class="token punctuation">.</span>MenuBarSpirit<span class="token punctuation">]</span>
+	<span class="token punctuation">]</span><span class="token punctuation">,</span>
+	plugins<span class="token punctuation">:</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// plugins for all spirits
+</span>		<span class="token string">&apos;number&apos;</span> <span class="token punctuation">:</span> myns<span class="token punctuation">.</span>NumberPlugin<span class="token punctuation">,</span>
+		<span class="token string">&apos;logger&apos;</span> <span class="token punctuation">:</span> myns<span class="token punctuation">.</span>LoggerPlugin
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	mixins<span class="token punctuation">:</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// methods for all spirits
+</span>		example <span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token string">&apos;Great example&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>You can check if a module is loaded.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span><span class="token function">HasModule<span class="token punctuation">(</span></span><span class="token string">&apos;mymodule@mycompany.com&apos;</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// true</span></code>
+</pre>
+			<p>There&apos;s also some methods you can add as part of the module definition in order to:</p>
+			<ul>
+				<li>Do something now, or as soon as the module gets parsed</li>
+				<li>Do something before we crawl the DOM in search for spirits</li>
+				<li>Do something after <code>onready</code> has been fired for all spirits.</li>
+			</ul>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span><span class="token function">module<span class="token punctuation">(</span></span><span class="token string">&apos;mymodule@mycompany.com&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+	oncontextinitialize<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// TODO: rename this
+</span>		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token string">&apos;Runs immediately&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	onbeforespiritualize<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token string">&apos;Before any spirits&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	onafterspiritualize<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token string">&apos;All spirits ready&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>Finally we will note that the <code>gui.module</code> method returns something called a <code>gui.Module</code> that you can work with as an entity if needed.</p>
+			<pre class="language-javascript">
+<code>myns<span class="token punctuation">.</span>MyModule <span class="token operator">=</span> gui<span class="token punctuation">.</span><span class="token function">module<span class="token punctuation">(</span></span><span class="token string">&apos;mymodule@mycompany.com&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+	credits<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token string">&apos;My Module was created by My Company&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+window<span class="token punctuation">.</span>onload <span class="token operator">=</span> myns<span class="token punctuation">.</span>MyModule<span class="token punctuation">.</span>credits<span class="token punctuation">;</span></code>
+</pre>
+		</main>
+		<aside>
+			<nav id="nav">
+				<li><a href="/gui/index.html">Spirits</a></li>
+				<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
+				<li><a href="/gui/callbacks.html">Callbacks</a></li>
+				<li><a href="/gui/plugins.html">Plugins</a><nav>
+					<li><a href="/gui/plugin-action.html">action</a></li>
+					<li><a href="/gui/plugin-att.html">att</a></li>
+					<li><a href="/gui/plugin-box.html">box</a></li>
+					<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
+					<li><a href="/gui/plugin-config.html">config</a></li>
+					<li><a href="/gui/plugin-css.html">css</a></li>
+					<li><a href="/gui/plugin-dom.html">dom</a></li>
+					<li><a href="/gui/plugin-event.html">event</a></li>
+					<li><a href="/gui/plugin-life.html">life</a></li>
+					<li><a href="/gui/plugin-tick.html">tick</a></li></nav></li>
+				<li><a href="/gui/classes.html">Classes</a></li>
+				<li><a href="/gui/projects.html">Projects</a></li>
+				<li><a href="/gui/caveats.html">Caveats</a></li>
+				<li><a href="/gui/contribute.html">Contribute</a></li>
+			</nav>
+		</aside>
+	</body>
+</html>

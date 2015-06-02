@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>action</title>
+	</head>
+	<body>
+		<main>
+			<h1>action</h1>
+			<p>The <code>action</code> plugin manages dispatching and handling of <em>actions</em>. Actions work much like DOM events or jQuery triggers. Despite the name, they don't actually do anything. They are simply objects with a <code>type</code> and an optional <code>data</code> property.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Spirit.extend({
+					onready: function() {
+						this.super.onready();
+						this.action.dispatch('mytype','mydata');
+					}
+				});
+			</script>
+			<p>The action takes the form of a <code>gui.Action</code>. Once dispatched, it will crawl upwards though the DOM structure until a spirit intercepts it and calls the <code>consume</code> method.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Spirit.extend({
+					onenter: function() {
+						this.super.onenter();
+						this.action.add('mytype');
+					},
+					onaction: function(a) {
+						this.super.onaction(a);
+						if(a.type === 'mytype') {
+							console.log(a.data); // ''mydata'
+							a.consume();
+						}
+					}
+				});
+			</script>
+
+
+			<h2>Multiple listeners</h2>
+			<p>You can add and remove multiple action listeners with an array or space-separated string. Just make sure that the individual action types don't contain spaces.</p>
+			<script class="language-javascript" type="text/plain">
+				this.action.add([ACTION1, ACTION2, ACTION3]);
+				this.action.remove('action1 action2 action3');
+			</script>
+			<p>When adding a listener, you can setup up to automatically remove it once the action is received.</p>
+			<script class="language-javascript" type="text/plain">
+				this.action.one('myaction'); // TODO: implement!
+			</script>
+
+
+			<h2>Descending actions</h2>
+			<p>When you <code>dispatch</code> an action, it naturally crawls upwards in the DOM tree until it hits HTML, but you can force it to crawl downwards.</p>
+			<script class="language-javascript" type="text/plain">
+				this.action.descend('mytype');
+			</script>
+			<p>You can use <code>ascend</code> as an alias to <code>dispatch</code> if you care to make the direction explicit.</p>
+
+
+			<h2>Get the dispatcher</h2>
+			<p>When you catch an action, you can identify the dispatcher using the <code>target</code> property. The dispatcher is always another spirit.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Spirit.extend({
+					onaction: function(a) {
+						this.super.onaction(a);
+						console.log(a.target); // [object gui.Spirit]
+					}
+				});
+			</script>
+
+			<h2>Change the handler</h2>
+			<p>You can add a second argument to the <code>add</code> and <code>remove</code> methods to specify whoever should handle the action. This can be anything that implements <code>onaction</code>, perhaps another spirit. It defaults to <code>this</code>, the spirit itself, but sometimes you'll want to specify <code>this</code> explicitely.</p>
+
+			<script class="language-javascript" type="text/plain">
+				var otherspirit = gui.get('#thatspirit');
+				otherspirit.action.add('myaction', this);
+			</script>
+
+			<p>Without specifying <code>this</code>, the the handler of the action would otherwise fall back to <code>otherspirit</code>.</p>
+
+
+			<h2>Global actions</h2>
+			<p>You can dispatch actions across <code>iframes</code> using the methods outlined below. Spiritual GUI must be loaded in all frames for this to work.</p>
+			<script class="language-javascript" type="text/plain">
+				this.action.addGlobal('myaction');	
+				this.action.oneGlobal('myaction');
+				this.action.dispatchGlobal('myaction');
+				this.action.ascendGlobal('myaction');
+				this.action.descendGlobal('myaction');
+			</script>
+			<p>It's important to synchronize <code>addGlobal</code> and <code>dispatchGlobal</code>. You cannot intercept a global action using a local listener, even if receiver and sender is in the same window.</p>
+			<p class="todo">Implement "<code>one</code>" methods if not already.</p>
+		</main>
+	</body>
+</html>

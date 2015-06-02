@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>css</title>
+	</head>
+	<body>
+		<main id="page-css">
+			<h1>css</h1>
+			<p>The <code>css</code> plugins deal with the <code>className</code> and <code>style</code> properties. Here's an overview of the methods.</p>
+			<script class="language-javascript" type="text/plain">
+				this.css.add('myclass'); // add classname(s)
+				this.css.remove('myclass'); // remove classname(s)
+				this.css.toggle('myclass'); // toggle classname(s)
+				this.css.shift(true, 'myclass'); // conditional class
+				this.css.contains('myclass'); // has classname?
+				this.css.set('color', 'red') // set single style
+				this.css.get('color') // get single style
+				this.css.style({color: 'red'}) // set multiple styles
+				this.css.compute('color') // get computed style
+				this.css.name() // get or set the classname
+				this.css.matches('[color]') // matches selector?
+			</script>
+
+			<h2 id="classes">Class names</h2>
+			<p>We can add a classname to the spirit.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Spirit.extend({
+					onenter: function() {
+						this.super.onenter();
+						this.css.add('myclass');
+					}
+				});
+			</script>
+			<p>We can also remove it again.</p>
+			<script class="language-javascript" type="text/plain">
+				this.css.remove('myclass');
+			</script>
+			<p>We can add or remove multiple class names with an array or space-separated string.</p>
+			<script class="language-javascript" type="text/plain">
+				this.css.add([CLASS1, CLASS2, CLASS3]);
+				this.css.remove('class1 class2 class3');
+			</script>
+			<p>We can toggle the class name on and off, depending on whether or not it's there already.</p>
+			<script class="language-javascript" type="text/plain">
+				this.css.toggle('myclass');
+			</script>
+			<p>The class can also be setup to depend on a <code>boolean</code>.</p>
+			<script class="language-javascript" type="text/plain">
+				this.css.shift(window === top, 'myclass');
+			</script>
+			<p>Finally, we can test if the class name is present.</p>
+			<script class="language-javascript" type="text/plain">
+				this.css.contains('myclass'); // true
+			</script>
+
+
+			<h2 id="styles">Style properties</h2>
+			<p>We can set a single <code>style</code> property on the spirit element.</p>
+			<script class="language-javascript" type="text/plain">
+				this.css.set('white-space', 'nowrap');
+			</script>
+			<p>We can set multiple style properties with a <code>map</code>. Note that this uses a different method call.</p>
+			<script class="language-javascript" type="text/plain">
+				this.css.style({
+					'white-space': 'nowrap',
+					'text-align': 'left',
+					'-beta-hyphens': 'auto'
+				});
+			</script>
+			<p>The <code>-beta</code> syntax is short for a vendor prefix. It resolves to <code>-webkit</code>, <code>-moz</code>, <code>-ms</code> or maybe an empty string depending on the browser that runs the code. You can also use an alternative syntax, but note that the <code>-beta</code> syntax is not yet supported here.</p>
+			<script class="language-javascript" type="text/plain">
+				this.css.style({
+					whiteSpace: 'nowrap',
+					textAlign: 'left',
+					'-beta-hyphens': 'auto'
+				});
+			</script>
+			<p>You can get a style property <em>provided</em> that you set it first.</p>
+			<script class="language-javascript" type="text/plain">
+				console.log(this.css.get('white-space')); //'nowrap'
+			</script>
+			<p>If you didn't explicitely <code>set</code> the property, but instead keep it defined in a stylesheet, you can still get the <em>computed</em> property.</p>
+			<script class="language-javascript" type="text/plain">
+				console.log(this.css.compute('white-space')); //'nowrap'
+			</script>
+			<p>Note that this may lead to unexpected results of the element is <code>display:none</code> or not positioned in the document.</p>
+
+
+			<h2 id="shorthands">Shorthands</h2>
+			<p>The <code>css</code> plugin comes with a set of shorthands for common <code>style</code> properties. For properties that require a unit, <code>px</code> is automatically assumed. </p>
+			<script class="language-javascript" type="text/plain">
+				this.css.display = "block";
+				this.css.width = "50%";
+				this.css.paddingTop = 100;
+				this.css.opacity = 0.5;
+				this.css.left = 250;
+			</script>
+			<p>CSS shorthands must be wrapped in a string. For now, all units must be also included. In other words, they don't really have a shorthand.</p>
+			<script class="language-javascript" type="text/plain">
+				this.css.margin = "10px 20px";
+			</script>
+			<p>Here's the list of properties we have covered with shorthands so far.</p>
+			<section class="shorthands">
+				<ul>
+					<li><code>zIndex</code></li>
+					<li><code>position</code></li>
+					<li><code>display</code></li>
+					<li><code>visibility</code>
+					<li><code>fontWeight</code></li>
+					<li><code>top</code></li>
+					<li><code>right</code></li>
+					<li><code>bottom</code></li>
+					<li><code>left</code></li>
+				</ul>
+				<ul>
+					<li><code>width</code></li>
+					<li><code>height</code></li>
+					<li><code>maxWidth</code></li>
+					<li><code>maxHeight</code></li>
+					<li><code>minWidth</code></li>
+					<li><code>minHeight</code></li>
+					<li><code>textIndent</code></li>
+					<li><code>margin</code></li>
+					<li><code>padding</code></li>
+				</ul>
+				<ul>
+					<li><code>marginTop</code></li>
+					<li><code>marginRight</code></li>
+					<li><code>marginBottom</code></li>
+					<li><code>marginLeft</code></li>
+					<li><code>paddingTop</code></li>
+					<li><code>paddingRight</code></li>
+					<li><code>paddingBottom</code></li>
+					<li><code>paddingLeft</code></li>
+					<li><code>opacity</code></li>
+				</ul>
+			</section>
+			<p class="todo">Support shorthand <em>getters</em>.</p>
+		</main>
+	</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Plugins</title>
+	</head>
+	<body>
+		<main>
+			<h1>Plugins</h1>
+			<p>Spirits come with a set of <em>plugins</em> out of the box and there's a whole subsection of this site dedicated to the study of default plugins.</p>
+			<dl class="inline">
+				<a href="plugin-action.html">
+					<dt><code>action</code></dt>
+					<dd>Actions work much like jQuery triggers.</dd>
+				</a>
+				<a href="plugin-att.html">
+					<dt><code>att</code></dt>
+					<dd>Update attributes and observe attribute updates.</dd>
+				</a>
+				<a href="plugin-box.html">
+					<dt><code>box</code></dt>
+					<dd>Compute the position and dimension of a spirit.</dd>
+				</a>
+				<a href="plugin-broadcast.html">
+					<dt><code>broadcast</code></dt>
+					<dd>Broadcast messages pub-sub style.</dd>
+				</a>
+				<a href="plugin-config.html">
+					<dt><code>config</code></dt>
+					<dd>Parsing special configuration attributes.</dd>
+				</a>
+				<a href="plugin-css.html">
+					<dt><code>css</code></dt>
+					<dd>maintain classnames and <code>style</code> properties.</dd>
+				</a>
+				<a href="plugin-dom.html">
+					<dt><code>dom</code></dt>
+					<dd>Find and manipulate elements.</dd>
+				</a>
+				<a href="plugin-event.html">
+					<dt><code>event</code></dt>
+					<dd>Add and remove event listeners.</dd>
+				</a>
+				<a href="plugin-life.html">
+					<dt><code>life</code></dt>
+					<dd>Tracking the lifecycle of a spirit.</dd>
+				</a>
+				<a href="plugin-tick.html">
+					<dt><code>tick</code></dt>
+					<dd>Deal with scheduling and timing.</dd>
+				</a>
+			</dl>
+
+			<p>In Spiritual, a plugin is simply a group of related functionality that has been encapsulated under a single property name. Plugins offload complexity from the spirit and reduce the likelihood of naming collisions.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Spirit.extend({
+					example: function() {
+						this.event.add('click');
+						this.action.add('pick');
+						this.broadcast.add('done');
+					}
+				});
+			</script>
+			<p>Because a spirits methods are only available to the spirit and its sub&shy;classes, plugins are also useful for sharing functionality between spirits that would otherwise become stuck in class hierarchies.</p>
+			
+			<h2 id="creating">Creating plugins</h2>
+			<p>To create a plugin, you start by extending another plugin. The base plugin is <code>gui.Plugin</code>.</p>
+			<script class="language-javascript" type="text/plain">
+				var NumberPlugin = gui.Plugin.extend({
+					getRandom: function(max) {
+						return Math.round(Math.random() * max);
+					}
+				});
+			</script>
+			<p>Then you just need to plug it into a spirit. The base spirit is <code>gui.Spirit</code>.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Spirit.plugin("number", NumberPlugin);
+			</script>
+			<p>The plugin becomes available to <code>gui.Spirit</code> and all spirits that inherit from it (in this case, all spirits). When the <code>number</code> property is accessed, the plugin will be newed up.</p>
+			<script class="language-javascript" type="text/plain">
+				var MySpirit = gui.Spirit.extend({
+					onconstruct: function() {
+						this.super.onconstruct();
+						console.log(this.number.getRandom());
+					}
+				});
+			</script>
+
+
+			<h2 id="laziness">Laziness</h2>
+			<p>Plugins are instantiated lazily. If you want the plugin to do something without being accessed first, you can set the <code>lazy</code> property to <code>false</code>. This is a property on the plugin <code>constructor</code>, so it's a static property. There's a shorthand for declaring this. Read <a href="classes.html">more about classes</a>.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Plugin.extend({
+					onconstruct: function() {
+						this.super.onconstruct();
+						console.log(this.getRandom());
+					},
+					getRandom: function() {
+						return Math.random();
+					}
+				}, {
+					lazy: false;
+				});
+			</script>
+			<p>A non-lazy plugin like this instantiates when the <code>onconfigure</code> method is called on the spirit. That's pretty much straight away. If the plugin needs to deal with the spirit (or any other plugin), it can access the spirit using <code>this.spirit</code>.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Plugin.extend({
+					onconstruct: function() {
+						this.super.onconstruct();
+						console.log(this.spirit); // [object gui.Spririt]
+					}
+				});
+			</script>
+
+			<h2 id="lifecycle">Lifecycle</h2>
+			<p>The lifecycle of a plugin is bound the spirit. A lazy plugin will be newed up when the spirit starts using. A non-lazy plugin will be created when <code>onconfigure</code> is called on the spirit. In both cases, the plugin will be destroyed when the spirit is destroyed. You can hook into these things.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Plugin.extend({
+					onconstruct: function() {
+						this.super.onconstruct();
+						console.log('Constructed.');
+					},
+					ondestruct: function() {
+						this.super.ondestruct();
+						console.log('Destructed.');
+					}
+				});
+			</script>
+			<p>Once constructed, the plugin can also hook into the spirits lifecycle. The plugin might for example need to know when <code>onenter</code> is called. We'll do this using the <code>life</code> plugin. You can get a hold on the <code>life</code> plugin through the spirit.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Plugin.extend({
+					onconstruct: function() {
+						this.super.onconstruct();
+						this.spirit.life.add('enter', this);
+					},
+					onlife: function(l) {
+						console.log(l.type); // 'enter'
+					}
+				}, {
+					lazy: false;
+				});
+			</script>
+			<p>For a full list of events, refer to the <a href="plugin-life.html"><code>life</code></a> plugin. Note that unlike with spirits, you should rarely add <code>this.super.onlife</code> in the callback method, since few plugins have this method predefined.</p>
+
+
+			<h2 id="chaining">Method chaining</h2>
+			<p>Plugins keep a tradition of method chaining as seen in jQuery. Unless a method returns something special, consider having it return <code>this</code> to cut down on keystrokes.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Spirit.extend({
+					example: function() {
+						this.action.
+							add('one').
+							remove('two').
+							dispatch('three');
+					}
+				});
+			</script>
+			<p>There's an assistant function <code>gui.Combo.chained</code> that makes a method return <code>this</code> when it would otherwise return <code>undefined</code>. It makes for a nice declarative syntax.</p>
+			<script class="language-javascript" type="text/plain">
+			var MySpirit = (function using(chained) {
+				return gui.Spirit.extend({
+					dothis: chained(function() {}),
+					dothat: chained(function() {})
+				});
+			}(gui.Combo.chained));
+			</script>
+		</main>
+	</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Projects</title>
+	</head>
+	<body>
+		<main>
+			<h1>Projects</h1>
+			<p>Introduction goes here.</p>
+
+			<h2 id="namespaces">Namespaces</h2>
+			<p>Although we haven't used them so far, namespace objects are recommended to avoid collissions in the global namespace, an invisible namespace that exists all around us.</p>
+			<script class="language-javascript" type="text/plain">
+				var myns = window.myns || {};
+				myns.MySpirit = gui.Spirit.extend();
+			</script>
+			<p>Spiritual comes with a formalized API for declaring namespace objects. You would usually do this in one of the <em>first</em> files so that the namespace is ready to be used.</p>
+			<script class="language-javascript" type="text/plain">
+			gui.namespace('myns'); // create window.myns (if needed)
+			</script>
+			<p>This declares the namespace as a property of <code>window</code>. It also returns the namespace object, so you can write it like this if your editor complaints that <code>myns</code> is not defined.</p>
+			<script class="language-javascript" type="text/plain">
+			myns = gui.namespace('myns');
+			</script>
+			<p>Some people like to declare constants and simple properties as part of the namespace declaration. I certainly do, since it's loaded first.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.namespace('myns', {
+					LOCALHOST: '127.0.0.1',
+					PUBLICHOST: '77.66.50.50'
+				});
+			</script>
+			<p>When you are done adding members like spirits and plugins to the namespace object, there's a method you can call to <em>name</em> the members. We are not sure if this is supposed to be a manual step, but that's what it is for now.</p>
+			<script class="language-javascript" type="text/plain">
+				myns.spacename();
+			</script>
+			<p>This runs through the namespace members and updates the <code>toString</code> method. It also changes how things get logged in the console and displayed in the profiler. This might not quite work at the moment, but that's the idea.</p>
+			<script class="language-javascript" type="text/plain">
+				alert(myspirit); // [object Anonymous]
+				myns.spacename();
+				alert(myspirit); // [object myns.MySpirit]
+			</script>
+			<p class="todo">See what's up with <a href="https://code.google.com/p/chromium/issues/detail?id=17356">issue 17356</a> nowadays.</p>
+			<p class="todo">Note on namespaces versus config-metatags.</p>
+
+
+			<h2 id="modules">Modules</h2>
+			<p>Spiritual comes with an informal <em>module</em> concept. A module doesn't <code>export</code> methods in the sense of a conventional module, it's more of a convenient place to:</p>
+			<ul>
+				<li>Channel spirits to CSS selectors</li>
+				<li>Assign plugins to all spirits</li>
+				<li>Declare mixins for all spirits</li>
+			</ul>
+			<p>You would usually load the module as the <em>last</em> file, having declared all the spirits and plugins that goes into it. Notice the identity token.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.module('mymodule@mycompany.com', {
+					channels: [ // spirits for selectors
+						["a, button", myns.ButtonSpirit],
+						["#menubar", myns.MenuBarSpirit]
+					],
+					plugins: { // plugins for all spirits
+						'number' : myns.NumberPlugin,
+						'logger' : myns.LoggerPlugin
+					},
+					mixins: { // methods for all spirits
+						example : function() {
+							console.log('Great example');
+						}
+					}
+				});
+			</script>
+			<p>You can check if a module is loaded.</p>
+			<script class="language-javascript" type="text/plain">
+			gui.HasModule('mymodule@mycompany.com') // true
+			</script>
+			<p>There's also some methods you can add as part of the module definition in order to:</p>
+			<ul>
+				<li>Do something now, or as soon as the module gets parsed</li>
+				<li>Do something before we crawl the DOM in search for spirits</li>
+				<li>Do something after <code>onready</code> has been fired for all spirits.</li>
+			</ul>
+			<script class="language-javascript" type="text/plain">
+				gui.module('mymodule@mycompany.com', {
+					oncontextinitialize: function() { // TODO: rename this
+						console.log('Runs immediately');
+					},
+					onbeforespiritualize: {
+						console.log('Before any spirits');
+					},
+					onafterspiritualize: {
+						console.log('All spirits ready');
+					}
+				});
+			</script>
+			<p>Finally we will note that the <code>gui.module</code> method returns something called a <code>gui.Module</code> that you can work with as an entity if needed.</p>
+			<script class="language-javascript" type="text/plain">
+			myns.MyModule = gui.module('mymodule@mycompany.com', {
+				credits: function() {
+					console.log('My Module was created by My Company');
+				}
+			});
+			window.onload = myns.MyModule.credits;
+			</script>
+		</main>
+	</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html id="spiritual-gui">
+	<head>
+		<title>event &#x2013; Spiritual GUI</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/css/styles.min.css">
+		<script src="/js/scripts.min.js"></script>
+	</head>
+	<body>
+		<main>
+			<h1>event</h1>
+			<p>The <code>event</code> plugin deals with DOM events. It looks like this:</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onready<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onready<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>event<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;click&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	onevent<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onevent<span class="token punctuation">(</span></span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">if</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>type <span class="token operator">===</span> <span class="token string">&apos;click&apos;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token string">&apos;Clicked&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>The chapter on <a href="callbacks.html">callbacks</a> attempts to explain why we do it like this. What&apos;s important here is that the arguments served to <code>event.add</code>  follow a particular order.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>event<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;click&apos;</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>dom<span class="token punctuation">.</span><span class="token function">q<span class="token punctuation">(</span></span><span class="token string">&apos;span&apos;</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">,</span> <span class="token keyword">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>The arguments in order are:</p>
+			<ol>
+				<li>The <code>type</code> of the event, like <code>focus</code>, <code>mouseover</code> or <code>keypress</code>.</li>
+				<li>The element for which to add the listener. This defaults to the spirits element. If you specify another spirit, we&apos;ll use its element.</li>
+				<li>The handler of the event. This defaults to the spirit, but it could be anything that implements <code>onevent</code>, perhaps another spirit.</li>
+				<li>The <a href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-flow-capture">capture flag</a>. It is rarely used, but it can be useful.</li>
+			</ol>
+			<h2>The <code>event</code> parameter</h2>
+			<p>The <code>event</code> parameter (we&apos;ve shortened it down to <code>e</code> in our example) is simply a <a href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-interface-h2">DOM event</a> of some kind. All our browsers support these things without the need for wrapper objects.</p>
+			<p class="todo">State an exception for <code>transitionend</code>, <code>mouseenter</code>, <code>mouseleave</code> and what else we may come up with.</p>
+
+
+			<h2>Multiple listeners</h2>
+			<p>You can add and remove multiple event listeners with an array or space-separated string.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>action<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token punctuation">[</span><span class="token string">&apos;click&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;focus&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;blur&apos;</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>action<span class="token punctuation">.</span><span class="token function">remove<span class="token punctuation">(</span></span><span class="token string">&apos;click focus blur&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>When adding a listener, you can setup up to automatically remove it once the event is received.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>event<span class="token punctuation">.</span><span class="token function">one<span class="token punctuation">(</span></span><span class="token string">&apos;click&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// TODO: implement!</span></code>
+</pre>
+		</main>
+		<aside>
+			<nav id="nav">
+				<li><a href="/gui/index.html">Spirits</a></li>
+				<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
+				<li><a href="/gui/callbacks.html">Callbacks</a></li>
+				<li><a href="/gui/plugins.html">Plugins</a><nav>
+					<li><a href="/gui/plugin-action.html">action</a></li>
+					<li><a href="/gui/plugin-att.html">att</a></li>
+					<li><a href="/gui/plugin-box.html">box</a></li>
+					<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
+					<li><a href="/gui/plugin-config.html">config</a></li>
+					<li><a href="/gui/plugin-css.html">css</a></li>
+					<li><a href="/gui/plugin-dom.html">dom</a></li>
+					<li><a href="/gui/plugin-event.html">event</a></li>
+					<li><a href="/gui/plugin-life.html">life</a></li>
+					<li><a href="/gui/plugin-tick.html">tick</a></li></nav></li>
+				<li><a href="/gui/classes.html">Classes</a></li>
+				<li><a href="/gui/projects.html">Projects</a></li>
+				<li><a href="/gui/caveats.html">Caveats</a></li>
+				<li><a href="/gui/contribute.html">Contribute</a></li>
+			</nav>
+		</aside>
+	</body>
+</html>

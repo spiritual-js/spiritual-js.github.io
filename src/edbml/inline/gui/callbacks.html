@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Callbacks</title>
+	</head>
+	<body>
+		<main>
+			<h1>Callbacks</h1>
+			<p>Before we proceed to plugins, we need to talk about callbacks. Spiritual promotes the use of callbacks as <em>methods of objects</em> instead of anonymous functions; such as this one.</p>
+			<script class="language-javascript" type="text/plain">
+				document.addEventListener('click', function(e) {
+					console.log(e.target);
+				});
+			</script>
+			<p>The following code will do same. It&apos;s vanilla DOM.</p>
+			<script class="language-javascript" type="text/plain">
+				document.addEventListener('click', {
+					handleEvent: function(e) {
+						console.log(e.target);
+					}
+				});
+			</script>
+			<p>Instead of a function, we have an object with a special method <code>handleEvent</code>. Spirits prefer this way of doing it, except the method is called <code>onevent</code>. Spirits can manage events using the <code>event</code> plugin.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Spirit.extend({
+					onenter: function() {
+						this.super.onenter();
+						this.event.add('click', document);
+					},
+					onevent: function(e) {
+						this.super.onevent(e);
+						console.log(e.type, e.target);	
+					}
+				});
+			</script>
+			<p>You can jump to a <a href="plugin-event.html">detailed description</a> of the <code>event</code> plugin.</p>
+			<p>With this code, we note that it&apos;s always clear what <code>this</code> is. There&apos;s no need to <code>bind</code> the <code>this</code> keyword or use <code>that=this</code>. And as long as we know what <code>this</code> is, there&apos;s no need to keep track of a function reference in order to remove the event listener at a later stage. As the complexity of your website approaches the singularity, the need to remove event listeners always arise.</p>
+			<script class="language-javascript" type="text/plain">
+				this.event.remove('click', document);
+			</script>
+			<p>This allows us to navigate some pretty complex event business logic without getting trapped in callback hell. Like in this simplified drag and drop routine.</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Spirit.extend({
+					onenter: function() {
+						this.super.onenter();
+						this.event.add('mousedown');
+					},
+					onevent: function(e) {
+						this.super.onevent(e);
+						switch(e.type) {
+							case 'mousedown':
+								this.event.remove('mousedown').
+								this.event.add('mousemove mouseup');
+								break;
+							case 'mousemove':
+								this.css.left = e.clientX;
+								break;
+							case 'mouseup':
+								this.event.remove('mousedown mouseup');
+								this.event.add('mousedown');
+								break;
+						}
+					}
+				});
+			</script></p>
+			<p>The flat structure makes it easy to avoid application state becoming trapped in deeply nested functions. We also note that:</p>
+			<ul>
+				<li>All DOM event handling gets channeled into single method. That's nice for maintenance, especially when we add support for other types of callbacks such as <code>onlife</code>, <code>onaction</code> and <code>onbroadcast</code>.</li>
+				<li>It's easy to manage <code>this.super.onevent(e)</code>. This makes it particularly easy for a subclass to <em>not</em> do the normal thing under certain conditions.</li>
+			</ul>
+			<p>The thruth is that the <code>function</code> pattern is a perfectly valid pattern. We simply haven't added support for it yet throughout the various plugins. We'll encourage the <code>method</code> pattern for now, but you can of course always bypass the <code>event</code> plugin and use a straight callback.</p>
+			<script class="language-javascript" type="text/plain">
+				this.element.addEventListener('click', function(e) {
+					console.log('Clicked');
+				});
+			</script>
+			<p>With that in mind, let's <a href="plugins.html">continue to plugins</a>.</p>
+		</main>
+	</body>
+</html>

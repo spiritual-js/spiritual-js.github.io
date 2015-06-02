@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html id="spiritual-gui">
+	<head>
+		<title>Callbacks &#x2013; Spiritual GUI</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/css/styles.min.css">
+		<script src="/js/scripts.min.js"></script>
+	</head>
+	<body>
+		<main>
+			<h1>Callbacks</h1>
+			<p>Before we proceed to plugins, we need to talk about callbacks. Spiritual promotes the use of callbacks as <em>methods of objects</em> instead of anonymous functions; such as this one.</p>
+			<pre class="language-javascript">
+<code>document<span class="token punctuation">.</span><span class="token function">addEventListener<span class="token punctuation">(</span></span><span class="token string">&apos;click&apos;</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>e<span class="token punctuation">.</span>target<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>The following code will do same. It&apos;s vanilla DOM.</p>
+			<pre class="language-javascript">
+<code>document<span class="token punctuation">.</span><span class="token function">addEventListener<span class="token punctuation">(</span></span><span class="token string">&apos;click&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+	handleEvent<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>e<span class="token punctuation">.</span>target<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>Instead of a function, we have an object with a special method <code>handleEvent</code>. Spirits prefer this way of doing it, except the method is called <code>onevent</code>. Spirits can manage events using the <code>event</code> plugin.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onenter<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onenter<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>event<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;click&apos;</span><span class="token punctuation">,</span> document<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	onevent<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onevent<span class="token punctuation">(</span></span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>e<span class="token punctuation">.</span>type<span class="token punctuation">,</span> e<span class="token punctuation">.</span>target<span class="token punctuation">)</span><span class="token punctuation">;</span>	
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>You can jump to a <a href="plugin-event.html">detailed description</a> of the <code>event</code> plugin.</p>
+			<p>With this code, we note that it&apos;s always clear what <code>this</code> is. There&apos;s no need to <code>bind</code> the <code>this</code> keyword or use <code>that=this</code>. And as long as we know what <code>this</code> is, there&apos;s no need to keep track of a function reference in order to remove the event listener at a later stage. As the complexity of your website approaches the singularity, the need to remove event listeners always arise.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>event<span class="token punctuation">.</span><span class="token function">remove<span class="token punctuation">(</span></span><span class="token string">&apos;click&apos;</span><span class="token punctuation">,</span> document<span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>This allows us to navigate some pretty complex event business logic without getting trapped in callback hell. Like in this simplified drag and drop routine.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onenter<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onenter<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>event<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;mousedown&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	onevent<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onevent<span class="token punctuation">(</span></span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">switch</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token keyword">case</span> <span class="token string">&apos;mousedown&apos;</span><span class="token punctuation">:</span>
+				<span class="token keyword">this</span><span class="token punctuation">.</span>event<span class="token punctuation">.</span><span class="token function">remove<span class="token punctuation">(</span></span><span class="token string">&apos;mousedown&apos;</span><span class="token punctuation">)</span><span class="token punctuation">.</span>
+				<span class="token keyword">this</span><span class="token punctuation">.</span>event<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;mousemove mouseup&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token keyword">break</span><span class="token punctuation">;</span>
+			<span class="token keyword">case</span> <span class="token string">&apos;mousemove&apos;</span><span class="token punctuation">:</span>
+				<span class="token keyword">this</span><span class="token punctuation">.</span>css<span class="token punctuation">.</span>left <span class="token operator">=</span> e<span class="token punctuation">.</span>clientX<span class="token punctuation">;</span>
+				<span class="token keyword">break</span><span class="token punctuation">;</span>
+			<span class="token keyword">case</span> <span class="token string">&apos;mouseup&apos;</span><span class="token punctuation">:</span>
+				<span class="token keyword">this</span><span class="token punctuation">.</span>event<span class="token punctuation">.</span><span class="token function">remove<span class="token punctuation">(</span></span><span class="token string">&apos;mousedown mouseup&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token keyword">this</span><span class="token punctuation">.</span>event<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;mousedown&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token keyword">break</span><span class="token punctuation">;</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre><p></p>
+			<p>The flat structure makes it easy to avoid application state becoming trapped in deeply nested functions. We also note that:</p>
+			<ul>
+				<li>All DOM event handling gets channeled into single method. That&apos;s nice for maintenance, especially when we add support for other types of callbacks such as <code>onlife</code>, <code>onaction</code> and <code>onbroadcast</code>.</li>
+				<li>It&apos;s easy to manage <code>this.super.onevent(e)</code>. This makes it particularly easy for a subclass to <em>not</em> do the normal thing under certain conditions.</li>
+			</ul>
+			<p>The thruth is that the <code>function</code> pattern is a perfectly valid pattern. We simply haven&apos;t added support for it yet throughout the various plugins. We&apos;ll encourage the <code>method</code> pattern for now, but you can of course always bypass the <code>event</code> plugin and use a straight callback.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>element<span class="token punctuation">.</span><span class="token function">addEventListener<span class="token punctuation">(</span></span><span class="token string">&apos;click&apos;</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token string">&apos;Clicked&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>With that in mind, let&apos;s <a href="plugins.html">continue to plugins</a>.</p>
+		</main>
+		<aside>
+			<nav id="nav">
+				<li><a href="/gui/index.html">Spirits</a></li>
+				<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
+				<li><a href="/gui/callbacks.html">Callbacks</a></li>
+				<li><a href="/gui/plugins.html">Plugins</a><nav>
+					<li><a href="/gui/plugin-action.html">action</a></li>
+					<li><a href="/gui/plugin-att.html">att</a></li>
+					<li><a href="/gui/plugin-box.html">box</a></li>
+					<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
+					<li><a href="/gui/plugin-config.html">config</a></li>
+					<li><a href="/gui/plugin-css.html">css</a></li>
+					<li><a href="/gui/plugin-dom.html">dom</a></li>
+					<li><a href="/gui/plugin-event.html">event</a></li>
+					<li><a href="/gui/plugin-life.html">life</a></li>
+					<li><a href="/gui/plugin-tick.html">tick</a></li></nav></li>
+				<li><a href="/gui/classes.html">Classes</a></li>
+				<li><a href="/gui/projects.html">Projects</a></li>
+				<li><a href="/gui/caveats.html">Caveats</a></li>
+				<li><a href="/gui/contribute.html">Contribute</a></li>
+			</nav>
+		</aside>
+	</body>
+</html>

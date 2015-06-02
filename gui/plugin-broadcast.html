@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html id="spiritual-gui">
+	<head>
+		<title>broadcast &#x2013; Spiritual GUI</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/css/styles.min.css">
+		<script src="/js/scripts.min.js"></script>
+	</head>
+	<body>
+		<main>
+			<h1>broadcast</h1>
+			<p>The <code>broadcast</code> plugin works like pub sub hub. You can subscribe to messages and publish messages with an optional <code>data</code> property. Messages recieved take the form of a <code>gui.Broadcast</code>. The message string may by identified by the <code>type</code> property.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onconfigure<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onconfigure<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>broadcast<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;mybroadcast&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	onbroadcast<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onbroadcast<span class="token punctuation">(</span></span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">switch</span><span class="token punctuation">(</span>b<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token keyword">case</span> <span class="token string">&apos;mybroadcast&apos;</span><span class="token punctuation">:</span>
+				console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>b<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token keyword">break</span><span class="token punctuation">;</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>You&apos;ll need another spirit to dispatch the broadcast.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onready<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onready<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>broadcast<span class="token punctuation">.</span><span class="token function">dispatch<span class="token punctuation">(</span></span><span class="token string">&apos;mybroadcast&apos;</span><span class="token punctuation">,</span><span class="token string">&apos;mydata&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+
+
+			<h2>Multiple listeners</h2>
+			<p>You can add and remove multiple broadcast listeners with an array or space-separated string. Just make sure that the individual messages don&apos;t contain spaces.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>broadcast<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token punctuation">[</span>BROADCAST1<span class="token punctuation">,</span> BROADCAST1<span class="token punctuation">,</span> BROADCAST3<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>broadcast<span class="token punctuation">.</span><span class="token function">remove<span class="token punctuation">(</span></span><span class="token string">&apos;broadcast1 broadcast2 broadcast3&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>When adding a listener, you can setup up to automatically remove it once the broadcast is received.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>broadcast<span class="token punctuation">.</span><span class="token function">one<span class="token punctuation">(</span></span><span class="token string">&apos;mybroadcast&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// TODO: implement!</span></code>
+</pre>
+
+
+			<h2>Get the dispatcher</h2>
+			<p>When you recieve a broadcast, you can identify the dispatcher using the <code>target</code> property. The dispatcher is most likely another spirit.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onbroadcast<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onbroadcast<span class="token punctuation">(</span></span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>b<span class="token punctuation">.</span>target<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// [object gui.Spirit]
+</span>	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+
+			
+			<h2>Global broadcasts</h2>
+			<p>You can broadcast messages across <code>iframes</code> using the methods outlined below. Spiritual GUI must be loaded in all frames for this to work.</p>
+			<pre class="language-javascript">
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>broadcast<span class="token punctuation">.</span><span class="token function">addGlobal<span class="token punctuation">(</span></span><span class="token string">&apos;mybroadcast&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>broadcast<span class="token punctuation">.</span><span class="token function">dispatchGlobal<span class="token punctuation">(</span></span><span class="token string">&apos;mybroadcast&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>It&apos;s important to synchronize <code>addGlobal</code> and <code>dispatchGlobal</code>. You cannot intercept a global broadcast using a local listener even if publisher and subscriber is in the same window.</p>
+
+
+			<h2>Broadcast anywhere</h2>
+			<p>You can dispatch a broadcast outside of a spirit.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Broadcast<span class="token punctuation">.</span><span class="token function">dispatch<span class="token punctuation">(</span></span><span class="token string">&apos;mybroadcast&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;mydata&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+			<p>You can subsribe to a broadcast from anywhere.</p>
+			<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span>Broadcast<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;mybroadcast&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+	onbroadcast<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>b<span class="token punctuation">.</span>type<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// &apos;mybroadcast&apos;
+</span>	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+		</main>
+		<aside>
+			<nav id="nav">
+				<li><a href="/gui/index.html">Spirits</a></li>
+				<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
+				<li><a href="/gui/callbacks.html">Callbacks</a></li>
+				<li><a href="/gui/plugins.html">Plugins</a><nav>
+					<li><a href="/gui/plugin-action.html">action</a></li>
+					<li><a href="/gui/plugin-att.html">att</a></li>
+					<li><a href="/gui/plugin-box.html">box</a></li>
+					<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
+					<li><a href="/gui/plugin-config.html">config</a></li>
+					<li><a href="/gui/plugin-css.html">css</a></li>
+					<li><a href="/gui/plugin-dom.html">dom</a></li>
+					<li><a href="/gui/plugin-event.html">event</a></li>
+					<li><a href="/gui/plugin-life.html">life</a></li>
+					<li><a href="/gui/plugin-tick.html">tick</a></li></nav></li>
+				<li><a href="/gui/classes.html">Classes</a></li>
+				<li><a href="/gui/projects.html">Projects</a></li>
+				<li><a href="/gui/caveats.html">Caveats</a></li>
+				<li><a href="/gui/contribute.html">Contribute</a></li>
+			</nav>
+		</aside>
+	</body>
+</html>

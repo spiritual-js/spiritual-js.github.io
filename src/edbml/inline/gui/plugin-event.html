@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>event</title>
+	</head>
+	<body>
+		<main>
+			<h1>event</h1>
+			<p>The <code>event</code> plugin deals with DOM events. It looks like this:</p>
+			<script class="language-javascript" type="text/plain">
+				gui.Spirit.extend({
+					onready: function() {
+						this.super.onready();
+						this.event.add('click');
+					},
+					onevent: function(e) {
+						this.super.onevent(e);
+						if(e.type === 'click') {
+							console.log('Clicked');
+						}
+					}
+				});
+			</script>
+			<p>The chapter on <a href="callbacks.html">callbacks</a> attempts to explain why we do it like this. What's important here is that the arguments served to <code>event.add</code>  follow a particular order.</p>
+			<script class="language-javascript" type="text/plain">
+			this.event.add('click', this.dom.q('span'), this, true);
+			</script>
+			<p>The arguments in order are:</p>
+			<ol>
+				<li>The <code>type</code> of the event, like <code>focus</code>, <code>mouseover</code> or <code>keypress</code>.</li>
+				<li>The element for which to add the listener. This defaults to the spirits element. If you specify another spirit, we'll use its element.</li>
+				<li>The handler of the event. This defaults to the spirit, but it could be anything that implements <code>onevent</code>, perhaps another spirit.</li>
+				<li>The <a href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-flow-capture">capture flag</a>. It is rarely used, but it can be useful.</li>
+			</ol>
+			<h2>The <code>event</code> parameter</h2>
+			<p>The <code>event</code> parameter (we've shortened it down to <code>e</code> in our example) is simply a <a href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-interface-h2">DOM event</a> of some kind. All our browsers support these things without the need for wrapper objects.</p>
+			<p class="todo">State an exception for <code>transitionend</code>, <code>mouseenter</code>, <code>mouseleave</code> and what else we may come up with.</p>
+
+
+			<h2>Multiple listeners</h2>
+			<p>You can add and remove multiple event listeners with an array or space-separated string.</p>
+			<script class="language-javascript" type="text/plain">
+				this.action.add(['click', 'focus', 'blur']);
+				this.action.remove('click focus blur');
+			</script>
+			<p>When adding a listener, you can setup up to automatically remove it once the event is received.</p>
+			<script class="language-javascript" type="text/plain">
+				this.event.one('click'); // TODO: implement!
+			</script>
+		</main>
+	</body>
+</html>
