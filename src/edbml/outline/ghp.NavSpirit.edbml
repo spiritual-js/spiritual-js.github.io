@@ -1,0 +1,16 @@
+<!DOCTYPE edbml>
+<script>
+	<?input name="menu" type="ghp.MenuModel"?>
+	menu.items.forEach(function doitem(item) {
+		<li>
+			@id = item.$instanceid;
+			@class = item.selected ? 'selected' : null;
+			<a @id @class href="${item.href}">${item.label}</a>
+			if(item.open) {
+				<nav @id>
+					item.items.forEach(doitem);
+				</nav>
+			}
+		</li>
+	});
+</script>

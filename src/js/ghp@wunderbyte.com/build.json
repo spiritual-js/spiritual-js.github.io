@@ -1,0 +1,12 @@
+[
+	"ghp.js",
+
+	"spirits/ghp.LinkSpirit.js",
+	"spirits/ghp.PageSpirit.js",
+	"spirits/ghp.NavSpirit.js",
+
+	"models/ghp.ItemModel.js",
+	"models/ghp.MenuModel.js",
+
+	"module.js"
+]
