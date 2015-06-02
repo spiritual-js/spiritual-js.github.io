@@ -14,6 +14,16 @@ module.exports = function(grunt) {
 
 	grunt.initConfig ({
 
+		sitemap_edb: [
+			['Types', '/edb/index.html', [
+				['Objects', '/edb/objects.html'],
+				['Arrays', '/edb/arrays.html']
+			]],
+			['Output', '/edb/output.html'],
+			['Observers', '/edb/observers.html'],
+			['Plugins', '/edb/plugins.html']
+		],
+
 		// cleanup previous build
 		clean: [
 			'css/*.css',
@@ -74,23 +84,33 @@ module.exports = function(grunt) {
 					'temp/edbml-compiled.js' : ['src/edbml/outline/*.edbml']
 				}
 			},
-			/*
 			inline: {
 				expand: true,
 				cwd: 'src/edbml/inline',
-				src: ['*.html', '*.edbml'],
+				src: ['**/*.html', '**/*.edbml'],
 				dest: '.',
 				options: {
 					inline: true,
 					beautify: true,
-					process: function(html) {
-						var processor = require('./tasks/processor.js');
-						var sitemap = grunt.template.process('<%= JSON.stringify(sitemap,null) %>');
-						return processor.process(html, sitemap, 'Spiritual GUI', 'spiritual-gui');
+					process: function(html, abspath, path) {
+						var sitemap, title, id, processor = require('./tasks/processor.js');
+						if(path.indexOf('edbml') === 0) {
+							sitemap = grunt.template.process('<%= JSON.stringify(sitemap_edbml,null) %>');
+							title = 'Spiritual EDBML';
+							id = 'spiritual-edbml';
+						} else if(path.indexOf('edb') === 0) {
+							sitemap = grunt.template.process('<%= JSON.stringify(sitemap_edb,null) %>');
+							title = 'Spiritual EDB';
+							id = 'spiritual-edb';
+						} else if(path.indexOf('gui') === 0) {
+							sitemap = grunt.template.process('<%= JSON.stringify(sitemap_gui,null) %>');
+							title = 'Spiritual GUI';
+							id = 'spiritual-gui';
+						}
+						return processor.process(html, sitemap, title, id);
 					}
 				}
 			}
-			*/
 		},
 
 		// concat JS
