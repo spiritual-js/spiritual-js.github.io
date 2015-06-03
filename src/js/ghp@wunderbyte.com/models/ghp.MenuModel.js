@@ -16,7 +16,6 @@ ghp.MenuModel = edb.Object.extend({
 	 */
 	select: function(href) {
 		this.items.forEach(function(item) {
-			console.log(href, item.href);
 			item.selected = item.href === href;
 			item.open = item.items.reduce(function(was, sub) {
 				sub.selected = sub.href === href;

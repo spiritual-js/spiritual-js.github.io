@@ -67,8 +67,8 @@ module.exports = function(grunt) {
 				},
 				files : {
 					'src/js/libs/spiritual-gui.js' : [
-						'../../spiritual-gui/src/gui@wunderbyte.com/build.json',
-						'../../spiritual-gui/src/gui-spirits@wunderbyte.com/build.json'
+						'../spiritual-gui/src/gui@wunderbyte.com/build.json',
+						'../spiritual-gui/src/gui-spirits@wunderbyte.com/build.json'
 					]
 				}
 			},
@@ -84,8 +84,8 @@ module.exports = function(grunt) {
 				},
 				files: {
 					'src/js/libs/spiritual-edb.js' : [
-						'../../spiritual-edb/src/edb@wunderbyte.com/build.json',
-						'../../spiritual-edbml/src/edbml@wunderbyte.com/build.json'
+						'../spiritual-edb/src/edb@wunderbyte.com/build.json',
+						'../spiritual-edbml/src/edbml@wunderbyte.com/build.json'
 					]
 				}
 			},
@@ -119,15 +119,15 @@ module.exports = function(grunt) {
 						if(path.indexOf('edbml') === 0) {
 							sitemap = grunt.template.process('<%= JSON.stringify(sitemap_edbml,null) %>');
 							title = 'Spiritual EDBML';
-							id = 'spiritual-edbml';
+							id = 'edbml';
 						} else if(path.indexOf('edb') === 0) {
 							sitemap = grunt.template.process('<%= JSON.stringify(sitemap_edb,null) %>');
 							title = 'Spiritual EDB';
-							id = 'spiritual-edb';
+							id = 'edb';
 						} else if(path.indexOf('gui') === 0) {
 							sitemap = grunt.template.process('<%= JSON.stringify(sitemap_gui,null) %>');
 							title = 'Spiritual GUI';
-							id = 'spiritual-gui';
+							id = 'gui';
 						}
 						return processor.process(html, sitemap, title, id);
 					}
@@ -185,6 +185,7 @@ module.exports = function(grunt) {
 		devserver : {
 			server: {},
 			options : {
+				cache: 'no-cache',
 				port: PORT
 			}
 		},
@@ -217,13 +218,13 @@ module.exports = function(grunt) {
 				options: { interval: 5000 },
 				tasks: ['edbml:inline'],
 				files: [ 
-					'src/edbml/inline/**/*.edbml',
+					'src/edbml/inline/**/*.html',
 					'Gruntfile.js'
 				]
 			},
 			js : {
 				options: { interval: 5000 },
-				tasks: ['concat', 'uglify'],
+				tasks: ['guibundles:ghp', 'concat', 'uglify'],
 				files: [ 
 					'src/js/**/*.js',
 					'src/js/build.json'

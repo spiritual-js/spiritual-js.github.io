@@ -6,7 +6,6 @@ gui.module("ghp@wunderbyte.com", {
 	oncontextinitialize: function() {
 		ghp.spacename(); // TODO: where to automate this?
 		gui.debug = location.href.contains('localhost');
-		edbml.bootload = true;
 	},
 
 	channel: [

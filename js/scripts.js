@@ -17881,6 +17881,7 @@ ghp.PageSpirit = gui.Spirit.extend({
 			this.event.add('popstate', window);
 			this.action.add('action-load');
 		}
+		this._zzzz();
 		this._menu();
 		this._done();
 	},
@@ -17910,6 +17911,7 @@ ghp.PageSpirit = gui.Spirit.extend({
 		switch(e.type) {
 			case 'popstate':
 				this._load(location.href);
+				//this._xxxx(location.pathname);
 				break;
 			case 'hashchange':
 				//this._menu();
@@ -17925,10 +17927,48 @@ ghp.PageSpirit = gui.Spirit.extend({
 	 * @param {string} href
 	 */
 	_load: function(href) {
+		var html, path = new gui.URL(document, href).pathname;
 		new gui.Request(href).acceptText().get().then(function(status, html) {
-			this._main(gui.HTMLParser.parseToDocument(html));
+			html = gui.HTMLParser.parseToDocument(html);
+			this._main(html);
+			if(this._xxxx(path)) {
+				this._zzzz(html);
+				this._menu();
+			}
 			this._loaded();
 		}, this);
+	},
+
+	/**
+	 * @param {string} path
+	 */
+	_xxxx: function(path) {
+		var section, html = document.documentElement;
+		if(path && (section = path.split('/')[1])) {
+			if(section !== html.id) {
+				html.id = section;
+				return true;
+
+			}
+		}
+	},
+
+	/**
+	 * @param @optional {HTMLDocument} html
+	 */
+	_zzzz: function(html) {
+		var nav = (html || document).querySelector('#nav');
+		this._menumodel = new ghp.MenuModel({
+			items: gui.Array.from(nav.children).map(function item(li) {
+				var link = li.firstElementChild;
+				var menu = li.querySelector('nav');
+				return {
+					label: link.textContent,
+					href: link.getAttribute('href'),
+					items : menu ? gui.Array.from(menu.children).map(item) : undefined
+				};
+			})
+		}).output();
 	},
 
 	/**
@@ -17956,7 +17996,8 @@ ghp.PageSpirit = gui.Spirit.extend({
 	_menu: function() {
 		var page = location.pathname; // .split('/').slice(-1)[0];
 		page = page.contains('.html') ? page : page + 'index.html';
-		gui.get('#nav').select(page); 
+		this._menumodel.select(page);
+		//gui.get('#nav').select(page); 
 	},
 
 	/**
@@ -17970,6 +18011,7 @@ ghp.PageSpirit = gui.Spirit.extend({
 	/**
 	 * Jump to anchor. We do this on a regular basis now 
 	 * that Prism might have messed with scroll position.
+	 * TODO: Prism is now serverside, this still needed?
 	 */
 	_jump: function() {
 		var elm, hash = location.hash;
@@ -17988,40 +18030,13 @@ ghp.PageSpirit = gui.Spirit.extend({
 ghp.NavSpirit = gui.Spirit.extend({
 
 	/**
-	 * Parse the HTML sitemap into a model-friendly 
-	 * JSON structure and inject the {ghp.MenuModel}.
+	 * This script watches a {ghp.MenuModel} that gets 
+	 * outputted by the {ghp.PageSpirit} on page load.
 	 */
-	onenter: function() {
-		gui.Spirit.prototype.onenter.call(this);
-		this._menu = this.script.input(new ghp.MenuModel({
-			items: this.dom.children().map(function item(li) {
-				var link = li.firstElementChild;
-				var menu = li.querySelector('nav');
-				return {
-					label: link.textContent,
-					href: link.getAttribute('href'),
-					items : menu ? gui.Array.make(menu.children).map(item) : undefined
-				};
-			})
-		}));
-	},
-
-	/**
-	 * Match selection to document location. Invoked by the {ghp.PageSpirit}.
-	 * @param {string} href
-	 */
-	select: function(href) {
-		this._menu.select(href);
-	},
-
-
-	// Private ...................................................................
-	
-	/**
-	 * Menu model.
-	 * @type {ghp.MenuModel}
-	 */
-	_menu: null
+	onconfigure: function() {
+		gui.Spirit.prototype.onconfigure.call(this);
+		this.script.load(ghp.NavSpirit.edbml);
+	}
 
 });
 
@@ -18061,7 +18076,6 @@ ghp.MenuModel = edb.Object.extend({
 	 */
 	select: function(href) {
 		this.items.forEach(function(item) {
-			console.log(href, item.href);
 			item.selected = item.href === href;
 			item.open = item.items.reduce(function(was, sub) {
 				sub.selected = sub.href === href;
@@ -18081,7 +18095,6 @@ gui.module("ghp@wunderbyte.com", {
 	oncontextinitialize: function() {
 		ghp.spacename(); // TODO: where to automate this?
 		gui.debug = location.href.contains('localhost');
-		edbml.bootload = true;
 	},
 
 	channel: [

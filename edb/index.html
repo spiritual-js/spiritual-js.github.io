@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html id="spiritual-edb">
+<html id="edb">
 	<head>
 		<title>Types &#x2013; Spiritual EDB</title>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="/css/styles.min.css">
-		<script src="/js/scripts.min.js"></script>
 	</head>
 	<body>
 		<main>
 			<h1>Types</h1>
 			<p>
 				There&apos;s two types of data structure in Spiritual EDB: <code>edb.Object</code> and <code>edb.Array</code>. They are commonly referred to as <em>Types</em> and they behave much like regular objects and arrays, except they can be observed for changes in browser that don&apos;t necessarily support <code>Object.observe</code>.</p><p>
-			</p><p>Both are constructors for a <code>gui.Class</code> and the syntax for declaring them resembles that of spirits and plugins (see <a href="http://wunderbyte.github.io/spiritual-gui/classes.html">Spiritual GUI</a>).</p>
+			</p><p>Both are constructors for a <code>gui.Class</code> and the syntax for declaring them resembles that of spirits and plugins (see <a href="/gui/classes.html">gui.Class</a>).</p>
 			<pre class="language-javascript">
 <code><span class="token keyword">var</span> Person <span class="token operator">=</span> edb<span class="token punctuation">.</span>Object<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token comment" spellcheck="true">/* extensions */</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">var</span> Persons <span class="token operator">=</span> edb<span class="token punctuation">.</span>Array<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token comment" spellcheck="true">/* extensions */</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
@@ -50,5 +49,6 @@ localStorage<span class="token punctuation">.</span><span class="token function"
 				<li><a href="/edb/plugins.html">Plugins</a></li>
 			</nav>
 		</aside>
+		<script src="/js/scripts.min.js"></script>
 	</body>
 </html>

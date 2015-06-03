@@ -1,0 +1,25 @@
+{
+	"browser": true,
+	"esnext": true,
+	"globals": {
+		"module": true,
+		"require": true,
+		"console": true,
+		"chrome": true,
+		"gui": true,
+		"edb": true,
+		"ghp": true,
+		"edbml": true,
+		"self": true,
+		"alert": true,
+		"Prism": true
+	},
+	"globalstrict": false,
+	"quotmark": false,
+	"smarttabs": true,
+	"trailing": false,
+	"undef": true,
+	"scripturl" : true,
+	"unused": "vars",
+	"sub": true
+}

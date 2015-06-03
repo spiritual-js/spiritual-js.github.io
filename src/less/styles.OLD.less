@@ -30,8 +30,7 @@
 
 // Variables ...................................................................
 
-@scale: 1.2;
-@unit: 24px * @scale; 
+@unit: 24px; 
 @unit-half: @unit * 0.5;
 @unit-double: @unit * 2;
 @unit-triple: @unit * 3;
@@ -39,6 +38,7 @@
 @text: rgb(0,0,0);
 @code: rgb(100,100,100);
 @fade: rgba(255,255,255,0.9);
+@scale: 1.2;
 
 
 // Styles ......................................................................
@@ -65,7 +65,8 @@ html {
 	color: @text;
 }
 body {
-	font-family: "Open Sans", "Helvetica Neue", "Lucida Grande", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif;
+	font-family: "Open Sans", "Helvetica Neue", "Lucida Grande", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif;;
+	//font-size: 16px;
 	line-height: @unit;
 	font-weight: 300;
 }
@@ -73,6 +74,7 @@ code,
 samp, 
 var {
 	font-family: "Ubuntu Mono", "Monaco", "Consolas", "Bitstream Vera Sans Mono", monospace;
+	//font-size: 16px;
 	color: @code;
 }
 main {
@@ -96,7 +98,7 @@ main {
 	position: fixed;
 	right: 680px;
 	background-color: @fade;
-	//top: @unit * 6 + 8px;
+	top: @unit * 6 + 8px;
 	padding: @unit;
 	padding-right: 0;
 	border-radius: 2px 0 0 2px;
@@ -117,6 +119,7 @@ main {
 		}
 	}
 }
+
 nav {
 	text-align: right;
 	list-style: none;
@@ -161,12 +164,19 @@ ol {
 h1 {
 	margin: 0 0 @unit-double 0;
 	line-height: @unit-double;
+	font-size: 38px;
 	font-weight: 600;
+	code {
+		font-size: 38px;
+	}
 }
 h2 {
 	margin: @unit 0 0 0;
 	line-height: @unit-double;
 	font-weight: 400;
+	&, code {
+		font-size: 22px;
+	}
 }
 dl {
 	> a {
@@ -205,6 +215,7 @@ dl {
 figure {}
 figcaption {
 	font-style: italic;
+	font-size: 14px;
 	padding: 0 @unit;
 }
 pre + figcaption {
@@ -256,11 +267,11 @@ blockquote {
 		background-attachment: fixed;
 		background-size: auto 100%;
 		color: @text;
-		&#gui {
-			background-image: url("/img/gui.svg");
+		&#spiritual-gui {
+			background-image: url("../img/spiritual-gui.svg");
 		}
-		&#edb {
-			background-image: url("/img/edb.svg");
+		&#spiritual-edb {
+			background-image: url("../img/spiritual-edb.svg");
 		}
 	}	
 }
@@ -271,23 +282,20 @@ blockquote {
 @media only screen and (min-width: 1500px) {
 	body {
 		font-size: 16px * @scale;
-		line-height: @unit;
+		line-height: @unit * @scale;
 	}
 	main {
 		width: 680px * @scale;
+		padding-top: 80px * @scale;
 		padding-right: 120px * @scale;
 		padding-bottom: 120px * @scale;
 		padding-left: 60px * @scale;
 	}
 	#nav {
 		right: 680px * @scale;
-		padding: @unit;
+		top: (@unit * 6 * @scale);
+		padding: @unit * @scale;
 		padding-right: 0;
-		top: @unit-double * 2;
-	}
-	main, 
-	#nav {
-		padding-top: 80px * @scale;
 	}
 	code, 
 	samp, 
@@ -301,11 +309,16 @@ blockquote {
 	}
 	h1 {
 		font-size: 38px * @scale;
-		line-height: @unit-double;
+		line-height: @unit-double * @scale;
+		code {
+			font-size: 38px * @scale;
+		}
 	}
 	h2 {
-		line-height: @unit-double;
-		font-size: 24px * @scale;
+		line-height: @unit-double * @scale;
+		&, code {
+			font-size: 22px * @scale;
+		}
 	}
 }
 

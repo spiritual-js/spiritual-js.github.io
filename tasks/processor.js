@@ -27,14 +27,16 @@ function processTags($, map, title) {
 	$('title').text($('title').text() + ' – ' + title);
 	$('title').after(pretty([
 		'<meta charset="UTF-8"/>',
-		'<link rel="stylesheet" href="/css/styles.min.css"/>',
-		'<script src="/js/scripts.min.js"></script>'
+		'<link rel="stylesheet" href="/css/styles.min.css"/>'
 	]));
 	$('main').after(pretty([
 		'<aside>',
 		'\t<nav id="nav">' + htmlmenu(map,'\t\t\t\t'),
 		'\t</nav>',
 		'</aside>'
+	]));
+	$('aside').after(pretty([
+		'<script src="/js/scripts.min.js"></script>'
 	]));
 }
 
