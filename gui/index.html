@@ -4,6 +4,8 @@
 		<title>Spirits &#x2013; Spiritual GUI</title>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="/css/styles.min.css">
+		<link rel="prefetch" href="/img/gui.svg">
+		<link rel="prefetch" href="/img/edb.svg">
 	</head>
 	<body>
 		<main>
@@ -32,7 +34,7 @@
 			<p>
 				If you need to fetch a spirit out of nowhere, you should never create a 
 				<code>new Spirit()</code>, since this only creates the JavaScript object. 
-				Use instead the <code>Spirit.summon()</code> method, which also creates the element.
+				Use instead <code>Spirit.summon()</code>, which also creates the element.
 			</p>
 			<pre class="language-javascript">
 <code><span class="token keyword">var</span> spirit <span class="token operator">=</span> gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">summon<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>

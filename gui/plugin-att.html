@@ -4,27 +4,29 @@
 		<title>att &#x2013; Spiritual GUI</title>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="/css/styles.min.css">
+		<link rel="prefetch" href="/img/gui.svg">
+		<link rel="prefetch" href="/img/edb.svg">
 	</head>
 	<body>
 		<main>
 			<h1>att</h1>
-			<p>The <code>att</code> plugin is used to update DOM attributes on the spirits element and/or listening for DOM attributes being updated.</p>
-
-			<h2 id="updates">Attribute updates</h2>
+			<p>The <code>att</code> plugin is used to update DOM attributes on the spirits element and/or listening for DOM attributes being updated. It supports the following methods.</p>
 			<pre class="language-javascript">
 <code><span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span><span class="token string">&apos;name&apos;</span><span class="token punctuation">,</span><span class="token string">&apos;value&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// set attribute
 </span><span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token function">del<span class="token punctuation">(</span></span><span class="token string">&apos;name&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// delete attribute
 </span><span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">&apos;name&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// get attribute
 </span><span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token function">getmap<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// get atributes as map
 </span><span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token function">setmap<span class="token punctuation">(</span></span>obj<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// set attributes with map
-</span><span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token function">all<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// get DOM attributes as array</span></code>
+</span><span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token function">all<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// get attributes as array
+</span><span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span><span class="token string">&apos;name&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// add attribute listener
+</span><span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token function">remove<span class="token punctuation">(</span></span><span class="token string">&apos;name&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// remove attribute listener</span></code>
 </pre>
-			<p>You can set an attribute like this:</p>
+			<p>You can set an attribute like this.</p>
 			<pre class="language-javascript">
 <code>gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
 	onenter<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
 		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onenter<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-		<span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span><span class="token string">&apos;title&apos;</span><span class="token punctuation">,</span><span class="token string">&apos;Return&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token keyword">set</span><span class="token punctuation">(</span><span class="token string">&apos;title&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;Return&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
@@ -34,11 +36,11 @@
 </pre>
 			<p>You can check if the attribute is specified.</p>
 			<pre class="language-javascript">
-<code>console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token function">has<span class="token punctuation">(</span></span><span class="token string">&apos;title&apos;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// true</span></code>
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token function">has<span class="token punctuation">(</span></span><span class="token string">&apos;title&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// true</span></code>
 </pre>
 			<p>You can of course also get the attribute value.</p>
 			<pre class="language-javascript">
-<code>console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span><span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">&apos;title&apos;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// &apos;Return&apos;</span></code>
+<code><span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">&apos;title&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// &apos;Return&apos;</span></code>
 </pre>
 			<p>Or you can get all the attributes in the form of an <code>object</code>.</p>
 			<pre class="language-javascript">
@@ -54,7 +56,8 @@ console<span class="token punctuation">.</span><span class="token function">log<
 </pre>
 			<p>You can even get the attributes as an array (of DOM attributes).</p>
 			<pre class="language-javascript">
-<code><span class="token keyword">var</span> atts <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token function">all<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">,</span> att <span class="token operator">=</span> atts<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<code><span class="token keyword">var</span> atts <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>att<span class="token punctuation">.</span><span class="token function">all<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> att <span class="token operator">=</span> atts<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>att<span class="token punctuation">.</span>name<span class="token punctuation">,</span> att<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// &apos;title&apos;, &apos;Return&apos;</span></code>
 </pre>
 

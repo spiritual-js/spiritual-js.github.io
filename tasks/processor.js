@@ -27,7 +27,9 @@ function processTags($, map, title) {
 	$('title').text($('title').text() + ' – ' + title);
 	$('title').after(pretty([
 		'<meta charset="UTF-8"/>',
-		'<link rel="stylesheet" href="/css/styles.min.css"/>'
+		'<link rel="stylesheet" href="/css/styles.min.css"/>',
+		'<link rel="prefetch" href="/img/gui.svg"/>',
+		'<link rel="prefetch" href="/img/edb.svg"/>'
 	]));
 	$('main').after(pretty([
 		'<aside>',

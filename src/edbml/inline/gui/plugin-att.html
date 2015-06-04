@@ -6,23 +6,23 @@
 	<body>
 		<main>
 			<h1>att</h1>
-			<p>The <code>att</code> plugin is used to update DOM attributes on the spirits element and/or listening for DOM attributes being updated.</p>
-
-			<h2 id="updates">Attribute updates</h2>
+			<p>The <code>att</code> plugin is used to update DOM attributes on the spirits element and/or listening for DOM attributes being updated. It supports the following methods.</p>
 			<script class="language-javascript" type="text/plain">
 				this.att.set('name','value'); // set attribute
 				this.att.del('name'); // delete attribute
 				this.att.get('name'); // get attribute
 				this.att.getmap(); // get atributes as map
 				this.att.setmap(obj); // set attributes with map
-				this.att.all(); // get DOM attributes as array
+				this.att.all(); // get attributes as array
+				this.att.add('name'); // add attribute listener
+				this.att.remove('name'); // remove attribute listener
 			</script>
-			<p>You can set an attribute like this:</p>
+			<p>You can set an attribute like this.</p>
 			<script class="language-javascript" type="text/plain">
 				gui.Spirit.extend({
 					onenter: function() {
 						this.super.onenter();
-						this.att.set('title','Return');
+						this.att.set('title', 'Return');
 					}
 				});
 			</script>
@@ -32,11 +32,11 @@
 			</script>
 			<p>You can check if the attribute is specified.</p>
 			<script class="language-javascript" type="text/plain">
-				console.log(this.att.has('title')); // true
+				this.att.has('title'); // true
 			</script>
 			<p>You can of course also get the attribute value.</p>
 			<script class="language-javascript" type="text/plain">
-				console.log(this.att.get('title')); // 'Return'
+				this.att.get('title'); // 'Return'
 			</script>
 			<p>Or you can get all the attributes in the form of an <code>object</code>.</p>
 			<script class="language-javascript" type="text/plain">
@@ -52,7 +52,8 @@
 			</script>
 			<p>You can even get the attributes as an array (of DOM attributes).</p>
 			<script class="language-javascript" type="text/plain">
-				var atts = this.att.all(), att = atts[0];
+				var atts = this.att.all();
+				var att = atts[0];
 				console.log(att.name, att.value); // 'title', 'Return'
 			</script>
 

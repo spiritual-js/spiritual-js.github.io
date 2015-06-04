@@ -30,8 +30,7 @@
 
 // Variables ...................................................................
 
-@scale: 1.2;
-@unit: 24px * @scale; 
+@unit: 1.5rem; 
 @unit-half: @unit * 0.5;
 @unit-double: @unit * 2;
 @unit-triple: @unit * 3;
@@ -39,6 +38,28 @@
 @text: rgb(0,0,0);
 @code: rgb(100,100,100);
 @fade: rgba(255,255,255,0.9);
+@breakpoint1: 800px;
+@breakpoint2: 1200px;
+@breakpoint3: 1600px;
+
+
+// Base font size ..............................................................
+
+@media only screen and (max-width : @breakpoint2)  {
+	html {
+		font-size: 15px;
+	}
+}
+@media only screen and (min-width: @breakpoint2) {
+	html {
+		font-size: 17px;
+	}
+}
+@media only screen and (min-width: @breakpoint3) {
+	html {
+		font-size: 19px;
+	}
+}
 
 
 // Styles ......................................................................
@@ -61,6 +82,7 @@ body {
 }
 html {
 	overflow-y: scroll;
+	overflow-x: hidden;
 	background-color: rgb(255,255,255);
 	color: @text;
 }
@@ -75,34 +97,37 @@ var {
 	font-family: "Ubuntu Mono", "Monaco", "Consolas", "Bitstream Vera Sans Mono", monospace;
 	color: @code;
 }
-main {
-	position: absolute;
-	right: 0;
-	width: 680px;
-	padding: 80px 120px 120px 60px;
+main,
+aside {
 	min-height: 100%;
-	background-color: @fade;
 }
-@media only screen and (max-device-width : 1024px)  {
-	main {
-		right: auto;
-		left: 50%;
-		margin-left: -340px;
-		padding-left: 100px;
-		padding-right: 100px;
-	}
-}
-#nav {
-	position: fixed;
-	right: 680px;
+main {
 	background-color: @fade;
-	//top: @unit * 6 + 8px;
-	padding: @unit;
-	padding-right: 0;
-	border-radius: 2px 0 0 2px;
+	position: relative;
+	z-index: 1;
+}
+aside {
+	background-color: @fade;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
+}
+#nav {
+	text-align: right;
+	list-style: none;
+	z-index: 2;
+	a {
+		text-decoration: none;
+		position: relative;
+		&.selected:before {
+			content: "▶";
+			font-family: "Arial", sans-serif;
+			position: absolute;
+			left: -14px;
+			top: 0;
+			font-size: 14px;
+		}
+	}
 	nav {
 		padding-right: @unit-half;
 		position: relative;
@@ -117,22 +142,6 @@ main {
 		}
 	}
 }
-nav {
-	text-align: right;
-	list-style: none;
-	a {
-		text-decoration: none;
-		position: relative;
-		&.selected:before {
-			content: "▶";
-			font-family: "Courier New", monospace;
-			position: absolute;
-			left: -14px;
-			top: 0;
-			font-size: 14px;
-		}
-	}
-}
 a,
 a code {
 	color: @link;
@@ -142,6 +151,24 @@ a:focus {
 }
 p > a {
 	text-decoration: underline;
+}
+code, 
+samp, 
+var {
+	line-height: 0;
+}
+pre[class*="language-"] {
+	code {
+		font-size: 1rem;
+	}
+}
+h1 {
+	font-size: 2.4rem;
+	line-height: @unit-double;
+}
+h2 {
+	font-size: 1.2rem;
+	line-height: @unit-double;
 }
 p,
 ul,
@@ -235,77 +262,79 @@ blockquote {
 	content: "NOTE";
 }
 
+// Nano screen .................................................................
+
+@media only screen and (max-width : @breakpoint1)  {
+	main {
+		padding: 4rem;
+	}
+}
+
+// Mini screen .................................................................
+
+@media only screen and (min-width : @breakpoint1)  {
+	main {
+		max-width: 42rem;
+		padding: (@unit * 3) 7rem 8rem 4rem;
+	}
+	aside {
+		padding: (@unit * 7) 0 0 1rem;
+		position: fixed;
+	}
+}
+
 
 // Small screen ................................................................
 
-@media only screen and (max-device-width : 1024px)  {
+
+@media only screen and (max-width : @breakpoint2)  {
+	main {
+		margin-left: auto;
+		margin-right: auto;
+	}
+	aside {
+		right: 50%;
+		top: 0;
+	}
 	#nav {
-		right: auto;
-		left: 50%;
-		margin-left: -440px;
+		position: relative;
+		right: 21rem;
+		//line-height: @unit * 1.5;
 	}
 }
 
 
 // Normal screen ...............................................................
 
-@media only screen and (min-device-width : 1025px) {
+@media only screen and (min-width : @breakpoint2) {
 	html {
 		overflow-y: scroll;
 		background-repeat: no-repeat;
 		background-attachment: fixed;
-		background-size: auto 100%;
+		background-size: auto 50%;
 		color: @text;
-		&#gui {
-			background-image: url("/img/gui.svg");
-		}
-		&#edb {
-			background-image: url("/img/edb.svg");
-		}
-	}	
+	}
+	html#gui {
+		background-image: url("/img/gui.svg");
+	}
+	html#edb {
+		background-image: url("/img/edb.svg");
+	}
+	main {
+		position: absolute;
+		margin: auto;
+		right: 0;
+	}
+	aside {
+		right: 42rem;
+	}
 }
-
 
 // Big screen ..................................................................
 
-@media only screen and (min-width: 1500px) {
-	body {
-		font-size: 16px * @scale;
-		line-height: @unit;
-	}
-	main {
-		width: 680px * @scale;
-		padding-right: 120px * @scale;
-		padding-bottom: 120px * @scale;
-		padding-left: 60px * @scale;
-	}
-	#nav {
-		right: 680px * @scale;
-		padding: @unit;
-		padding-right: 0;
-		top: @unit-double * 2;
-	}
-	main, 
-	#nav {
-		padding-top: 80px * @scale;
-	}
-	code, 
-	samp, 
-	var {
-		font-size: 17px * @scale;
-	}
-	pre[class*="language-"] {
-		code {
-			font-size: 15px * @scale;
-		}
-	}
-	h1 {
-		font-size: 38px * @scale;
-		line-height: @unit-double;
-	}
-	h2 {
-		line-height: @unit-double;
-		font-size: 24px * @scale;
+@media only screen and (min-width: @breakpoint3) {
+	html {
+		background-size: auto 100%;
 	}
 }
 
@@ -313,7 +342,7 @@ blockquote {
 
 // Pages .......................................................................
 
-#spiritual-gui {
+html#gui {
 	#page-lifecycle {
 		figure {
 			dislay: table;
@@ -399,8 +428,8 @@ code[class*="language-"]::selection, code[class*="language-"] ::selection {
 
 /* Code blocks */
 pre[class*="language-"] {
-	padding: @unit;
 	overflow: auto;
+	padding: @unit;
 }
 
 :not(pre) > code[class*="language-"],
