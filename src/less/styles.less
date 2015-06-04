@@ -272,36 +272,33 @@ blockquote {
 
 // Mini screen .................................................................
 
-@media only screen and (min-width : @breakpoint1)  {
-	main {
-		width: 42rem;
-		padding: (@unit * 3) 7rem 8rem 4rem;
-	}
+@media only screen and (min-width : @breakpoint1) {
 	aside {
-		padding: (@unit * 7) 0 0 1rem;
 		position: fixed;
 	}
 }
 
-
 // Small screen ................................................................
 
 
-@media only screen and (max-width : @breakpoint2)  {
+@media only screen and (min-width : @breakpoint1) and (max-width : @breakpoint2)  {
 	main {
+		padding-top: (@unit * 3);
 		margin-left: auto;
 		margin-right: auto;
-	}
+		width: 33rem;
+	}	
 	aside {
+		padding-top: (@unit * 7);
 		right: 50%;
 		top: 0;
 	}
 	#nav {
 		position: relative;
-		right: 21rem;
-		//line-height: @unit * 1.5;
+		right: 20rem;
 	}
 }
+
 
 
 // Normal screen ...............................................................
@@ -321,12 +318,21 @@ blockquote {
 		background-image: url("/img/edb.svg");
 	}
 	main {
+		width: 43rem;
+		padding: (@unit * 3) 7rem 8rem 4rem;
+	}
+	aside {
+		padding: (@unit * 7) 0 0 1rem;
+	}
+	main {
+		
 		position: absolute;
 		margin: auto;
 		right: 0;
 	}
 	aside {
-		right: 42rem;
+		
+		right: 43rem;
 	}
 }
 
