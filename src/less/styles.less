@@ -38,36 +38,42 @@
 @text: rgb(0,0,0);
 @code: rgb(100,100,100);
 @fade: rgba(255,255,255,0.9);
-@breakpoint1: 800px;
-@breakpoint2: 1200px;
-@breakpoint3: 1600px;
-@breakpoint4: 2000px;
-@breakpoint5: 2800px;
+@bp1: 500px;
+@bp2: 700px;
+@bp3: 1200px;
+@bp4: 1600px;
+@bp5: 2000px;
+@bp6: 2800px;
 
 
 // Base font size ..............................................................
 
-@media only screen and (max-width : @breakpoint2)  {
+@media only screen (max-width : @bp2) {
+	html {
+		font-size: 13px;
+	}
+}
+@media only screen and (min-width : @bp2)  {
 	html {
 		font-size: 15px;
 	}
 }
-@media only screen and (min-width: @breakpoint2) {
+@media only screen and (min-width: @bp3) {
 	html {
 		font-size: 17px;
 	}
 }
-@media only screen and (min-width: @breakpoint3) {
+@media only screen and (min-width: @bp4) {
 	html {
 		font-size: 19px;
 	}
 }
-@media only screen and (min-width: @breakpoint4) {
+@media only screen and (min-width: @bp5) {
 	html {
 		font-size: 21px;
 	}
 }
-@media only screen and (min-width: @breakpoint5) {
+@media only screen and (min-width: @bp6) {
 	html {
 		font-size: 25px;
 	}
@@ -287,15 +293,23 @@ blockquote {
 
 // Nano screen .................................................................
 
-@media only screen and (max-width : @breakpoint1)  {
+@media only screen and (max-width : @bp1) {
 	main {
-		padding: 4rem;
+		padding: (@unit * 1.5) 2rem (@unit * 1.5) 2rem;
+	}
+}
+
+// Nano screen .................................................................
+
+@media only screen and (min-width : @bp1) and (max-width : @bp2)  {
+	main {
+		padding: (@unit * 3) 6rem (@unit * 5) 6rem;
 	}
 }
 
 // Mini screen .................................................................
 
-@media only screen and (min-width : @breakpoint1) {
+@media only screen and (min-width: @bp2) {
 	aside {
 		position: fixed;
 	}
@@ -304,12 +318,14 @@ blockquote {
 // Small screen ................................................................
 
 
-@media only screen and (min-width : @breakpoint1) and (max-width : @breakpoint2)  {
+@media only screen and (min-width: @bp2) and (max-width: @bp3)  {
 	main {
-		padding-top: (@unit * 3);
+		padding: (@unit * 3) 0 (@unit * 5) 0;
 		margin-left: auto;
 		margin-right: auto;
 		width: 33rem;
+		position: relative;
+		left: 4rem;
 	}	
 	aside {
 		padding-top: (@unit * 7);
@@ -318,7 +334,7 @@ blockquote {
 	}
 	#nav {
 		position: relative;
-		right: 20rem;
+		right: 16rem;
 	}
 }
 
@@ -326,7 +342,7 @@ blockquote {
 
 // Normal screen ...............................................................
 
-@media only screen and (min-width : @breakpoint2) {
+@media only screen and (min-width: @bp3) {
 	html {
 		overflow-y: scroll;
 		background-repeat: no-repeat;
@@ -355,7 +371,7 @@ blockquote {
 
 // Big screen ..................................................................
 
-@media only screen and (min-width: @breakpoint3) {
+@media only screen and (min-width: @bp4) {
 	html {
 		background-size: auto 100%;
 	}
