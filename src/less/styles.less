@@ -38,6 +38,7 @@
 @text: rgb(0,0,0);
 @code: rgb(100,100,100);
 @fade: rgba(255,255,255,0.9);
+@back: rgb(255,255,255);
 @bp1: 500px;
 @bp2: 700px;
 @bp3: 1200px;
@@ -46,42 +47,46 @@
 @bp6: 2800px;
 
 
-// Base font size ..............................................................
+// Font sizes ..................................................................
 
-@media only screen (max-width : @bp2) {
+@media only screen and (min-width : 0)  {
 	html {
 		font-size: 13px;
 	}
 }
+@media only screen and (min-width : @bp1)  {
+	html {
+		font-size: 14px;
+	}
+}
 @media only screen and (min-width : @bp2)  {
 	html {
-		font-size: 15px;
+		font-size: 16px;
 	}
 }
 @media only screen and (min-width: @bp3) {
 	html {
-		font-size: 17px;
+		font-size: 18px;
 	}
 }
 @media only screen and (min-width: @bp4) {
 	html {
-		font-size: 19px;
+		font-size: 20px;
 	}
 }
 @media only screen and (min-width: @bp5) {
 	html {
-		font-size: 21px;
+		font-size: 22px;
 	}
 }
 @media only screen and (min-width: @bp6) {
 	html {
-		font-size: 25px;
+		font-size: 24px;
 	}
 }
 
 
-
-// Styles ......................................................................
+// Stylee ......................................................................
 
 * {
 	margin: 0;
@@ -102,7 +107,7 @@ body {
 html {
 	overflow-y: scroll;
 	overflow-x: hidden;
-	background-color: rgb(255,255,255);
+	background-color: @back;
 	color: @text;
 }
 body {
@@ -121,12 +126,12 @@ aside {
 	min-height: 100%;
 }
 main {
-	background-color: @fade;
+	//background-color: @fade;
 	position: relative;
 	z-index: 1;
 }
 aside {
-	background-color: @fade;
+	//background-color: @fade;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
@@ -137,14 +142,13 @@ aside {
 	z-index: 2;
 	a {
 		text-decoration: none;
-		position: relative;
 		&.selected:before {
-			content: "▶";
-			font-family: "Arial", sans-serif;
-			position: absolute;
-			left: -14px;
-			top: 0;
-			font-size: 14px;
+			content: "➜";
+			line-height: 0;
+			font-size: 1rem;
+			padding-right: 0.35rem;
+			position: relative;
+			top: -0.05rem;
 		}
 	}
 	nav {
@@ -175,10 +179,14 @@ code,
 samp, 
 var {
 	line-height: 0;
+	background: #F5F5F5;
+	padding: 0.1rem;
 }
 pre[class*="language-"] {
 	code {
-		font-size: 1rem;
+		font-size: 0.96rem;
+		background: transparent;
+		padding: 0;
 	}
 }
 h1 {
