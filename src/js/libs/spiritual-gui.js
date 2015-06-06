@@ -6361,6 +6361,8 @@ gui.ActionPlugin = (function using(confirmed, chained) {
 		
 		/**
 		 * Dispatch type(s) ascending.
+		 * TODO: This should probably just return the plugin and not 
+		 *       the action since nobody's gonna suspect that anyways.
 		 * @alias {gui.ActionPlugin#ascend}
 		 * @param {string} type
 		 * @param @optional {object} data

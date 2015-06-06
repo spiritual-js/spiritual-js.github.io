@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html id="edb">
+
 	<head>
 		<title>Plugins &#x2013; Spiritual EDB</title>
 		<meta charset="UTF-8">
@@ -8,11 +9,14 @@
 		<link rel="prefetch" href="/img/gui.svg">
 		<link rel="prefetch" href="/img/edb.svg">
 	</head>
+
 	<body>
-		<main>
-			<h1>Plugins</h1>
-			<p>If spirits.</p>
-			<pre class="language-javascript">
+
+		<div id="root">
+			<main>
+				<h1>Plugins</h1>
+				<p>If spirits.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> MySpirit <span class="token operator">=</span> gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
 	onready<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
 		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onready<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -20,12 +24,12 @@
 	<span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span></code>
 </pre>
-			<p>Equivalent.</p>
-			<pre class="language-javascript">
+				<p>Equivalent.</p>
+				<pre class="language-javascript">
 <code>Person<span class="token punctuation">.</span>output<span class="token punctuation">.</span><span class="token function">connect<span class="token punctuation">(</span></span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p>Destruction.</p>
-			<pre class="language-javascript">
+				<p>Destruction.</p>
+				<pre class="language-javascript">
 <code>oninput<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>input<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 	<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">oninput<span class="token punctuation">(</span></span>input<span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token keyword">switch</span><span class="token punctuation">(</span>input<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -40,17 +44,23 @@
 	<span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code>
 </pre>
-		</main>
-		<aside>
-			<nav id="nav">
-				<li><a href="/edb/index.html">Types</a><nav>
-					<li><a href="/edb/objects.html">Objects</a></li>
-					<li><a href="/edb/arrays.html">Arrays</a></li></nav></li>
-				<li><a href="/edb/output.html">Output</a></li>
-				<li><a href="/edb/observers.html">Observers</a></li>
-				<li><a href="/edb/plugins.html">Plugins</a></li>
-			</nav>
-		</aside>
-		<script src="/js/scripts.min.js"></script>
+			</main>
+			<aside>
+				<nav id="nav">
+
+					<li><a href="/edb/index.html">Types</a>
+						<nav>
+							<li><a href="/edb/objects.html">Objects</a></li>
+							<li><a href="/edb/arrays.html">Arrays</a></li>
+						</nav>
+					</li>
+					<li><a href="/edb/output.html">Output</a></li>
+					<li><a href="/edb/observers.html">Observers</a></li>
+					<li><a href="/edb/plugins.html">Plugins</a></li>
+				</nav>
+			</aside>
+		</div>
+		<script src="/js/scripts.js"></script>
 	</body>
+
 </html>

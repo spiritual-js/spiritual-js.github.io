@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html id="edb">
+
 	<head>
 		<title>Objects &#x2013; Spiritual EDB</title>
 		<meta charset="UTF-8">
@@ -8,11 +9,14 @@
 		<link rel="prefetch" href="/img/gui.svg">
 		<link rel="prefetch" href="/img/edb.svg">
 	</head>
+
 	<body>
-		<main>
-			<h1>Objects</h1>
-			<p>To create an <code>edb.Object</code> constructor, simply <code>extend</code> from <code>edb.Object</code>.</p>
-			<pre class="language-javascript">
+
+		<div id="root">
+			<main>
+				<h1>Objects</h1>
+				<p>To create an <code>edb.Object</code> constructor, simply <code>extend</code> from <code>edb.Object</code>.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> Person <span class="token operator">=</span> edb<span class="token punctuation">.</span>Object<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
 	firstname<span class="token punctuation">:</span> <span class="token string">&apos;&apos;</span><span class="token punctuation">,</span>
 	lastname<span class="token punctuation">:</span> <span class="token string">&apos;&apos;</span><span class="token punctuation">,</span>
@@ -21,8 +25,8 @@
 	<span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p>An instance of <code>Person</code> can now be created with a JSON argument.</p>
-			<pre class="language-javascript">
+				<p>An instance of <code>Person</code> can now be created with a JSON argument.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> person <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
 	firstname<span class="token punctuation">:</span> <span class="token string">&apos;John&apos;</span><span class="token punctuation">,</span>
 	lastname<span class="token punctuation">:</span> <span class="token string">&apos;Johnson&apos;</span>
@@ -30,21 +34,21 @@
 console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>person<span class="token punctuation">.</span><span class="token function">fullname<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// John Johnson</span></code>
 </pre>
 
-			<h2>Typed properties</h2>
-			<p>We can also declare <em>typed properties</em>. Typically like this:</p>
-			<pre class="language-javascript">
+				<h2>Typed properties</h2>
+				<p>We can also declare <em>typed properties</em>. Typically like this:</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> Person <span class="token operator">=</span> edb<span class="token punctuation">.</span>Object<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
 	friend<span class="token punctuation">:</span> Person
 	<span class="token comment" spellcheck="true">// (firstname, lastname, fullname etc.)
 </span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p>This example will however not really work. That&apos;s because the <code>Person</code> constructor doesn&apos;t exist before it has been declared, but we can work around this by writing directly to the <code>prototype</code>.</p>
-			<pre class="language-javascript">
+				<p>This example will however not really work. That&apos;s because the <code>Person</code> constructor doesn&apos;t exist before it has been declared, but we can work around this by writing directly to the <code>prototype</code>.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> Person <span class="token operator">=</span> edb<span class="token punctuation">.</span>Object<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token comment" spellcheck="true">/* extensions */</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 Person<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>friend <span class="token operator">=</span> Person<span class="token punctuation">;</span></code>
 </pre>
-			<p>Two <code>Person</code> instances can now be created with a single argument.</p>
-			<pre class="language-javascript">
+				<p>Two <code>Person</code> instances can now be created with a single argument.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> person <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
 	firstname<span class="token punctuation">:</span> <span class="token string">&apos;John&apos;</span><span class="token punctuation">,</span>
 	lastname<span class="token punctuation">:</span> <span class="token string">&apos;Johnson&apos;</span><span class="token punctuation">,</span>
@@ -56,16 +60,16 @@ Person<span class="token punctuation">.</span>prototype<span class="token punctu
 console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>person<span class="token punctuation">.</span><span class="token function">fullname<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// John Johnson
 </span>console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>person<span class="token punctuation">.</span>friend<span class="token punctuation">.</span><span class="token function">fullname<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Bob Schmidt</span></code>
 </pre>
-			<p>The typed properties can also be an <code>edb.Array</code>. We haven&apos;t prepared such a constructor, but we can declare one <em>anonymously</em>.</p>
-			<pre class="language-javascript">
+				<p>The typed properties can also be an <code>edb.Array</code>. We haven&apos;t prepared such a constructor, but we can declare one <em>anonymously</em>.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> Person <span class="token operator">=</span> edb<span class="token punctuation">.</span>Object<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
 	friends<span class="token punctuation">:</span> edb<span class="token punctuation">.</span>Array<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
 		$of<span class="token punctuation">:</span> Person
 	<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p>We can now create as many <code>Person</code> instances as we like with a single JSON argument. Note that the value of <code>friends</code> must now be an array.</p>
-			<pre class="language-javascript">
+				<p>We can now create as many <code>Person</code> instances as we like with a single JSON argument. Note that the value of <code>friends</code> must now be an array.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> person <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
 	firstname<span class="token punctuation">:</span> <span class="token string">&apos;John&apos;</span><span class="token punctuation">,</span>
 	lastname<span class="token punctuation">:</span> <span class="token string">&apos;Johnson&apos;</span><span class="token punctuation">,</span>
@@ -78,19 +82,19 @@ console<span class="token punctuation">.</span><span class="token function">log<
 console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>person<span class="token punctuation">.</span>friends<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">fullname<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Jim Nielsen</span></code>
 </pre>
 
-			<h2>Untyped properties</h2>
-			<p>If no Types are a assigned to the properties, objects and arrays found in JSON will be newed up as either an <code>edb.Object</code> or an <code>edb.Array</code>. If you don&apos;t want this, you must declare them as simple objects/arrays.</p>
-			<pre class="language-javascript">
+				<h2>Untyped properties</h2>
+				<p>If no Types are a assigned to the properties, objects and arrays found in JSON will be newed up as either an <code>edb.Object</code> or an <code>edb.Array</code>. If you don&apos;t want this, you must declare them as simple objects/arrays.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> Person <span class="token operator">=</span> edb<span class="token punctuation">.</span>Object<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
 	friend<span class="token punctuation">:</span> Object<span class="token punctuation">,</span>
 	friends<span class="token punctuation">:</span> Array
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p>If you&apos;re not planning to <a href="observers.html">observe</a> these properties, and if they contain a lot of data, it&apos;s generally adviced to declare them as simple properties.</p>
+				<p>If you&apos;re not planning to <a href="observers.html">observe</a> these properties, and if they contain a lot of data, it&apos;s generally adviced to declare them as simple properties.</p>
 
-			<h2>Anonymous Objects</h2>
-			<p>As we have seen, Type subclasses can be create <em>anonymously</em>.</p>
-			<pre class="language-javascript">
+				<h2>Anonymous Objects</h2>
+				<p>As we have seen, Type subclasses can be create <em>anonymously</em>.</p>
+				<pre class="language-javascript">
 <code>Person<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>friend <span class="token operator">=</span> Person<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
 	fullname<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
 		<span class="token keyword">return</span> <span class="token string">&apos;Friendly &apos;</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">fullname<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -104,17 +108,23 @@ console<span class="token punctuation">.</span><span class="token function">log<
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>person<span class="token punctuation">.</span>friend<span class="token punctuation">.</span><span class="token function">fullname<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Friendly Bob Schmidt</span></code>
 </pre>
-		</main>
-		<aside>
-			<nav id="nav">
-				<li><a href="/edb/index.html">Types</a><nav>
-					<li><a href="/edb/objects.html">Objects</a></li>
-					<li><a href="/edb/arrays.html">Arrays</a></li></nav></li>
-				<li><a href="/edb/output.html">Output</a></li>
-				<li><a href="/edb/observers.html">Observers</a></li>
-				<li><a href="/edb/plugins.html">Plugins</a></li>
-			</nav>
-		</aside>
-		<script src="/js/scripts.min.js"></script>
+			</main>
+			<aside>
+				<nav id="nav">
+
+					<li><a href="/edb/index.html">Types</a>
+						<nav>
+							<li><a href="/edb/objects.html">Objects</a></li>
+							<li><a href="/edb/arrays.html">Arrays</a></li>
+						</nav>
+					</li>
+					<li><a href="/edb/output.html">Output</a></li>
+					<li><a href="/edb/observers.html">Observers</a></li>
+					<li><a href="/edb/plugins.html">Plugins</a></li>
+				</nav>
+			</aside>
+		</div>
+		<script src="/js/scripts.js"></script>
 	</body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html id="gui">
+
 	<head>
 		<title>config &#x2013; Spiritual GUI</title>
 		<meta charset="UTF-8">
@@ -8,19 +9,22 @@
 		<link rel="prefetch" href="/img/gui.svg">
 		<link rel="prefetch" href="/img/edb.svg">
 	</head>
+
 	<body>
-		<main>
-			<h1>config</h1>
-			<p>The <code>config</code> plugin doesn&apos;t expose useful methods. But it serves a useful purpose for spirits that like to be configured from the server side or in a template file.</p>
+
+		<div id="root">
+			<main>
+				<h1>config</h1>
+				<p>The <code>config</code> plugin doesn&apos;t expose useful methods. But it serves a useful purpose for spirits that like to be configured from the server side or in a template file.</p>
 
 
-			<h2 id="properties">Config properties</h2>
-			<p>When the spirit initializes, the plugin will collect all DOM attributes prefixed with <code>gui</code>.</p>
-			<pre class="language-markup">
+				<h2 id="properties">Config properties</h2>
+				<p>When the spirit initializes, the plugin will collect all DOM attributes prefixed with <code>gui</code>.</p>
+				<pre class="language-markup">
 <code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>my-spirit<span class="token punctuation">&quot;</span></span> <span class="token attr-name">gui</span>.<span class="token attr-name">visible</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>false<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span></code>
 </pre>
-			<p>This happens exactly when the <code>onconfigure</code> method is called. The name and value of <code>gui</code> attributes will be mapped directly onto JavaScript properties of the spirit.</p>
-			<pre class="language-javascript">
+				<p>This happens exactly when the <code>onconfigure</code> method is called. The name and value of <code>gui</code> attributes will be mapped directly onto JavaScript properties of the spirit.</p>
+				<pre class="language-javascript">
 <code>gui<span class="token punctuation">.</span><span class="token function">channel<span class="token punctuation">(</span></span><span class="token string">&apos;.my-spirit&apos;</span><span class="token punctuation">,</span> gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span>extend <span class="token punctuation">(</span><span class="token punctuation">{</span>
 	visible<span class="token punctuation">:</span> <span class="token keyword">true</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// must be declared
 </span>	onconfigure<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -31,18 +35,18 @@
 	<span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p>The spirit must declare the property in advance, otherwise an error will be thrown, just to make sure that we remember to update the HTML whenever we rename the property.</p>
-			<p>The attribute value will be converted to an appropriate type, in this case a <code>boolean</code>. In the example below, the attribute values will be converted to a <code>number</code>, an <code>array</code> and an <code>object</code>.</p>
-			<pre class="language-markup">
+				<p>The spirit must declare the property in advance, otherwise an error will be thrown, just to make sure that we remember to update the HTML whenever we rename the property.</p>
+				<p>The attribute value will be converted to an appropriate type, in this case a <code>boolean</code>. In the example below, the attribute values will be converted to a <code>number</code>, an <code>array</code> and an <code>object</code>.</p>
+				<pre class="language-markup">
 <code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>my-spirit<span class="token punctuation">&quot;</span></span> 
 	<span class="token attr-name">gui</span>.<span class="token attr-name">maxcount</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>23<span class="token punctuation">&quot;</span></span>
 	<span class="token attr-name">gui</span>.<span class="token attr-name">counters</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>[1,2,3]<span class="token punctuation">&quot;</span></span>
 	<span class="token attr-name">gui</span>.<span class="token attr-name">mincount</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>{value: 23}<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span></code>
 </pre>
-			<p class="todo">Actually support arrays and objects.</p>
-			<p>The <code>gui</code> attribute can also configure nested objects. Here we configure an imaginary <code>randomizer</code> plugin that generates random numbers. You can check out how to <a href="plugins.html#creating">create plugins</a> if you like.</p>
-			<pre class="language-markup">
+				<p class="todo">Actually support arrays and objects.</p>
+				<p>The <code>gui</code> attribute can also configure nested objects. Here we configure an imaginary <code>randomizer</code> plugin that generates random numbers. You can check out how to <a href="plugins.html#creating">create plugins</a> if you like.</p>
+				<pre class="language-markup">
 <code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>my-spirit<span class="token punctuation">&quot;</span></span> 
 	<span class="token attr-name">gui</span>.<span class="token attr-name">randomizer</span>.<span class="token attr-name">maxvalue</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>23<span class="token punctuation">&quot;</span></span>
 	<span class="token attr-name">gui</span>.<span class="token attr-name">randomizer</span>.<span class="token attr-name">minvalue</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>5<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
@@ -50,48 +54,54 @@
 </pre>
 
 
-			<h2 id="methods">Config methods</h2>
-			<p>If the attribute name matches a method, the method will be invoked with with the attribute value as an argument. Again, the value will be converted to a convenient type. In this case, it gets to stay a string.</p>
-			<pre class="language-markup">
+				<h2 id="methods">Config methods</h2>
+				<p>If the attribute name matches a method, the method will be invoked with with the attribute value as an argument. Again, the value will be converted to a convenient type. In this case, it gets to stay a string.</p>
+				<pre class="language-markup">
 <code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>my-spirit<span class="token punctuation">&quot;</span></span> <span class="token attr-name">gui</span>.<span class="token attr-name">logmessage</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>Hello world<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span></code>
 </pre>
-			<pre class="language-javascript">
+				<pre class="language-javascript">
 <code>gui<span class="token punctuation">.</span><span class="token function">channel<span class="token punctuation">(</span></span><span class="token string">&apos;.my-spirit&apos;</span><span class="token punctuation">,</span> gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span>extend <span class="token punctuation">(</span><span class="token punctuation">{</span>
 	logmessage<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p>Importantly, a method gets triggered at <code>onready</code> while a property gets set a <code>onconfigure</code>. Please refer to the <a href="lifecycle.html">spirit lifecycle</a> for an overview of these events. You can say that:</p>
-			<ul>
-				<li>Properties configure how a spirit should start up</li>
-				<li>Methods configure what it should do when it&apos;s ready</li>
-			</ul>
-			<p>You can implement the property with an <a href="classes.html">accessor</a> if you need to run some code when the plugin sets the property (during <code>onconfigure</code>).</p>
-			<p class="todo">Make sure that link leads to something</p>
-		</main>
-		<aside>
-			<nav id="nav">
-				<li><a href="/gui/index.html">Spirits</a></li>
-				<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
-				<li><a href="/gui/callbacks.html">Callbacks</a></li>
-				<li><a href="/gui/plugins.html">Plugins</a><nav>
-					<li><a href="/gui/plugin-action.html">action</a></li>
-					<li><a href="/gui/plugin-att.html">att</a></li>
-					<li><a href="/gui/plugin-box.html">box</a></li>
-					<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
-					<li><a href="/gui/plugin-config.html">config</a></li>
-					<li><a href="/gui/plugin-css.html">css</a></li>
-					<li><a href="/gui/plugin-dom.html">dom</a></li>
-					<li><a href="/gui/plugin-event.html">event</a></li>
-					<li><a href="/gui/plugin-life.html">life</a></li>
-					<li><a href="/gui/plugin-tick.html">tick</a></li></nav></li>
-				<li><a href="/gui/classes.html">Classes</a></li>
-				<li><a href="/gui/projects.html">Projects</a></li>
-				<li><a href="/gui/caveats.html">Caveats</a></li>
-				<li><a href="/gui/contribute.html">Contribute</a></li>
-			</nav>
-		</aside>
-		<script src="/js/scripts.min.js"></script>
+				<p>Importantly, a method gets triggered at <code>onready</code> while a property gets set a <code>onconfigure</code>. Please refer to the <a href="lifecycle.html">spirit lifecycle</a> for an overview of these events. You can say that:</p>
+				<ul>
+					<li>Properties configure how a spirit should start up</li>
+					<li>Methods configure what it should do when it&apos;s ready</li>
+				</ul>
+				<p>You can implement the property with an <a href="classes.html">accessor</a> if you need to run some code when the plugin sets the property (during <code>onconfigure</code>).</p>
+				<p class="todo">Make sure that link leads to something</p>
+			</main>
+			<aside>
+				<nav id="nav">
+
+					<li><a href="/gui/index.html">Spirits</a></li>
+					<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
+					<li><a href="/gui/callbacks.html">Callbacks</a></li>
+					<li><a href="/gui/plugins.html">Plugins</a>
+						<nav>
+							<li><a href="/gui/plugin-action.html">action</a></li>
+							<li><a href="/gui/plugin-att.html">att</a></li>
+							<li><a href="/gui/plugin-box.html">box</a></li>
+							<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
+							<li><a href="/gui/plugin-config.html">config</a></li>
+							<li><a href="/gui/plugin-css.html">css</a></li>
+							<li><a href="/gui/plugin-dom.html">dom</a></li>
+							<li><a href="/gui/plugin-event.html">event</a></li>
+							<li><a href="/gui/plugin-life.html">life</a></li>
+							<li><a href="/gui/plugin-tick.html">tick</a></li>
+						</nav>
+					</li>
+					<li><a href="/gui/classes.html">Classes</a></li>
+					<li><a href="/gui/projects.html">Projects</a></li>
+					<li><a href="/gui/caveats.html">Caveats</a></li>
+					<li><a href="/gui/contribute.html">Contribute</a></li>
+				</nav>
+			</aside>
+		</div>
+		<script src="/js/scripts.js"></script>
 	</body>
+
 </html>

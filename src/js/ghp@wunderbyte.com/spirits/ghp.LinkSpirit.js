@@ -34,7 +34,7 @@ ghp.LinkSpirit = gui.Spirit.extend({
 	 */
 	_doaction: function() {
 		return gui.Client.hasHistory && 
-				!this.att.get('href').contains('//') && 
+				!this.att.get('href').includes('//') && 
 				!this._is('#') && !this._is('javascript:');
 
 	},

@@ -1,5 +1,6 @@
 var cheerio = require('cheerio');
 var prism = require('./prism.js');
+var beautify_html = require('js-beautify').html;
 
 /*
  * Hello
@@ -17,7 +18,11 @@ module.exports = {
 		$('html').attr('id', id);
 		processTags($, map, title);
 		processPrism($);
-		return $.html();
+		return beautify_html($.html(), {
+			indent_size: 1,
+			indent_char: '\t',
+			indent_inner_html: true
+		});
 	}
 };
 
@@ -25,21 +30,25 @@ module.exports = {
 
 function processTags($, map, title) {
 	$('title').text($('title').text() + ' – ' + title);
-	$('title').after(pretty([
+	$('title').after(join([
 		'<meta charset="UTF-8"/>',
 		'<meta name="viewport" content="width=device-width, initial-scale=1"/>',
 		'<link rel="stylesheet" href="/css/styles.min.css"/>',
 		'<link rel="prefetch" href="/img/gui.svg"/>',
 		'<link rel="prefetch" href="/img/edb.svg"/>'
 	]));
-	$('main').after(pretty([
+	var root = $('<div id="root"></div>');
+	var body = $('body');
+	root.append($('main'));
+	root.append(join([
 		'<aside>',
-		'\t<nav id="nav">' + htmlmenu(map,'\t\t\t\t'),
-		'\t</nav>',
+		'	<nav id="nav">',
+				htmlmenu(map,'\t\t\t\t'),
+		'	</nav>',
 		'</aside>'
 	]));
-	$('aside').after(pretty([
-		'<script src="/js/scripts.min.js"></script>'
+	body.append(root).append(join([
+		'<script src="/js/scripts.js"></script>'
 	]));
 }
 
@@ -61,16 +70,21 @@ function processPrism($) {
 	});
 }
 
+function join(tags) {
+	return tags.join('\n');
+}
+
 /**
  * Properly indent those tags.
  * @param {Array<string>} tags
  * @returns {string}
- */
-function pretty(tags) {
-	return '\n\t' + tags.map(function(tag) {
-		return '\t' + tag;
-	}).join('\n\t');
+ *
+function join(tags) {
+	return '\n\t\t' + tags.map(function(tag) {
+		return '\t\t' + tag;
+	}).join('\n\t\t');
 }
+*/
 
 /**
  * Unindent.

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html id="gui">
+
 	<head>
 		<title>Caveats &#x2013; Spiritual GUI</title>
 		<meta charset="UTF-8">
@@ -8,28 +9,32 @@
 		<link rel="prefetch" href="/img/gui.svg">
 		<link rel="prefetch" href="/img/edb.svg">
 	</head>
+
 	<body>
-		<main>
-			<h1>Caveats</h1>
-			<p>We are waiting on a fix for <a href="https://code.google.com/p/chromium/issues/detail?id=43394">issue&#xA0;43394</a>, &quot;DOM attributes should be moved to prototype chains and should expose JavaScript getters and setters&quot;. Until it fixes, spirits will attach <em>async</em> in Chrome and Safari whenever one of these is involved:</p>
-			<ul>
-				<li><code>innerHTML</code></li>
-				<li><code>outerHTML</code></li>
-				<li><code>textContent</code></li>
-			</ul>
-			<p>The bug relates to these things being implemented as property setters instead of method calls. Observe the difference:</p>
-			<pre class="language-javascript">
+
+		<div id="root">
+			<main>
+				<h1>Caveats</h1>
+				<p>We are waiting on a fix for <a href="https://code.google.com/p/chromium/issues/detail?id=43394">issue&#xA0;43394</a>, &quot;DOM attributes should be moved to prototype chains and should expose JavaScript getters and setters&quot;. Until it fixes,
+					spirits will attach <em>async</em> in Chrome and Safari whenever one of these is involved:</p>
+				<ul>
+					<li><code>innerHTML</code></li>
+					<li><code>outerHTML</code></li>
+					<li><code>textContent</code></li>
+				</ul>
+				<p>The bug relates to these things being implemented as property setters instead of method calls. Observe the difference:</p>
+				<pre class="language-javascript">
 <code>document<span class="token punctuation">.</span>body<span class="token punctuation">.</span>textContent <span class="token operator">=</span> <span class="token string">&apos;hello&apos;</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// property setter
 </span>document<span class="token punctuation">.</span>body<span class="token punctuation">.</span><span class="token function">appendChild<span class="token punctuation">(</span></span>textnode<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// method call</span></code>
 </pre>
-			<p>We can work around this with a <code>MutationObserver</code>. When the DOM changes, the observer will trigger a spiritualization of newly created elements.</p>
-			<ul>
-				<li>Spirits will constructed as expected, it just takes a few milliseconds before it happens. Until the bug is fixed, please be aware of this potential delay while coding your spirits.</li>
-				<li>Spirits may however not be destructed properly when their element is removed from the DOM, so they may still be subscribed to events and broadcasts going on. If this causes problems, you&apos;ll need extra code to work around it.</li>
-			</ul>
-			<p>The issue is making good progress in Chrome but the status in Safari is unknown, as always.</p>
+				<p>We can work around this with a <code>MutationObserver</code>. When the DOM changes, the observer will trigger a spiritualization of newly created elements.</p>
+				<ul>
+					<li>Spirits will constructed as expected, it just takes a few milliseconds before it happens. Until the bug is fixed, please be aware of this potential delay while coding your spirits.</li>
+					<li>Spirits may however not be destructed properly when their element is removed from the DOM, so they may still be subscribed to events and broadcasts going on. If this causes problems, you&apos;ll need extra code to work around it.</li>
+				</ul>
+				<p>The issue is making good progress in Chrome but the status in Safari is unknown, as always.</p>
 
-			<!--
+				<!--
 			<p>DOM setters are not overridable in Chrome and there is no per&shy;formant workaround. We've disabled overriding of DOM setters in all browsers, just so there's no surprises when switching back and forth between them. For now, you'll have to bear in mind that when a document update didn't initialize the spirits as expected, it probably boils down to this bug.</p>
 
 			<h2>Workarounds</h2>
@@ -86,29 +91,35 @@
 			-->
 
 
-		</main>
-		<aside>
-			<nav id="nav">
-				<li><a href="/gui/index.html">Spirits</a></li>
-				<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
-				<li><a href="/gui/callbacks.html">Callbacks</a></li>
-				<li><a href="/gui/plugins.html">Plugins</a><nav>
-					<li><a href="/gui/plugin-action.html">action</a></li>
-					<li><a href="/gui/plugin-att.html">att</a></li>
-					<li><a href="/gui/plugin-box.html">box</a></li>
-					<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
-					<li><a href="/gui/plugin-config.html">config</a></li>
-					<li><a href="/gui/plugin-css.html">css</a></li>
-					<li><a href="/gui/plugin-dom.html">dom</a></li>
-					<li><a href="/gui/plugin-event.html">event</a></li>
-					<li><a href="/gui/plugin-life.html">life</a></li>
-					<li><a href="/gui/plugin-tick.html">tick</a></li></nav></li>
-				<li><a href="/gui/classes.html">Classes</a></li>
-				<li><a href="/gui/projects.html">Projects</a></li>
-				<li><a href="/gui/caveats.html">Caveats</a></li>
-				<li><a href="/gui/contribute.html">Contribute</a></li>
-			</nav>
-		</aside>
-		<script src="/js/scripts.min.js"></script>
+			</main>
+			<aside>
+				<nav id="nav">
+
+					<li><a href="/gui/index.html">Spirits</a></li>
+					<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
+					<li><a href="/gui/callbacks.html">Callbacks</a></li>
+					<li><a href="/gui/plugins.html">Plugins</a>
+						<nav>
+							<li><a href="/gui/plugin-action.html">action</a></li>
+							<li><a href="/gui/plugin-att.html">att</a></li>
+							<li><a href="/gui/plugin-box.html">box</a></li>
+							<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
+							<li><a href="/gui/plugin-config.html">config</a></li>
+							<li><a href="/gui/plugin-css.html">css</a></li>
+							<li><a href="/gui/plugin-dom.html">dom</a></li>
+							<li><a href="/gui/plugin-event.html">event</a></li>
+							<li><a href="/gui/plugin-life.html">life</a></li>
+							<li><a href="/gui/plugin-tick.html">tick</a></li>
+						</nav>
+					</li>
+					<li><a href="/gui/classes.html">Classes</a></li>
+					<li><a href="/gui/projects.html">Projects</a></li>
+					<li><a href="/gui/caveats.html">Caveats</a></li>
+					<li><a href="/gui/contribute.html">Contribute</a></li>
+				</nav>
+			</aside>
+		</div>
+		<script src="/js/scripts.js"></script>
 	</body>
+
 </html>

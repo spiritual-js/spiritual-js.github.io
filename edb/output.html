@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html id="edb">
+
 	<head>
 		<title>Output &#x2013; Spiritual EDB</title>
 		<meta charset="UTF-8">
@@ -8,98 +9,103 @@
 		<link rel="prefetch" href="/img/gui.svg">
 		<link rel="prefetch" href="/img/edb.svg">
 		<script>
-				var Person = edb.Object.extend({
-					firstname: '',
-					lastname: '',
-					fullname: function() {
-						return [this.firstname, this.lastname].join(' ');
-					}
-				});
-			</script>
-			<script>
-				new Person({
-					firstname: 'John',
-					lastname: 'Johnson'
-				}).output();
-				
-				setTimeout(function() {
-					Person.output.revoke();	
-				}, 2000);
-			</script>
-			<script>
-				Person.output.add({
-					oninput: function(input) {
-						console.log(input.data);
-					}
-				});
-			</script>
+			var Person = edb.Object.extend({
+				firstname: '',
+				lastname: '',
+				fullname: function() {
+					return [this.firstname, this.lastname].join(' ');
+				}
+			});
+		</script>
+		<script>
+			new Person({
+				firstname: 'John',
+				lastname: 'Johnson'
+			}).output();
+
+			setTimeout(function() {
+				Person.output.revoke();
+			}, 2000);
+		</script>
+		<script>
+			Person.output.add({
+				oninput: function(input) {
+					console.log(input.data);
+				}
+			});
+		</script>
 	</head>
+
 	<body>
-		<main>
-			<h1>Output</h1>
-			<p>You can <em>output</em> a Type instance on the page.</p>
-			<pre class="language-javascript">
+
+		<div id="root">
+			<main>
+				<h1>Output</h1>
+				<p>You can <em>output</em> a Type instance on the page.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> person <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
 	firstname<span class="token punctuation">:</span> <span class="token string">&apos;John&apos;</span><span class="token punctuation">,</span>
 	lastname<span class="token punctuation">:</span> <span class="token string">&apos;Johnson&apos;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 person<span class="token punctuation">.</span><span class="token function">output<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p>That&apos;s all there is to it. You can now get a hold of the 
-				<code>person</code> from anywhere on the page.</p>
-			<pre class="language-javascript">
+				<p>That&apos;s all there is to it. You can now get a hold of the
+					<code>person</code> from anywhere on the page.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> person <span class="token operator">=</span> Person<span class="token punctuation">.</span>output<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>person<span class="token punctuation">.</span><span class="token function">fullname<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// John Johnson</span></code>
 </pre>
-			<p>That is nice, but not always practical if you don&apos;t know when the person is outputted. To cover this, you can connect an <em>output listener</em>. But before we can get to that, please observe the following conventions.</p>
+				<p>That is nice, but not always practical if you don&apos;t know when the person is outputted. To cover this, you can connect an <em>output listener</em>. But before we can get to that, please observe the following conventions.</p>
 
-			<h2>Output conventions</h2>
-			<ol>
-				<li>When a new instance is outputted, the new output replaces the old output. There can only be one instance of our <code>Person</code> on the page.</li>
-				<li>When a <em>subclass</em> of <code>Person</code> is outputted, it also replaces the output of type <code>Person</code> or any other subclass. There can really only be one.</li>
-			</ol>
-			<p>According to conventions, any output listener connected to <code>Person</code> would also be hooked up to output of type <code>GoodPerson</code> or <code>BadPerson</code>, so let&apos;s create and output one of those.</p>
-			<pre class="language-javascript">
+				<h2>Output conventions</h2>
+				<ol>
+					<li>When a new instance is outputted, the new output replaces the old output. There can only be one instance of our <code>Person</code> on the page.</li>
+					<li>When a <em>subclass</em> of <code>Person</code> is outputted, it also replaces the output of type <code>Person</code> or any other subclass. There can really only be one.</li>
+				</ol>
+				<p>According to conventions, any output listener connected to <code>Person</code> would also be hooked up to output of type <code>GoodPerson</code> or <code>BadPerson</code>, so let&apos;s create and output one of those.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> GoodPerson <span class="token operator">=</span> Person<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">var</span> goodperson <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">GoodPerson</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 goodperson<span class="token punctuation">.</span><span class="token function">output<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// replaces the Person output</span></code>
 </pre>
 
-			<h2>Connect a listener</h2>
-			<p>The output listener must have a special method <code>oninput</code> to be called whenever a new <code>Person</code> is outputted. It listens for <em>all kinds</em> of <code>Person</code>.</p>
-			<pre class="language-javascript">
+				<h2>Connect a listener</h2>
+				<p>The output listener must have a special method <code>oninput</code> to be called whenever a new <code>Person</code> is outputted. It listens for <em>all kinds</em> of <code>Person</code>.</p>
+				<pre class="language-javascript">
 <code>Person<span class="token punctuation">.</span>output<span class="token punctuation">.</span>connect <span class="token punctuation">(</span><span class="token punctuation">{</span>
 	oninput<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>input<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 		console<span class="token punctuation">.</span><span class="token function">log<span class="token punctuation">(</span></span>input<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p>Because an instance of <code>GoodPerson</code> is already out, the method will be called immediately. In the code above, the <code>input</code> parameter is not the <code>goodperson</code> instance, but an <code>edb.Input</code> object with three properties.</p>
-			<ul>
-				<li><code>data</code> refers to the outputted instance (<code>goodperson</code>)</li>
-				<li><code>type</code> refers to the instance constructor (<code>GoodPerson</code>)</li>
-				<li><code>connection</code> refers to Type we are connected to (Person)</li>
-			</ul>
-			<p>This elaborate setup will come in handy when we attempt to handle multiple types of output with a single method (like we do in <a href="plugins.html">plugins</a>).</p>
+				<p>Because an instance of <code>GoodPerson</code> is already out, the method will be called immediately. In the code above, the <code>input</code> parameter is not the <code>goodperson</code> instance, but an <code>edb.Input</code> object with three
+					properties.</p>
+				<ul>
+					<li><code>data</code> refers to the outputted instance (<code>goodperson</code>)</li>
+					<li><code>type</code> refers to the instance constructor (<code>GoodPerson</code>)</li>
+					<li><code>connection</code> refers to Type we are connected to (Person)</li>
+				</ul>
+				<p>This elaborate setup will come in handy when we attempt to handle multiple types of output with a single method (like we do in <a href="plugins.html">plugins</a>).</p>
 
-			<h2>Disconnect a listener</h2>
-			<p>If you keep a reference to listener, you can of course disconnect it.</p>
-			<pre class="language-javascript">
+				<h2>Disconnect a listener</h2>
+				<p>If you keep a reference to listener, you can of course disconnect it.</p>
+				<pre class="language-javascript">
 <code>Person<span class="token punctuation">.</span>output<span class="token punctuation">.</span><span class="token function">disconnect<span class="token punctuation">(</span></span>listener<span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
 
-			<h2>Revoke the output</h2>
-			<p>If you decide that a Type should no longer be output on the page, you can <em>revoke</em> it. There&apos;s two ways to go about this.</p>
-			<pre class="language-javascript">
+				<h2>Revoke the output</h2>
+				<p>If you decide that a Type should no longer be output on the page, you can <em>revoke</em> it. There&apos;s two ways to go about this.</p>
+				<pre class="language-javascript">
 <code>person<span class="token punctuation">.</span><span class="token function">revoke<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// via the instance
 </span>Person<span class="token punctuation">.</span>output<span class="token punctuation">.</span><span class="token function">revoke<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// via the constructor</span></code>
 </pre>
-			<p>This will cause all output observers to be called with an <code>edb.Input</code> object whose <code>data</code> property is <code>null</code>.</p>
+				<p>This will cause all output observers to be called with an <code>edb.Input</code> object whose <code>data</code> property is <code>null</code>.</p>
 
-			<h2>Working with output</h2>
-			<p>Say we&apos;re working on a list-detail view. It&apos;s fine that there is only ever one <code>Person</code> to deal with in the details, but what if there&apos;s more than one <code>Person</code> in the list? To cover this, we&apos;ll need to output a second Type on the page and this time it&apos;s an <code>edb.Array</code>. Note that we&apos;ll not worry about rendering techniques here, we&apos;ll save that topic for <a href="javascript:alert(&apos;TODO: Spiritual EDBML&apos;)">later</a>.</p>
+				<h2>Working with output</h2>
+				<p>Say we&apos;re working on a list-detail view. It&apos;s fine that there is only ever one <code>Person</code> to deal with in the details, but what if there&apos;s more than one <code>Person</code> in the list? To cover this, we&apos;ll need to output
+					a second Type on the page and this time it&apos;s an <code>edb.Array</code>. Note that we&apos;ll not worry about rendering techniques here, we&apos;ll save that topic for <a href="javascript:alert(&apos;TODO: Spiritual EDBML&apos;)">later</a>.</p>
 
-			<pre class="language-javascript">
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> PersonList <span class="token operator">=</span> edb<span class="token punctuation">.</span>Array<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span>
 	$of<span class="token punctuation">:</span> Person
 <span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -107,27 +113,21 @@ goodperson<span class="token punctuation">.</span><span class="token function">o
 ver personlist <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PersonList</span><span class="token punctuation">(</span>json_array<span class="token punctuation">)</span><span class="token punctuation">;</span>
 personlist<span class="token punctuation">.</span><span class="token function">output<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p>When a person is selected in the list, we can update the details view.</p>
-			<pre class="language-javascript">
+				<p>When a person is selected in the list, we can update the details view.</p>
+				<pre class="language-javascript">
 <code>personlist<span class="token punctuation">[</span><span class="token number">23</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">output<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p>You can render a lot of UI by outputting Objects and Arrays like this.</p>
+				<p>You can render a lot of UI by outputting Objects and Arrays like this.</p>
 
-			<h2>Observing Types</h2>
-			<p>If we&apos;re coding a chat room, our rendering might also need to know:</p>
+				<h2>Observing Types</h2>
+				<p>If we&apos;re coding a chat room, our rendering might also need to know:</p>
 
-			<ul>
-				<li>When a new <code>Person</code> goes online (and should be added to the list)</li>
-				<li>When a <code>Person</code> changes status (and the details should be updated)</li>
-			</ul>
+				<ul>
+					<li>When a new <code>Person</code> goes online (and should be added to the list)</li>
+					<li>When a <code>Person</code> changes status (and the details should be updated)</li>
+				</ul>
 
-			<p>Instead of rendering the whole UI whenever something like this happes, we can apply incremental updates to our rendering by <em>observing the output</em> for microscopic changes. <a href="observers.html">Let&apos;s see how.</a></p>
-
-
-
-
-
-			
+				<p>Instead of rendering the whole UI whenever something like this happes, we can apply incremental updates to our rendering by <em>observing the output</em> for microscopic changes. <a href="observers.html">Let&apos;s see how.</a></p>
 
 
 
@@ -135,7 +135,13 @@ personlist<span class="token punctuation">.</span><span class="token function">o
 
 
 
-			<!--
+
+
+
+
+
+
+				<!--
 			<h2>Conventions</h2>
 			<p>Input and output follows a set of important <em>conventions</em>.</p>
 			<ul>
@@ -153,17 +159,23 @@ personlist<span class="token punctuation">.</span><span class="token function">o
 			</ul>
 			-->
 
-		</main>
-		<aside>
-			<nav id="nav">
-				<li><a href="/edb/index.html">Types</a><nav>
-					<li><a href="/edb/objects.html">Objects</a></li>
-					<li><a href="/edb/arrays.html">Arrays</a></li></nav></li>
-				<li><a href="/edb/output.html">Output</a></li>
-				<li><a href="/edb/observers.html">Observers</a></li>
-				<li><a href="/edb/plugins.html">Plugins</a></li>
-			</nav>
-		</aside>
-		<script src="/js/scripts.min.js"></script>
+			</main>
+			<aside>
+				<nav id="nav">
+
+					<li><a href="/edb/index.html">Types</a>
+						<nav>
+							<li><a href="/edb/objects.html">Objects</a></li>
+							<li><a href="/edb/arrays.html">Arrays</a></li>
+						</nav>
+					</li>
+					<li><a href="/edb/output.html">Output</a></li>
+					<li><a href="/edb/observers.html">Observers</a></li>
+					<li><a href="/edb/plugins.html">Plugins</a></li>
+				</nav>
+			</aside>
+		</div>
+		<script src="/js/scripts.js"></script>
 	</body>
+
 </html>

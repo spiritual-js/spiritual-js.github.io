@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html id="edb">
+
 	<head>
 		<title>Output &#x2013; Spiritual EDB</title>
 		<meta charset="UTF-8">
@@ -8,55 +9,58 @@
 		<link rel="prefetch" href="/img/gui.svg">
 		<link rel="prefetch" href="/img/edb.svg">
 		<script>
-				var Person = edb.Object.extend({
-					firstname: '',
-					lastname: '',
-					fullname: function() {
-						return [this.firstname, this.lastname].join(' ');
-					}
-				});
-			</script>
-			<script>
-				new Person({
-					firstname: 'John',
-					lastname: 'Johnson'
-				}).output();
-			</script>
-			<script>
-				edb.Input.add(Person, {
-					oninput: function(input) {
-						console.log(input.type); // Class constructor
-						console.log(input.data); // Object instance
-					}
-				});
-			</script>
+			var Person = edb.Object.extend({
+				firstname: '',
+				lastname: '',
+				fullname: function() {
+					return [this.firstname, this.lastname].join(' ');
+				}
+			});
+		</script>
+		<script>
+			new Person({
+				firstname: 'John',
+				lastname: 'Johnson'
+			}).output();
+		</script>
+		<script>
+			edb.Input.add(Person, {
+				oninput: function(input) {
+					console.log(input.type); // Class constructor
+					console.log(input.data); // Object instance
+				}
+			});
+		</script>
 	</head>
+
 	<body>
-		<main>
-			<h1>Output</h1>
-			<p>You can <em>output</em> a Type on the page.</p>
-			<pre class="language-javascript">
+
+		<div id="root">
+			<main>
+				<h1>Output</h1>
+				<p>You can <em>output</em> a Type on the page.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> person <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
 	firstname<span class="token punctuation">:</span> <span class="token string">&apos;John&apos;</span><span class="token punctuation">,</span>
 	lastname<span class="token punctuation">:</span> <span class="token string">&apos;Johnson&apos;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 person<span class="token punctuation">.</span><span class="token function">output<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p>You can now get a hold of the <code>person</code> from anywhere on the page.</p>
-			<pre class="language-javascript">
+				<p>You can now get a hold of the <code>person</code> from anywhere on the page.</p>
+				<pre class="language-javascript">
 <code>edb<span class="token punctuation">.</span>Input<span class="token punctuation">.</span><span class="token function">add<span class="token punctuation">(</span></span>Person<span class="token punctuation">,</span> <span class="token punctuation">{</span>
 	oninput<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>input<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 		<span class="token comment" spellcheck="true">// handle input ...
 </span>	<span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p>Whenever a new <code>person</code> is output, the <code>oninput</code> method will be called. The <code>input</code> parameter is a simple object with two properties.</p>
-			<ul>
-				<li><code>type</code> refers to the Type constructor (<code>Person</code>)</li>
-				<li><code>data</code> refers to the Type instance (<code>person</code>)</li>
-			</ul>
-			<p>To handle the actual <code>person</code>, you code could look something like this.</p>
-			<pre class="language-javascript">
+				<p>Whenever a new <code>person</code> is output, the <code>oninput</code> method will be called. The <code>input</code> parameter is a simple object with two properties.</p>
+				<ul>
+					<li><code>type</code> refers to the Type constructor (<code>Person</code>)</li>
+					<li><code>data</code> refers to the Type instance (<code>person</code>)</li>
+				</ul>
+				<p>To handle the actual <code>person</code>, you code could look something like this.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">switch</span><span class="token punctuation">(</span>input<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 	<span class="token keyword">case</span> Person<span class="token punctuation">:</span>
 		<span class="token keyword">var</span> person <span class="token operator">=</span> input<span class="token punctuation">.</span>data<span class="token punctuation">;</span>
@@ -64,17 +68,23 @@ person<span class="token punctuation">.</span><span class="token function">outpu
 </span>		<span class="token keyword">break</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code>
 </pre>
-		</main>
-		<aside>
-			<nav id="nav">
-				<li><a href="/edb/index.html">Types</a><nav>
-					<li><a href="/edb/objects.html">Objects</a></li>
-					<li><a href="/edb/arrays.html">Arrays</a></li></nav></li>
-				<li><a href="/edb/output.html">Output</a></li>
-				<li><a href="/edb/observers.html">Observers</a></li>
-				<li><a href="/edb/plugins.html">Plugins</a></li>
-			</nav>
-		</aside>
-		<script src="/js/scripts.min.js"></script>
+			</main>
+			<aside>
+				<nav id="nav">
+
+					<li><a href="/edb/index.html">Types</a>
+						<nav>
+							<li><a href="/edb/objects.html">Objects</a></li>
+							<li><a href="/edb/arrays.html">Arrays</a></li>
+						</nav>
+					</li>
+					<li><a href="/edb/output.html">Output</a></li>
+					<li><a href="/edb/observers.html">Observers</a></li>
+					<li><a href="/edb/plugins.html">Plugins</a></li>
+				</nav>
+			</aside>
+		</div>
+		<script src="/js/scripts.js"></script>
 	</body>
+
 </html>

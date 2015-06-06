@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html id="edb">
+
 	<head>
 		<title>Types &#x2013; Spiritual EDB</title>
 		<meta charset="UTF-8">
@@ -8,50 +9,62 @@
 		<link rel="prefetch" href="/img/gui.svg">
 		<link rel="prefetch" href="/img/edb.svg">
 	</head>
+
 	<body>
-		<main>
-			<h1>Types</h1>
-			<p>
-				There&apos;s two types of data structure in Spiritual EDB: <code>edb.Object</code> and <code>edb.Array</code>. They are commonly referred to as <em>Types</em> and they behave much like regular objects and arrays, except they can be observed for changes in browser that don&apos;t necessarily support <code>Object.observe</code>.</p><p>
-			</p><p>Both are constructors for a <code>gui.Class</code> and the syntax for declaring them resembles that of spirits and plugins (see <a href="/gui/classes.html">gui.Class</a>).</p>
-			<pre class="language-javascript">
+
+		<div id="root">
+			<main>
+				<h1>Types</h1>
+				<p>
+					There&apos;s two types of data structure in Spiritual EDB: <code>edb.Object</code> and <code>edb.Array</code>. They are commonly referred to as <em>Types</em> and they behave much like regular objects and arrays, except they can be observed for changes
+					in browser that don&apos;t necessarily support <code>Object.observe</code>.</p>
+				<p>
+				</p>
+				<p>Both are constructors for a <code>gui.Class</code> and the syntax for declaring them resembles that of spirits and plugins (see <a href="/gui/classes.html">gui.Class</a>).</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> Person <span class="token operator">=</span> edb<span class="token punctuation">.</span>Object<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token comment" spellcheck="true">/* extensions */</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">var</span> Persons <span class="token operator">=</span> edb<span class="token punctuation">.</span>Array<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token comment" spellcheck="true">/* extensions */</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
 
-			<h2>Loading Types</h2>
-			<p>Types are designed to be instantiated with JSON data. This will come in handy when we fetch the data from a server or from <code>localStorage</code>.</p>
-			<pre class="language-javascript">
+				<h2>Loading Types</h2>
+				<p>Types are designed to be instantiated with JSON data. This will come in handy when we fetch the data from a server or from <code>localStorage</code>.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> person <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyPerson</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
 	firstname<span class="token punctuation">:</span> <span class="token string">&apos;John&apos;</span><span class="token punctuation">,</span>
 	lastname<span class="token punctuation">:</span> <span class="token string">&apos;Johnson&apos;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
 
-			<h2>Saving Types</h2>
-			<p>If you modify a Type instance, you might like to backup the data. Simply convert it back to JSON.</p>
-			<pre class="language-javascript">
+				<h2>Saving Types</h2>
+				<p>If you modify a Type instance, you might like to backup the data. Simply convert it back to JSON.</p>
+				<pre class="language-javascript">
 <code><span class="token keyword">var</span> guid <span class="token operator">=</span> person<span class="token punctuation">.</span>$id<span class="token punctuation">;</span>
 <span class="token keyword">var</span> json <span class="token operator">=</span> JSON<span class="token punctuation">.</span><span class="token function">stringify<span class="token punctuation">(</span></span>person<span class="token punctuation">)</span><span class="token punctuation">;</span>
 localStorage<span class="token punctuation">.</span><span class="token function">setItem<span class="token punctuation">(</span></span>guid<span class="token punctuation">,</span> json<span class="token punctuation">)</span><span class="token punctuation">;</span></code>
 </pre>
-			<p class="todo">Note about _ and $ properties.</p>
-			<p class="todo">Note about primary key.</p>
-			<!--
+				<p class="todo">Note about _ and $ properties.</p>
+				<p class="todo">Note about primary key.</p>
+				<!--
 			<p>The Type constructor can be designed to match any property name to another Type. Any object (or array) value of this property will be used to create an instance of this Type.</p>
 			-->
-			<p></p>
-		</main>
-		<aside>
-			<nav id="nav">
-				<li><a href="/edb/index.html">Types</a><nav>
-					<li><a href="/edb/objects.html">Objects</a></li>
-					<li><a href="/edb/arrays.html">Arrays</a></li></nav></li>
-				<li><a href="/edb/output.html">Output</a></li>
-				<li><a href="/edb/observers.html">Observers</a></li>
-				<li><a href="/edb/plugins.html">Plugins</a></li>
-			</nav>
-		</aside>
-		<script src="/js/scripts.min.js"></script>
+				<p></p>
+			</main>
+			<aside>
+				<nav id="nav">
+
+					<li><a href="/edb/index.html">Types</a>
+						<nav>
+							<li><a href="/edb/objects.html">Objects</a></li>
+							<li><a href="/edb/arrays.html">Arrays</a></li>
+						</nav>
+					</li>
+					<li><a href="/edb/output.html">Output</a></li>
+					<li><a href="/edb/observers.html">Observers</a></li>
+					<li><a href="/edb/plugins.html">Plugins</a></li>
+				</nav>
+			</aside>
+		</div>
+		<script src="/js/scripts.js"></script>
 	</body>
+
 </html>
