@@ -15,7 +15,8 @@ module.exports = function(grunt) {
 	grunt.initConfig ({
 
 		sitemap_gui: [
-			['Spirits', '/gui/index.html'],
+			['Intro', '/gui/index.html'],
+			['Spirits', '/gui/spirits.html'],
 			['Lifecycle', '/gui/lifecycle.html'],
 			['Callbacks', '/gui/callbacks.html'],
 			['Plugins', '/gui/plugins.html', [
@@ -37,13 +38,20 @@ module.exports = function(grunt) {
 		],
 
 		sitemap_edb: [
-			['Types', '/edb/index.html', [
+			['Intro', '/edb/index.html'],
+			['Types', '/edb/types.html', [
 				['Objects', '/edb/objects.html'],
 				['Arrays', '/edb/arrays.html']
 			]],
 			['Output', '/edb/output.html'],
 			['Observers', '/edb/observers.html'],
 			['Plugins', '/edb/plugins.html']
+		],
+
+		sitemap_edbml: [
+			['Intro', '/edbml/index.html'],
+			['Functions', '/edbml/functions.html'],
+			['Scripts', '/edbml/scripts.html']
 		],
 
 		// cleanup previous build

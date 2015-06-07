@@ -16,7 +16,7 @@ module.exports = {
 	process: function(html, map, title, id) {
 		var $ = cheerio.load(html);
 		$('html').attr('id', id);
-		processTags($, map, title);
+		processTags($, map, title, id);
 		processPrism($);
 		return beautify_html($.html(), {
 			indent_size: 1,
@@ -28,28 +28,54 @@ module.exports = {
 
 // Private .....................................................................
 
-function processTags($, map, title) {
-	$('title').text($('title').text() + ' – ' + title);
-	$('title').after(join([
+/**
+ * TODO: Enable zoom again (by not using position:fixed in the CSS).
+ */
+function processTags($, map, title, id) {
+	var root = $('<div id="root"></div>');
+	var html = $('html');
+	var body = $('body');
+	var main = $('main');
+	var titl = $('title');
+	var text = titl.text();
+	if(text !== title) {
+		titl.text(text + ' – ' + title);
+	}
+	titl.after(join([
 		'<meta charset="UTF-8"/>',
-		'<meta name="viewport" content="width=device-width, initial-scale=1"/>',
+		'<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />',
 		'<link rel="stylesheet" href="/css/styles.min.css"/>',
 		'<link rel="prefetch" href="/img/gui.svg"/>',
 		'<link rel="prefetch" href="/img/edb.svg"/>'
 	]));
-	var root = $('<div id="root"></div>');
-	var body = $('body');
-	root.append($('main'));
+	root.append(join([
+		'<header>',
+			'<nav>',
+				'<li><a class="toggle">',
+					'<span>&mdash;</span>',
+					'<span>&mdash;</span>',
+					'<span>&mdash;</span>',
+				'</a></li>',
+				'<li><a href="/gui/" class="spiritual-gui">GUI</a></li>',
+				'<li><a href="/edb/" class="spiritual-edb">EDB</a></li>',
+				'<li><a href="/edbml/" class="spiritual-edbml">EDBML</a></li>',
+			'</nav>',
+		'</header>'
+	]));
+	root.find('a[class="spiritual-' + id + '"]').addClass('selected');
+	root.append(main);
 	root.append(join([
 		'<aside>',
-		'	<nav id="nav">',
+			'<nav id="nav">',
 				htmlmenu(map,'\t\t\t\t'),
-		'	</nav>',
+			'</nav>',
 		'</aside>'
 	]));
-	body.append(root).append(join([
+	body.append(root);
+	body.append(join([
 		'<script src="/js/scripts.js"></script>'
 	]));
+	html.attr('lang', 'en');
 }
 
 function processPrism($) {
@@ -75,18 +101,6 @@ function join(tags) {
 }
 
 /**
- * Properly indent those tags.
- * @param {Array<string>} tags
- * @returns {string}
- *
-function join(tags) {
-	return '\n\t\t' + tags.map(function(tag) {
-		return '\t\t' + tag;
-	}).join('\n\t\t');
-}
-*/
-
-/**
  * Unindent.
  * @param {string} code
  * @returns {string}
@@ -101,7 +115,7 @@ function unindent(code) {
 /**
  * Better render the menu as static HTML before the robot gets here.
  * @param {string|Array} sitemap
- * @param {string} tabs
+ * @param {string} tabs (not needed now that some modules handles it)
  * @rturns {string}
  */
 function htmlmenu(sitemap, tabs) {

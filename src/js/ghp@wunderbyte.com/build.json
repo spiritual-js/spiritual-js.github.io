@@ -2,6 +2,7 @@
 	"ghp.js",
 
 	"spirits/ghp.LinkSpirit.js",
+	"spirits/ghp.ToggleSpirit.js",
 	"spirits/ghp.PageSpirit.js",
 	"spirits/ghp.NavSpirit.js",
 

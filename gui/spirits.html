@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html id="gui" lang="en">
+
+	<head>
+		<title>Spirits &#x2013; Spiritual GUI</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<link rel="stylesheet" href="/css/styles.min.css">
+		<link rel="prefetch" href="/img/gui.svg">
+		<link rel="prefetch" href="/img/edb.svg">
+	</head>
+
+	<body>
+
+		<div id="root">
+			<header>
+				<nav>
+					<li>
+						<a class="toggle">
+							<span>&#x2014;</span>
+							<span>&#x2014;</span>
+							<span>&#x2014;</span>
+						</a>
+					</li>
+					<li><a href="/gui/" class="spiritual-gui selected">GUI</a></li>
+					<li><a href="/edb/" class="spiritual-edb">EDB</a></li>
+					<li><a href="/edbml/" class="spiritual-edbml">EDBML</a></li>
+				</nav>
+			</header>
+			<main>
+				<h1>Spirits</h1>
+				<p>
+					Spirits are javascript objects much like widgets and components, but with a less generic name. A spirit is always associated to an element.
+				</p>
+				<ul>
+					<li><code>gui.get(element)</code> returns the spirit associated to that element.</li>
+					<li>The spirit has a property <code>element</code> that points to the element.</li>
+				</ul>
+				<p>
+					Spirits are configured with a number of <a href="plugins.html">plugins</a> that facilitate useful stuff you can do with the spirit. For example, the spirit has a plugin named <code>event</code> that handles event listeners and another named <code>dom</code>					that handles DOM manipulation.
+				</p>
+				<ul>
+					<li>The spirit has a property <code>[name]</code> that points to the plugin.</li>
+					<li>The plugin has a property <code>spirit</code> that points to the spirit.</li>
+				</ul>
+
+
+				<h2 id="summoning">Summoning spirits</h2>
+				<p>
+					If you need to fetch a spirit out of nowhere, you should never create a
+					<code>new Spirit()</code>, since this only creates the JavaScript object. Use instead <code>Spirit.summon()</code>, which also creates the element.
+				</p>
+				<pre class="language-javascript">
+<code><span class="token keyword">var</span> spirit <span class="token operator">=</span> gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">summon<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+spirit<span class="token punctuation">.</span>dom<span class="token punctuation">.</span><span class="token function">appendTo<span class="token punctuation">(</span></span>document<span class="token punctuation">.</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+				<p>
+					This creates a <code>DIV</code> associated to a <code>gui.Spirit</code>, the most basic spirit you can imagine. The <code>dom</code> plugin also features an appearance here.
+				</p>
+
+
+				<h2 id="channeling">Channeling spirits</h2>
+				<p>
+					Most often you wouldn&apos;t create spirits like this, but instead channel the spirit through a CSS selector, like through a classname.
+				</p>
+				<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span><span class="token function">channel<span class="token punctuation">(</span></span><span class="token string">&apos;.gui-spirit&apos;</span><span class="token punctuation">,</span> gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+				<p>
+					This will make the spirit exist without special API calls whenever something with this classname is found on the page, whether it was there when the page loaded or somebody put it there. From now on, you only have to remember the classname.
+				</p>
+				<script class="language-javascript" type="text/runnable">
+					var div = document.createElement('div'); div.className = 'gui-spirit'; document.body.appendChild(div);
+				</script>
+				<p>
+					It&apos;s an ambition for spirits to initialize without special APIs in order to blend in with other frameworks. You can read about
+					<a href="caveats.html">current limitations</a> to this strategy.
+				</p>
+				<p>
+					When channeling spirits, it&apos;s important that you do so in an ordered manner. The rule is to declare special cases before general cases.
+				</p>
+				<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span><span class="token function">channel<span class="token punctuation">(</span></span><span class="token string">&apos;button.special&apos;</span><span class="token punctuation">,</span> SpecialButtonSpirit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+gui<span class="token punctuation">.</span><span class="token function">channel<span class="token punctuation">(</span></span><span class="token string">&apos;button&apos;</span><span class="token punctuation">,</span> ButtonSpirit<span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+				<p>
+					In this example, <code>SpecialButtonSpirit</code> would never exist if the declaration order was reversed, because the match for
+					<code>button</code> would alwys return a hit before
+					<code>button.special</code> was evaluated. Later we&apos;ll introduce the concept of <a href="projects.html#modules">modules</a> as a convenient place to channel spirits.
+				</p>
+
+
+				<h2 id="inlining">Inlining spirits</h2>
+				<p>
+					You can also channel the spirit <em>inline</em> via the <code>gui</code> attribute. That&apos;s not always practical when you decide to rename or remove the spirit, but sometimes it&apos;s more important to make the association explicit.
+				</p>
+				<pre class="language-markup">
+<code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span> <span class="token attr-name">gui</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>MySpirit<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">&gt;</span></span></code>
+</pre>
+				<p>
+					If you prefer <code>data-gui</code> or something else, there&apos;s a way to configure the attribute name (citation needed).
+				</p>
+
+
+				<h2 id="creating">Creating spirits</h2>
+				<p>
+					The framework doesn&apos;t come with any widgets out of the box, so you will have to create your own. Spirits employ a classical inhertitance model with concepts such as subclasses and super methods. This pattern is fit for GUI components and it is relatively
+					easy to explain, like we just did. To create a spirit, you simply <code>extend</code> an existing spirit. The base spirit is <code>gui.Spirit</code>.
+				</p>
+				<pre class="language-javascript">
+<code><span class="token keyword">var</span> MySpirit <span class="token operator">=</span> gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	onenter<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onenter<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>dom<span class="token punctuation">.</span><span class="token function">text<span class="token punctuation">(</span></span><span class="token string">&apos;Hello World&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+				<p>You can channel the spirit into <code>H1</code> elements like this.</p>
+				<pre class="language-javascript">
+<code>gui<span class="token punctuation">.</span><span class="token function">channel<span class="token punctuation">(</span></span><span class="token string">&apos;h1&apos;</span><span class="token punctuation">,</span> MySpirit<span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+				<p>
+					To make sure that the spririt is alwas assocaited to a <code>h1</code> element, you can hardcode one into the <code>summon</code> method, which otherwise defaults to a <code>DIV</code>.
+				</p>
+				<pre class="language-javascript">
+<code><span class="token keyword">var</span> MySpirit <span class="token operator">=</span> gui<span class="token punctuation">.</span>Spirit<span class="token punctuation">.</span><span class="token function">extend<span class="token punctuation">(</span></span><span class="token punctuation">{</span>
+	text<span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+	onenter<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onenter<span class="token punctuation">(</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>dom<span class="token punctuation">.</span><span class="token function">text<span class="token punctuation">(</span></span><span class="token keyword">this</span><span class="token punctuation">.</span>text <span class="token operator">||</span> <span class="token string">&apos;Hello World&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+	summon<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">var</span> spirit <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">possess<span class="token punctuation">(</span></span>
+			document<span class="token punctuation">.</span><span class="token function">createElement<span class="token punctuation">(</span></span><span class="token string">&apos;h1&apos;</span><span class="token punctuation">)</span>
+		<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		spirit<span class="token punctuation">.</span>text <span class="token operator">=</span> text<span class="token punctuation">;</span>
+		<span class="token keyword">return</span> spirit<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code>
+</pre>
+				<p>
+					We&apos;ve added a second argument to the <code>extend</code> method. The first configures the spirit <em>instance</em> object, the
+					<code>prototype</code> of the spirit. The second configures
+					<em>static</em> methods, they belong to the spirits
+					<code>constructor</code> object.
+				</p>
+				<ul>
+					<li>In the instance block, the <code>this</code> keyword point to the spirit.</li>
+					<li>In the static block, the <code>this</code> keyword point to the constructor.</li>
+				</ul>
+				<p>
+					We have declared the <code>MySpirit.summon</code> method. You can add any number of arguments to this method. In our example, we&apos;ve added support for the header text. Unless we overwrite it, the <code>summon</code> method gets copied onto any
+					subclasses of our new class. Read more about <a href="classes.html">classes</a>.
+				</p>
+				<p>
+					When the spirit enters the document, it will inject a textnode into it&apos;s element. This happens at <code>DOMContentLoaded</code> or as soon as the element gets appended somewhere. There are other important events in the life of a spirit and you
+					can simplify your code if you study the <a href="lifecycle.html">spirit lifecycle</a> for a moment.
+				</p>
+			</main>
+			<aside>
+				<nav id="nav">
+
+					<li><a href="/gui/index.html">Intro</a></li>
+					<li><a href="/gui/spirits.html">Spirits</a></li>
+					<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
+					<li><a href="/gui/callbacks.html">Callbacks</a></li>
+					<li><a href="/gui/plugins.html">Plugins</a>
+						<nav>
+							<li><a href="/gui/plugin-action.html">action</a></li>
+							<li><a href="/gui/plugin-att.html">att</a></li>
+							<li><a href="/gui/plugin-box.html">box</a></li>
+							<li><a href="/gui/plugin-broadcast.html">broadcast</a></li>
+							<li><a href="/gui/plugin-config.html">config</a></li>
+							<li><a href="/gui/plugin-css.html">css</a></li>
+							<li><a href="/gui/plugin-dom.html">dom</a></li>
+							<li><a href="/gui/plugin-event.html">event</a></li>
+							<li><a href="/gui/plugin-life.html">life</a></li>
+							<li><a href="/gui/plugin-tick.html">tick</a></li>
+						</nav>
+					</li>
+					<li><a href="/gui/classes.html">Classes</a></li>
+					<li><a href="/gui/projects.html">Projects</a></li>
+					<li><a href="/gui/caveats.html">Caveats</a></li>
+					<li><a href="/gui/contribute.html">Contribute</a></li>
+				</nav>
+			</aside>
+		</div>
+		<script src="/js/scripts.js"></script>
+	</body>
+
+</html>

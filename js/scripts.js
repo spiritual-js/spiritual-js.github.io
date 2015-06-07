@@ -17869,9 +17869,39 @@ ghp.LinkSpirit = gui.Spirit.extend({
 
 
 /**
- * Spirit of the BODY element.
+ * Spirit of the menu toggle button.
  */
-ghp.PageSpirit = (function() {
+ghp.ToggleSpirit = gui.Spirit.extend({
+	
+	/** 
+	 * Injecting some HTML because we 
+	 * don't have an icon font around.
+	 */
+	onconfigure: function() {
+		gui.Spirit.prototype.onconfigure.call(this);
+		this.script.load(ghp.ToggleSpirit.edbml);
+		this.event.add('click');
+	},
+
+	/**
+	 * Handle event.
+	 * @param {Event} e
+	 */
+	onevent: function(e) {
+		gui.Spirit.prototype.onevent.call(this, e);
+		if(e.type === 'click') {
+			this.action.dispatch('action-toggle');
+		}
+	},
+
+});
+
+
+/**
+ * Spirit of the BODY element.
+ * @using {gui.CSSPlugin}
+ */
+ghp.PageSpirit = (function using(CSSPlugin) {
 
 	var menumodel;
 
@@ -17882,6 +17912,7 @@ ghp.PageSpirit = (function() {
 		 */
 		onready: function() {
 			gui.Spirit.prototype.onready.call(this);
+			this.action.add('action-toggle');
 			this.event.add('hashchange', window);
 			if(gui.Client.hasHistory) {
 				this.event.add('popstate', window);
@@ -17905,6 +17936,9 @@ ghp.PageSpirit = (function() {
 					this._load(href);
 					a.consume();
 					break;
+				case 'action-toggle':
+					this._togglemenu();
+					break;
 			}
 		},
 
@@ -17920,6 +17954,14 @@ ghp.PageSpirit = (function() {
 					break;
 				case 'hashchange':
 					break;
+				case 'click':
+					if(this.css.contains('menuopen')) {
+						var aside = this.dom.q('aside');
+						if(!gui.DOMPlugin.contains(aside, e.target)) {
+							this._togglemenu();
+						}
+					}
+					break;
 			}
 		},
 
@@ -17931,7 +17973,7 @@ ghp.PageSpirit = (function() {
 		 * @param {string} href
 		 */
 		_load: function(href) {
-			var html, path = new gui.URL(document, href).pathname;
+			var path = new gui.URL(document, href).pathname;
 			new gui.Request(href).acceptText().get().then(function(status, html) {
 				html = gui.HTMLParser.parseToDocument(html);
 				this._main(html);
@@ -17951,10 +17993,22 @@ ghp.PageSpirit = (function() {
 			if(path && (section = path.split('/')[1])) {
 				if(section !== html.id) {
 					html.id = section;
+					this._yyyy(section);
 					return true;
-
 				}
 			}
+		},
+
+		/**
+		 * @param {string} path
+		 */
+		_yyyy: function(section) {
+			var oldlink = this.dom.qdoc('header .selected');
+			var newlink = this.dom.qdoc('header .spiritual-' + section);
+			if(oldlink) {
+				CSSPlugin.remove(oldlink, 'selected');
+			}
+			CSSPlugin.add(newlink, 'selected');
 		},
 
 		/**
@@ -17993,6 +18047,11 @@ ghp.PageSpirit = (function() {
 			window.scrollTo(0,0);
 			this._menu();
 			this._done();
+			if(this.css.contains('menuopen')) {
+				this.tick.time(function() {
+					this._togglemenu();
+				}, 350);
+			}
 		},
 
 		/**
@@ -18022,11 +18081,21 @@ ghp.PageSpirit = (function() {
 			if(hash && (elm = document.querySelector(hash))) {
 				elm.scrollIntoView();
 			}
+		},
+
+		_togglemenu: function() {
+			this.css.toggle('menuopen');
+			if(this.css.contains('menuopen')) {
+				this.tick.time(function() {
+					this.event.add('click');	
+				});
+			} else {
+				this.event.remove('click');
+			}
 		}
-		
 	});
 
-}());
+}(gui.CSSPlugin));
 
 
 /**
@@ -18104,6 +18173,7 @@ gui.module("ghp@wunderbyte.com", {
 
 	channel: [
 		['a[href]', ghp.LinkSpirit],
+		['a.toggle', ghp.ToggleSpirit],
 		['body', ghp.PageSpirit],
 		['#nav', ghp.NavSpirit]
 	]
@@ -18141,3 +18211,13 @@ edbml.declare("ghp.NavSpirit.edbml").as(function $edbml(){
       type : "ghp.MenuModel"
     }
   }]);
+
+// src/edbml/outline/ghp.ToggleSpirit.edbml
+edbml.declare("ghp.ToggleSpirit.edbml").as(function $edbml(){
+  'use strict';
+  var out = $edbml.$out;
+  out.html += '<span>\u2014</span>' +
+              '<span>\u2014</span>' +
+              '<span>\u2014</span>';
+  return out.write();
+});

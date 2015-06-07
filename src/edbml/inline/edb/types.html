@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Types</title>
+	</head>
+	<body>
+		<main>
+			<h1>Types</h1>
+			<p>
+				There's two types of data structure in Spiritual EDB: <code>edb.Object</code> and <code>edb.Array</code>. They are commonly referred to as <em>Types</em> and they behave much like regular objects and arrays, except they can be observed for changes in browser that don't necessarily support <code>Object.observe</code>.<p>
+			<p>Both are constructors for a <code>gui.Class</code> and the syntax for declaring them resembles that of spirits and plugins (see <a href="/gui/classes.html">gui.Class</a>).</p>
+			<script class="language-javascript" type="text/plain">
+				var Person = edb.Object.extend(/* extensions */);
+				var Persons = edb.Array.extend(/* extensions */);
+			</script>
+
+			<h2>Loading Types</h2>
+			<p>Types are designed to be instantiated with JSON data. This will come in handy when we fetch the data from a server or from <code>localStorage</code>.</p>
+			<script class="language-javascript" type="text/plain">
+				var person = new MyPerson({
+					firstname: 'John',
+					lastname: 'Johnson'
+				});
+			</script>
+
+			<h2>Saving Types</h2>
+			<p>If you modify a Type instance, you might like to backup the data. Simply convert it back to JSON.</p>
+			<script class="language-javascript" type="text/plain">
+				var guid = person.$id;
+				var json = JSON.stringify(person);
+				localStorage.setItem(guid, json);
+			</script>
+			<p class="todo">Note about _ and $ properties.</p>
+			<p class="todo">Note about primary key.</p>
+			<!--
+			<p>The Type constructor can be designed to match any property name to another Type. Any object (or array) value of this property will be used to create an instance of this Type.</p>
+			-->
+			<p></p>
+		</main>
+	</body>
+</html>

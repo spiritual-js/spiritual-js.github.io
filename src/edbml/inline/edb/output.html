@@ -2,32 +2,6 @@
 <html>
 	<head>
 		<title>Output</title>
-		<script>
-				var Person = edb.Object.extend({
-					firstname: '',
-					lastname: '',
-					fullname: function() {
-						return [this.firstname, this.lastname].join(' ');
-					}
-				});
-			</script>
-			<script>
-				new Person({
-					firstname: 'John',
-					lastname: 'Johnson'
-				}).output();
-				
-				setTimeout(function() {
-					Person.output.revoke();	
-				}, 2000);
-			</script>
-			<script>
-				Person.output.add({
-					oninput: function(input) {
-						console.log(input.data);
-					}
-				});
-			</script>
 	</head>
 	<body>
 		<main>

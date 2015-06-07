@@ -2,8 +2,28 @@
 
 // Fonts .......................................................................
 
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600,300italic);
-@import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700);
+//@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic);
+//@import url(http://fonts.googleapis.com/css?family=PT+Sans:700);
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url(http://fonts.gstatic.com/s/sourcesanspro/v9/toadOcfmlt9b38dHJxOBGOode0-EuMkY--TSyExeINg.woff2) format('woff2'), url(http://fonts.gstatic.com/s/sourcesanspro/v9/toadOcfmlt9b38dHJxOBGNbE_oMaV8t2eFeISPpzbdE.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: italic;
+  font-weight: 300;
+  src: local('Source Sans Pro Light Italic'), local('SourceSansPro-LightIt'), url(http://fonts.gstatic.com/s/sourcesanspro/v9/fpTVHK8qsXbIeTHTrnQH6MAjkyiewWYrWZc50I8hK7I.woff2) format('woff2'), url(http://fonts.gstatic.com/s/sourcesanspro/v9/fpTVHK8qsXbIeTHTrnQH6GGomRtBD2u8FwSY4jjlmeA.woff) format('woff');
+}
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('PT Sans Bold'), local('PTSans-Bold'), url(http://fonts.gstatic.com/s/ptsans/v8/0XxGQsSc1g4rdRdjJKZrNPk_vArhqVIZ0nv9q090hN8.woff2) format('woff2'), url(http://fonts.gstatic.com/s/ptsans/v8/0XxGQsSc1g4rdRdjJKZrNBsxEYwM7FgeyaSgU71cLG0.woff) format('woff');
+}
+
 @font-face {
   font-family: "Ubuntu Mono";
   font-weight: 400;
@@ -17,13 +37,14 @@
 @unit-half: @unit * 0.5;
 @unit-double: @unit * 2;
 @unit-triple: @unit * 3;
+@unit-special: 2.5rem;
 @link: rgb(0,0,127);
 @text: rgb(0,0,0);
 @code: rgb(100,100,100);
 @fade: rgba(255,255,255,0.9);
 @back: rgb(255,255,255);
-@bp1: 500px;
-@bp2: 700px;
+@bp1: 530px;
+@bp2: 730px;
 @bp3: 1200px;
 @bp4: 1600px;
 @bp5: 2000px;
@@ -32,30 +53,30 @@
 
 // Font sizes ..................................................................
 
-@media only screen and (min-width : 0)  {
+@media (min-width : 0)  {
 	html { font-size: 15px; }
 }
-@media only screen and (min-width : @bp1)  {
+@media (min-width : @bp1)  {
 	html { font-size: 16px; }
 }
-@media only screen and (min-width : @bp2)  {
-	html { font-size: 18px; }
+@media (min-width : @bp2)  {
+	html { font-size: 17px; }
 }
-@media only screen and (min-width: @bp3) {
+@media (min-width: @bp3) {
 	html { font-size: 20px; }
 }
-@media only screen and (min-width: @bp4) {
+@media (min-width: @bp4) {
 	html { font-size: 22px; }
 }
-@media only screen and (min-width: @bp5) {
+@media (min-width: @bp5) {
 	html { font-size: 24px; }
 }
-@media only screen and (min-width: @bp6) {
+@media (min-width: @bp6) {
 	html { font-size: 26px; }
 }
 
 
-// Stylee ......................................................................
+// Layout ......................................................................
 
 * {
 	margin: 0;
@@ -80,27 +101,61 @@ html {
 	color: @text;
 }
 body {
-	font-family: "Source Sans Pro", "Open Sans", sans-serif;
+	font-family: "Source Sans Pro", sans-serif;
 	line-height: @unit;
 	font-weight: 300;
 }
-#root {
-
+header {
+	font-family: "PT Sans", sans-serif;
+	text-align: right;
+	color: @back;
+	overflow: hidden;
+	height: @unit-special;
+	font-size: 0;
+	li {
+		display: inline-block;
+	}
+	a {
+		font-size: 1rem;
+		padding: 0.5rem 0.75rem;
+		display: inline-block;
+		font-weight: 700;
+		&.selected {
+			background-color: @text;
+			background-color: @link;
+			color: white;
+			cursor: default;
+		}
+		&.toggle {
+			display: none;
+			position: fixed;
+			font-size: 2.5rem;
+			padding-bottom: 1.5rem;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			span {
+				display: block;
+				line-height: 0.2em;
+			}
+		}
+		/*
+		&.toggle {
+			font-size: 0.75rem;
+			display: none;
+			cursor: pointer;
+			position: fixed;
+			top: 0;
+			left: 0;
+			&:before {
+				content: "<";
+				padding-right: 0.25rem;
+			}
+		}
+		*/
+	}
 }
-code, 
-samp, 
-var {
-	font-family: "Ubuntu Mono", monospace;
-	color: @code;
-}
-main,
-aside {
-	min-height: 100%;
-}
-main {
-	position: relative;
-	z-index: 1;
-}
+header,
 aside {
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -112,6 +167,7 @@ aside {
 	z-index: 2;
 	a {
 		text-decoration: none;
+		padding-left: 0.25rem;
 		&.selected:before {
 			content: "➜";
 			line-height: 0;
@@ -134,6 +190,26 @@ aside {
 			opacity: 0.5;
 		}
 	}
+}
+main {
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	-ms-hyphens: auto;
+	hyphens: auto;
+}
+
+
+// Typo ........................................................................
+
+code, 
+samp, 
+var {
+	font-family: "Ubuntu Mono", monospace;
+	color: @code;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
 }
 a {
 	text-decoration: none;
@@ -279,47 +355,88 @@ blockquote {
 	content: "NOTE";
 }
 
-// Nano screen .................................................................
 
-@media only screen and (max-width : @bp1) {
+// Breakpoints .................................................................
+
+@media (max-width : @bp2) {
+	header a.toggle {
+		display: inline-block;
+		z-index: 1;
+	}
 	main {
-		padding: (@unit * 1.5) 2rem (@unit * 1.5) 2rem;
+		max-width: 33rem;
+	}
+	#root {
+		//transform: translate3d(0, 0, 0);
+	}
+	aside {
+		width: 7rem;
+		padding: 5.25rem 0 0 0;
+		position: fixed;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		transform: translate3d(-7rem, 0, 0);
+	}
+	aside,
+	main {
+		transition: transform 0.1s ease-out;
+	}
+	.menuopen {
+		aside {
+			transform: translate3d(0, 0, 0);	
+		}
+		main {
+			transform: translate3d(7rem, 0, 0);
+		}
+		header {
+			li:not(:first-child) {
+				pointer-events: none;
+			}
+		}
 	}
 }
 
-// Nano screen .................................................................
-
-@media only screen and (min-width : @bp1) and (max-width : @bp2)  {
+@media (max-width : @bp1) {
 	main {
-		padding: (@unit * 3) 6rem (@unit * 5) 6rem;
+		padding: (@unit) 1rem (@unit * 1.5) 4rem;
 	}
 }
 
+@media (min-width : @bp1) and (max-width : @bp2) {
+	main {
+		padding: (@unit) 0 (@unit * 5) 5rem;
+	}
+}
 
-// Small screen ................................................................
-
-@media only screen and (min-width: @bp2) {
+@media (min-width: @bp2) {
 	#root {
 		width: 28rem;
 	}
+	main,
+	aside {
+		min-height: 100%;
+	}
 	main {
-		padding-top: (@unit * 3);
 		padding-bottom: (@unit * 8);
+		padding-top: 1rem;
 	}
 	aside {
 		position: fixed;
 		top: 0;
 		width: 10rem;
 		margin-left: -14rem;
-		padding-top: (@unit * 7.5);
+		padding-top: 10.25rem;
 	}
 }
 
-@media only screen and (min-width: @bp2) and (max-width: @bp3)  {
-	#root {
+@media (min-width: @bp2) and (max-width: @bp3)  {
+	#root,
+	header {
 		margin-left: auto;
 		margin-right: auto;
 	}
+	header,
 	main,
 	#nav {
 		position: relative;
@@ -327,15 +444,11 @@ blockquote {
 	}
 }
 
-
-
-// Normal screen ...............................................................
-
-@media only screen and (min-width: @bp3) {
+@media (min-width: @bp3) {
 	html {
 		background-repeat: no-repeat;
 		background-attachment: fixed;
-		background-size: auto 50%;
+		background-size: auto 60%;
 	}
 	html#gui {
 		background-image: url("/img/gui.svg");
@@ -343,17 +456,29 @@ blockquote {
 	html#edb {
 		background-image: url("/img/edb.svg");
 	}
+	html#edbml {
+		background-image: url("/img/edbml.svg");
+		background-position: 0 100px;
+	}
 	#root {
 		position: absolute;
 		right: @unit * 4;
 	}
+	#root,
+	aside a {
+		background-color: @back;
+	}
+	main {
+		padding-top: 2rem;
+	}
+	aside {
+		padding-top: 11.25rem;
+	}
 }
 
-// Big screen ..................................................................
-
-@media only screen and (min-width: @bp4) {
+@media (min-width: @bp4) {
 	html {
-		background-size: auto 100%;
+		background-size: auto 95%;
 	}
 }
 
@@ -424,10 +549,6 @@ pre[class*="language-"] {
 	-moz-tab-size: 4;
 	-o-tab-size: 4;
 	tab-size: 4;
-	-webkit-hyphens: none;
-	-moz-hyphens: none;
-	-ms-hyphens: none;
-	hyphens: none;
 }
 
 pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,

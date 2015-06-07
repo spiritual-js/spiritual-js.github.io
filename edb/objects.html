@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html id="edb">
+<html id="edb" lang="en">
 
 	<head>
 		<title>Objects &#x2013; Spiritual EDB</title>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<link rel="stylesheet" href="/css/styles.min.css">
 		<link rel="prefetch" href="/img/gui.svg">
 		<link rel="prefetch" href="/img/edb.svg">
@@ -13,6 +13,20 @@
 	<body>
 
 		<div id="root">
+			<header>
+				<nav>
+					<li>
+						<a class="toggle">
+							<span>&#x2014;</span>
+							<span>&#x2014;</span>
+							<span>&#x2014;</span>
+						</a>
+					</li>
+					<li><a href="/gui/" class="spiritual-gui">GUI</a></li>
+					<li><a href="/edb/" class="spiritual-edb selected">EDB</a></li>
+					<li><a href="/edbml/" class="spiritual-edbml">EDBML</a></li>
+				</nav>
+			</header>
 			<main>
 				<h1>Objects</h1>
 				<p>To create an <code>edb.Object</code> constructor, simply <code>extend</code> from <code>edb.Object</code>.</p>
@@ -112,7 +126,8 @@ console<span class="token punctuation">.</span><span class="token function">log<
 			<aside>
 				<nav id="nav">
 
-					<li><a href="/edb/index.html">Types</a>
+					<li><a href="/edb/index.html">Intro</a></li>
+					<li><a href="/edb/types.html">Types</a>
 						<nav>
 							<li><a href="/edb/objects.html">Objects</a></li>
 							<li><a href="/edb/arrays.html">Arrays</a></li>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html id="gui">
+<html id="gui" lang="en">
 
 	<head>
 		<title>dom &#x2013; Spiritual GUI</title>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<link rel="stylesheet" href="/css/styles.min.css">
 		<link rel="prefetch" href="/img/gui.svg">
 		<link rel="prefetch" href="/img/edb.svg">
@@ -13,6 +13,20 @@
 	<body>
 
 		<div id="root">
+			<header>
+				<nav>
+					<li>
+						<a class="toggle">
+							<span>&#x2014;</span>
+							<span>&#x2014;</span>
+							<span>&#x2014;</span>
+						</a>
+					</li>
+					<li><a href="/gui/" class="spiritual-gui selected">GUI</a></li>
+					<li><a href="/edb/" class="spiritual-edb">EDB</a></li>
+					<li><a href="/edbml/" class="spiritual-edbml">EDBML</a></li>
+				</nav>
+			</header>
 			<main>
 				<h1>dom</h1>
 				<p>The <code>dom</code> plugin handles DOM navigation and manipulation with a focus on navigating and manipulating the <em>spirits</em> associated to DOM elements. It is less suited for general DOM navigation, so you might want to compliment Spiritual
@@ -99,7 +113,8 @@
 			<aside>
 				<nav id="nav">
 
-					<li><a href="/gui/index.html">Spirits</a></li>
+					<li><a href="/gui/index.html">Intro</a></li>
+					<li><a href="/gui/spirits.html">Spirits</a></li>
 					<li><a href="/gui/lifecycle.html">Lifecycle</a></li>
 					<li><a href="/gui/callbacks.html">Callbacks</a></li>
 					<li><a href="/gui/plugins.html">Plugins</a>

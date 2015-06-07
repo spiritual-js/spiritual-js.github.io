@@ -1,7 +1,8 @@
 /**
  * Spirit of the BODY element.
+ * @using {gui.CSSPlugin}
  */
-ghp.PageSpirit = (function() {
+ghp.PageSpirit = (function using(CSSPlugin) {
 
 	var menumodel;
 
@@ -12,6 +13,7 @@ ghp.PageSpirit = (function() {
 		 */
 		onready: function() {
 			this.super.onready();
+			this.action.add('action-toggle');
 			this.event.add('hashchange', window);
 			if(gui.Client.hasHistory) {
 				this.event.add('popstate', window);
@@ -35,6 +37,9 @@ ghp.PageSpirit = (function() {
 					this._load(href);
 					a.consume();
 					break;
+				case 'action-toggle':
+					this._togglemenu();
+					break;
 			}
 		},
 
@@ -50,6 +55,14 @@ ghp.PageSpirit = (function() {
 					break;
 				case 'hashchange':
 					break;
+				case 'click':
+					if(this.css.contains('menuopen')) {
+						var aside = this.dom.q('aside');
+						if(!gui.DOMPlugin.contains(aside, e.target)) {
+							this._togglemenu();
+						}
+					}
+					break;
 			}
 		},
 
@@ -61,7 +74,7 @@ ghp.PageSpirit = (function() {
 		 * @param {string} href
 		 */
 		_load: function(href) {
-			var html, path = new gui.URL(document, href).pathname;
+			var path = new gui.URL(document, href).pathname;
 			new gui.Request(href).acceptText().get().then(function(status, html) {
 				html = gui.HTMLParser.parseToDocument(html);
 				this._main(html);
@@ -81,10 +94,22 @@ ghp.PageSpirit = (function() {
 			if(path && (section = path.split('/')[1])) {
 				if(section !== html.id) {
 					html.id = section;
+					this._yyyy(section);
 					return true;
-
 				}
 			}
+		},
+
+		/**
+		 * @param {string} path
+		 */
+		_yyyy: function(section) {
+			var oldlink = this.dom.qdoc('header .selected');
+			var newlink = this.dom.qdoc('header .spiritual-' + section);
+			if(oldlink) {
+				CSSPlugin.remove(oldlink, 'selected');
+			}
+			CSSPlugin.add(newlink, 'selected');
 		},
 
 		/**
@@ -123,6 +148,11 @@ ghp.PageSpirit = (function() {
 			window.scrollTo(0,0);
 			this._menu();
 			this._done();
+			if(this.css.contains('menuopen')) {
+				this.tick.time(function() {
+					this._togglemenu();
+				}, 350);
+			}
 		},
 
 		/**
@@ -152,8 +182,18 @@ ghp.PageSpirit = (function() {
 			if(hash && (elm = document.querySelector(hash))) {
 				elm.scrollIntoView();
 			}
+		},
+
+		_togglemenu: function() {
+			this.css.toggle('menuopen');
+			if(this.css.contains('menuopen')) {
+				this.tick.time(function() {
+					this.event.add('click');	
+				});
+			} else {
+				this.event.remove('click');
+			}
 		}
-		
 	});
 
-}());
+}(gui.CSSPlugin));
