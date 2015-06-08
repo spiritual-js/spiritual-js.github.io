@@ -2,6 +2,8 @@
 
 // Fonts .......................................................................
 
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:700,600);
+
 @font-face {
   font-family: 'Source Sans Pro';
   font-style: normal;
@@ -150,14 +152,13 @@ aside {
 	z-index: 2;
 	a {
 		text-decoration: none;
-		padding-left: 0.25rem;
-		&.selected:before {
-			content: "➜";
-			line-height: 0;
-			font-size: 1rem;
-			padding-right: 0.35rem;
-			position: relative;
-			top: -0.025rem;
+		position: relative;
+		padding: 0.1rem 0.4rem 0.1rem 0.8rem;
+		left: 0.4rem;
+		&.selected {
+			background-color: @link;
+			font-weight: 600;
+			color: @back;
 		}
 	}
 	nav {
