@@ -9,9 +9,9 @@ gui.module("ghp@wunderbyte.com", {
 	},
 
 	channel: [
-		['a[href]', ghp.LinkSpirit],
-		['a.toggle', ghp.ToggleSpirit],
 		['body', ghp.PageSpirit],
-		['#nav', ghp.NavSpirit]
+		['a.menu-toggle', ghp.ToggleSpirit],
+		['a[href]', ghp.LinkSpirit],
+		['#subnav', ghp.NavSpirit]
 	]
 });

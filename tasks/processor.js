@@ -50,12 +50,8 @@ function processTags($, map, title, id) {
 	]));
 	root.append(join([
 		'<header>',
-			'<nav>',
-				'<li><a class="toggle">',
-					'<span>&mdash;</span>',
-					'<span>&mdash;</span>',
-					'<span>&mdash;</span>',
-				'</a></li>',
+			'<nav id="topnav">',
+				'<li><a class="menu-toggle"></a></li>',
 				'<li><a href="/gui/" class="spiritual-gui">GUI</a></li>',
 				'<li><a href="/edb/" class="spiritual-edb">EDB</a></li>',
 				'<li><a href="/edbml/" class="spiritual-edbml">EDBML</a></li>',
@@ -66,7 +62,7 @@ function processTags($, map, title, id) {
 	root.append(main);
 	root.append(join([
 		'<aside>',
-			'<nav id="nav">',
+			'<nav id="subnav">',
 				htmlmenu(map,'\t\t\t\t'),
 			'</nav>',
 		'</aside>'

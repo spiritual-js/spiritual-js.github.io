@@ -18015,7 +18015,7 @@ ghp.PageSpirit = (function using(CSSPlugin) {
 		 * @param @optional {HTMLDocument} html
 		 */
 		_zzzz: function(html) {
-			var nav = (html || document).querySelector('#nav');
+			var nav = (html || document).querySelector('#subnav');
 			menumodel = new ghp.MenuModel({
 				items: gui.Array.from(nav.children).map(function item(li) {
 					var link = li.firstElementChild;
@@ -18050,7 +18050,7 @@ ghp.PageSpirit = (function using(CSSPlugin) {
 			if(this.css.contains('menuopen')) {
 				this.tick.time(function() {
 					this._togglemenu();
-				}, 350);
+				}, 500);
 			}
 		},
 
@@ -18172,10 +18172,10 @@ gui.module("ghp@wunderbyte.com", {
 	},
 
 	channel: [
-		['a[href]', ghp.LinkSpirit],
-		['a.toggle', ghp.ToggleSpirit],
 		['body', ghp.PageSpirit],
-		['#nav', ghp.NavSpirit]
+		['a.menu-toggle', ghp.ToggleSpirit],
+		['a[href]', ghp.LinkSpirit],
+		['#subnav', ghp.NavSpirit]
 	]
 });
 
