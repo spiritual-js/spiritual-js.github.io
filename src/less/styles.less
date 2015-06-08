@@ -157,8 +157,9 @@ aside {
 	a {
 		text-decoration: none;
 		position: relative;
-		padding: 0.1rem 0.4rem 0.1rem 0.7rem;
+		padding: 0.12rem 0.4rem 0.12rem 0.7rem;
 		left: 0.4rem;
+		background-color: back;
 		&.selected {
 			background-color: @link;
 			font-weight: 600;
@@ -176,7 +177,7 @@ aside {
 			top: 0.4rem;
 			bottom: 0.3rem;
 		}
-		a.selected {
+		a {
 			padding-right: 0.75rem;
 			left: 0.75rem;
 		}
@@ -452,8 +453,7 @@ blockquote {
 		position: absolute;
 		right: @unit * 4;
 	}
-	#root,
-	aside a {
+	#root {
 		background-color: @back;
 	}
 	main {
